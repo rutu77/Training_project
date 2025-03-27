@@ -1,0 +1,17 @@
+<form [formGroup]="updateRoleForm" (ngSubmit)="onSubmit()">
+    <h2>Update Role</h2>
+
+    <label for="email">Email:</label>
+    <input type="email" formControlName="email" placeholder="Enter your email id" required>
+  
+    <div class="flex align-items-center">
+        <input type="radio" id="user" formControlName="newRole" value="user">
+        <label for="user" class="mr-2">User</label>
+        <input type="radio" id="teacher" formControlName="newRole" value="teacher">
+        <label for="teacher">Teacher</label>
+        <input type="radio" id="admin" formControlName="newRole" value="admin">
+        <label for="admin">Admin</label>
+    </div>
+
+    <button type="submit">Submit</button>
+</form>

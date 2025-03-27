@@ -12,14 +12,17 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/mssql": "^9.1.7",
     "@types/node": "^22.13.13",
     "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mssql": "^11.0.1",
     "nodemon": "^3.1.9",
+    "reflect-metadata": "^0.2.2",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
