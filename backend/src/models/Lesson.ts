@@ -16,9 +16,6 @@ export class Lesson {
     @Column({nullable:true})
     duration:number;
 
-    @Column({nullable:true})
-    position: number;
-
     @ManyToOne(()=>Course,(course)=>course.lessons)
     course:Course;
 

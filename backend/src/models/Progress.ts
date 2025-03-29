@@ -15,4 +15,7 @@ export class Progress {
 
   @Column({default:false })
   isCompleted: boolean;
+
+  @Column({nullable:true})
+  completion:Date
 }

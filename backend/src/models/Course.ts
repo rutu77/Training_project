@@ -24,6 +24,12 @@ export class Course {
   @Column({nullable:true})
   thumbnail:string;
 
+  @Column({nullable:true})
+  level: 'beginner' | 'intermediate' | 'advanced';
+
+  @Column({nullable:true})
+  duration: number;
+
   @Column({type: 'decimal',default: 0})
   price: number;
 
@@ -32,9 +38,6 @@ export class Course {
 
   @CreateDateColumn()
   createdAt:Date;
-
-  @UpdateDateColumn()
-  updatedAt:Date;
 
   @ManyToOne(() =>User,(user)=>user.courses)
   creator:User;

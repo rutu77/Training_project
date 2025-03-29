@@ -33,6 +33,7 @@ export const authenticateUser: RequestHandler= async(
         const freshUser= await authService.getUserByEmail(decoded.email);
         console.log(freshUser);
 
+        
         (req as AuthRequest).user= freshUser; // Attaches the fetched user to the request object.
 
         next();

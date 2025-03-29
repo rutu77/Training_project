@@ -20,4 +20,7 @@ export class Quiz {
 
   @Column({nullable:true})
   explanation:string;
+
+  @Column({nullable:true})
+  timeLimit: number;
 }

@@ -33,9 +33,6 @@ export class User {
     @CreateDateColumn()
     createdAt:Date;
 
-    @UpdateDateColumn()
-    updatedAt:Date;
-
     @OneToMany(()=>Course,(course)=>course.creator)
     courses:Course[];
 

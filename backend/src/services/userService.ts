@@ -9,23 +9,23 @@ export class UserService{
 
     async getUserById(id:number){
         const user=userRepository.findOne({where:{id}})
-        if(!user){
-            return {message:`User with ID ${id} not found`}
-        }
+        if(!user) throw Error("User not found!")
         return user;
     }
 
     async updateUserById(id:number,data:Partial<User>){
-        const user= await userRepository.update(id,data)
-        return user;
+        await userRepository.update(id,data)
+        const updatedUser= userRepository.findOne({where:{id}});
+        if(!updatedUser) throw new Error("User not found!")
+        return updatedUser;
     }
 
     async deleteUser(id:number){
-        return await userRepository.delete(id)
+        const result= await userRepository.delete(id);
+        if(result.affected===0) throw new Error("User not found!")
     }
 
     async getAllUsers(){
         return await userRepository.find();
     }
-
 }
