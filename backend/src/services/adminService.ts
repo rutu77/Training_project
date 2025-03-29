@@ -1,16 +1,17 @@
 import bcrypt from "bcrypt"
-import { UserRepository,userRepository } from "../repositories/userRepository"
+import {userRepository } from "../repositories/userRepository"
+import { UserService } from "./userService";
 
-const userRepo= new UserRepository()
+const userService= new UserService()
 
 export class AdminService{
 
     async getUserByEmail(email:string){
-        return await userRepo.getUserByEmail(email)
+        return await userService.getUserByEmail(email)
     }
 
     async updateUserRole(email: string, newRole: 'user' | 'teacher' | 'admin') {
-        const user = await userRepo.getUserByEmail(email);
+        const user = await userService.getUserByEmail(email);
         if (!user) return {error:"User not found!"};
     
         user.role = newRole;
@@ -31,4 +32,17 @@ export class AdminService{
         await userRepository.save(admin)
         return {message:'admin account created successfully',admin}
     }
+
+        // //--------------
+        // adminEmail:any = process.env.ADMIN_EMAIL;
+        // adminPassword:any = process.env.ADMIN_PASSWORD;
+    
+        // async initializeAdmin() {
+        //     const admin = await userRepo.getUserByEmail(this.adminEmail);
+        //     if (!admin) {
+        //         const hashedPassword = await bcrypt.hash(this.adminPassword, 10);
+        //         await userRepository.create({ email: this.adminEmail, password: hashedPassword, role: 'admin' });
+        //         console.log("Admin user created");
+        //     }
+        // }
 }

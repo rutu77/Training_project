@@ -1,1 +1,6 @@
-<p>navbar works!</p>
+<nav *ngIf="isLoggedIn">
+    <a routerLink="/index">Home</a> 
+    <a routerLink="/admin/updateRole">Admin</a> 
+    <button (click)="logout()">Logout</button>
+</nav>
+  

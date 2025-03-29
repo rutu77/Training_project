@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminComponent } from './admin.component';
-import { IndexComponent } from './index/index.component';
+import { AdminGuard } from '../guard/admin.guard';
+import { AdminIndexComponent } from './admin-index/admin-index.component';
 
 const routes: Routes = [
-  {path:'updateRole',component:IndexComponent},
+  {path:'updateRole',component:AdminIndexComponent,canActivate:[AdminGuard]},
 ];
 
 @NgModule({

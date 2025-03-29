@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../auth/auth.service';
 import { AdminService } from '../admin.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-index',
+  selector: 'app-admin-index',
   standalone: false,
-  templateUrl: './index.component.html',
-  styleUrl: './index.component.css'
+  templateUrl: './admin-index.component.html',
+  styleUrl: './admin-index.component.css'
 })
-export class IndexComponent {
+export class AdminIndexComponent {
   constructor(private _admin:AdminService){}
 
   updateRoleForm = new FormGroup({

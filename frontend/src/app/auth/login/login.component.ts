@@ -20,50 +20,42 @@ export class LoginComponent {
     password: new FormControl('',[Validators.minLength(8),Validators.required])
   })
 
-  onSubmit(){
-      this._auth.Login(this.loginForm.value).subscribe(
-          (res: any) => {
-              console.log("Login form submitted");
-              localStorage.setItem('token', res.token);
-              Swal.fire({
-                title: "Good job!",
-                text: "Login Successful!",
-                icon: "success"
-              });
-              localStorage.setItem('loggedIn','true');
-              this.router.navigate(['/index'])
-          },
-          (error: any) => {
-              console.error("Error during login:", error);
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: error.error.message||"Invalid Credentials!!",
-              });
-              localStorage.setItem('loggedIn','false');
-          }
-      );
-
-      // alert("Login Form Submitted");
-      // this._auth.Login(this.loginForm.value).subscribe({
-      //     next: (res: any) => {
-      //         console.log("Login form submitted");
-      //         localStorage.setItem('token', res.token);
-      //         alert("Login Successful!");
-      //     },
-      //     error: (error: any) => {
-      //         console.error("Error during login:", error);
-      //         alert("Invalid Credentials!");
-      //     }
-      // });
-
-
+    onSubmit() {
+      this._auth.Login(this.loginForm.value);
+      this._auth.$authState.subscribe(isLoggedIn => {
+        if (isLoggedIn) {
+          Swal.fire({
+            title: "Good job!",
+            text: "Login Successful!",
+            icon: "success"
+          });
+          this.router.navigate(['/index']);
+        }
+      })
   }
-  //     alert("Login Form Submitted")
-  //     this._auth.Login(this.loginForm.value).subscribe((res:any)=>{
-  //     console.log("Login from submitted");
-  //     localStorage.setItem('token', res.token)
-  //   })
+    // onSubmit(){
+  //   this._auth.Login(this.loginForm.value).subscribe(
+  //       (res: any) => {
+  //         console.log("Login form submitted");
+  //       localStorage.setItem('token', res.data.token);
+  //         Swal.fire({
+  //           title: "Good job!",
+  //           text: "Login Successful!",
+  //           icon: "success"
+  //         });
+  //         if (this._auth.isLoggedIn()) { 
+  //           this.router.navigate(['/index'])
+  //         }
+          
+  //     },
+  //       (error: any) => {
+  //           console.error("Error during login:", error);
+  //           Swal.fire({
+  //             icon: "error",
+  //             title: "Oops...",
+  //             text: error.error.message||"Invalid Credentials!!",
+  //           });
+  //       }
+  //   );
   // }
-
 }

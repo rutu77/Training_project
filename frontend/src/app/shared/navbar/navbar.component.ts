@@ -12,10 +12,12 @@ export class NavbarComponent {
   isLoggedIn:boolean=false;
 
   constructor(private _auth:AuthService, private route:Router){
+    this._auth.$authState.subscribe(status=>this.isLoggedIn=status)
   }
 
   logout(){
       this._auth.logout()
       this.route.navigate(['/auth/login'])
     }
+
 }

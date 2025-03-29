@@ -26,13 +26,15 @@ export class AuthController{
         const {email,password}=req.body;
         try{
             const result= await authService.loginUser(email,password);
-            const data={user:result.user,token:result.token}
+            // const data={user:result.user,token:result.token}
+            // console.log(result.token);
+            
             if(result.error){
                 res.status(400).json({ message: result.error });
                 console.log(result.error);
                 return;
             }
-            res.status(201).json({message:"Login Successful!", data:data})
+            res.status(201).json({message:"Login Successful!", data:{user:result.user,token:result.token,role:result.role}})
             console.log("Login Successful!");
         }catch(error){
             res.status(500).json({error})

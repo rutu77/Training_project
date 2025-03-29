@@ -1,16 +1,17 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import { UserRepository, userRepository } from "../repositories/userRepository"
+import { userRepository } from "../repositories/userRepository"
+import { UserService } from "./userService"
 
 
 const secretKey= "Rutuja1147"
 
-const userRepo= new UserRepository()
+const userService= new UserService
 
 export class AuthService{
 
     async registerUser(name:string, email:string, password:string, role:'user'|'teacher'){
-        const existing= await userRepo.getUserByEmail(email);
+        const existing= await userService.getUserByEmail(email);
         if(existing) return {error:"User already exist! Please Login."}
 
         const hashedPassword= await bcrypt.hash(password,10)
@@ -20,18 +21,19 @@ export class AuthService{
     }
 
     async loginUser(email: string, password: string) {
-        const user = await userRepo.getUserByEmail(email);
+        const user = await userService.getUserByEmail(email);
         if (!user) return { error: "User not found!" };
     
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) return { error: "Invalid Credentials!" };
-    
+        
         const token = jwt.sign({ email: user.email }, secretKey, { expiresIn: '1h' });
-        return { user, token };
+        const role=user.role
+        return { user, token, role };        
     }
 
     async getUserByEmail(email:string){
-        return await userRepo.getUserByEmail(email)
+        return await userService.getUserByEmail(email)
     }
 
 }

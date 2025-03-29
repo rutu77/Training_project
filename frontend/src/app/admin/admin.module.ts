@@ -4,13 +4,11 @@ import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AdminComponent } from './admin.component';
-import { IndexComponent } from './index/index.component';
+import { AdminIndexComponent } from './admin-index/admin-index.component';
 
 @NgModule({
   declarations: [
-    AdminComponent,
-    IndexComponent
+    AdminIndexComponent
   ],
   imports: [
     CommonModule,
