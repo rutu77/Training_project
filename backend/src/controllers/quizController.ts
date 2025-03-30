@@ -1,9 +1,20 @@
 import { Request, Response } from "express";
 import { QuizService } from "../services/quizService";
+import { Quiz } from "../models/Quiz";
 
 
 export class QuizController{
     quizService = new QuizService();
+
+    async createQuiz(req: Request, res: Response){
+      const quizData: Partial<Quiz> = req.body;
+      try {
+        const quiz = await this.quizService.createQuiz(quizData);
+        res.status(201).json({ message: "Quiz created successfully!", data: quiz });
+      } catch (error) {
+        res.status(500).json({ error: "Error creating enrollment" });
+      }
+    }
     
     async getQuizById(req: Request, res: Response): Promise<void> {
       const quizId = Number(req.params.id);

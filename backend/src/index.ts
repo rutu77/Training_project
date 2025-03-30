@@ -31,4 +31,4 @@ AppDataSource.initialize().then(async ()=>{
         console.log("Server running!")
         // admin.initializeAdmin();
     })
-}).catch((error)=>{console.log("Error occured while initializing: ",error)})
+}).catch((error: any)=>{console.log("Error occured while initializing: ",error)})

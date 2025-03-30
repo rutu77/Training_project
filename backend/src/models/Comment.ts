@@ -10,12 +10,12 @@ export class Comment {
   @Column()
   message:string;
 
-  @ManyToOne(()=>User,(user)=>user.comments)
+  @ManyToOne(()=>User,(user)=>user.comments,{ cascade: true , onDelete: 'CASCADE' })
   user:User;
 
-  @ManyToOne(()=>Course,(course)=>course.comments)
+  @ManyToOne(()=>Course,(course)=>course.comments,{ cascade: true , onDelete: 'CASCADE' })
   course:Course;
 
-  @ManyToOne(()=>Comment,{ nullable: true })
+  @ManyToOne(()=>Comment,{ nullable: true, cascade: true  })
   parentComment:Comment;
 }

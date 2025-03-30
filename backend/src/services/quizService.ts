@@ -3,6 +3,10 @@ import { quizRepository } from "../repositories/quizRepository";
 
 
 export class QuizService {
+  async createQuiz(quizData: Partial<Quiz>){
+      const quiz = quizRepository.create(quizData);
+      return await quizRepository.save(quiz);
+  }
 
   async getQuizById(id: number){
     const quiz = await quizRepository.findOne({where:{quiz_id:id}});

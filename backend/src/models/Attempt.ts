@@ -7,10 +7,10 @@ export class Attempt {
   @PrimaryGeneratedColumn()
   attempt_id:number;
 
-  @ManyToOne(() => User,(user)=>user.attempts)
+  @ManyToOne(() => User,(user)=>user.attempts, { cascade: true })
   user:User;
 
-  @ManyToOne(() => Quiz)
+  @ManyToOne(() => Quiz,(quiz)=>quiz.attempts, { cascade: true })
   quiz:Quiz;
 
   @Column()

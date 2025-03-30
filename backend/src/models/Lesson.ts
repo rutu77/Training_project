@@ -10,15 +10,15 @@ export class Lesson {
     @Column()
     title:string;
 
-    @Column()
+    @Column({nullable:true})
     videoUrl:string;
 
     @Column({nullable:true})
     duration:number;
 
-    @ManyToOne(()=>Course,(course)=>course.lessons)
+    @ManyToOne(()=>Course,(course)=>course.lessons, { onDelete: 'CASCADE' })
     course:Course;
 
-    @OneToMany(()=>Progress,(progress)=>progress.lesson)
+    @OneToMany(()=>Progress,(progress)=>progress.lesson,{ cascade: true })
     progress:Progress[];
 }

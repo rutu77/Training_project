@@ -39,24 +39,24 @@ export class Course {
   @CreateDateColumn()
   createdAt:Date;
 
-  @ManyToOne(() =>User,(user)=>user.courses)
+  @ManyToOne(() =>User,(user)=>user.courses,{ cascade: true })
   creator:User;
 
   @ManyToOne(()=> Category,(category)=>category.courses,{ nullable: true })
   category:Category;
 
-  @OneToMany(()=>Lesson,(lesson)=>lesson.course)
+  @OneToMany(()=>Lesson,(lesson)=>lesson.course,{ cascade: true , onDelete: 'CASCADE' })
   lessons:Lesson[];
 
-  @OneToMany(()=>Quiz,(quiz)=>quiz.course)
+  @OneToMany(()=>Quiz,(quiz)=>quiz.course,{ cascade: true , onDelete: 'CASCADE' })
   quizzes:Quiz[];
 
-  @OneToMany(()=>Comment,(comment)=>comment.course)
+  @OneToMany(()=>Comment,(comment)=>comment.course,{ cascade: true , onDelete: 'CASCADE' })
   comments:Comment[];
 
-  @OneToMany(()=>Review,(review)=>review.course)
+  @OneToMany(()=>Review,(review)=>review.course,{ cascade: true , onDelete: 'CASCADE' })
   reviews:Review[];
 
-  @OneToMany(()=>Enrollment,(enrollments)=>enrollments.course)
+  @OneToMany(()=>Enrollment,(enrollments)=>enrollments.course,{ cascade: true , onDelete: 'CASCADE' })
   enrollments:Enrollment[];
 }

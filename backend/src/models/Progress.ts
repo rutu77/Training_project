@@ -7,10 +7,10 @@ export class Progress {
   @PrimaryGeneratedColumn()
   progress_id:number;
 
-  @ManyToOne(()=>User,(user)=>user.progress)
+  @ManyToOne(()=>User,(user)=>user.progress,{ cascade: true, onDelete:'CASCADE' })
   user: User;
 
-  @ManyToOne(()=>Lesson,(lesson)=>lesson.progress)
+  @ManyToOne(()=>Lesson,(lesson)=>lesson.progress,{ cascade: true, onDelete:'CASCADE' })
   lesson:Lesson;
 
   @Column({default:false })

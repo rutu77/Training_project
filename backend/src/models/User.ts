@@ -20,7 +20,7 @@ export class User {
     @Column()
     password:string;
 
-    @Column()
+    @Column({default:'user'})
     role: 'user'|'teacher'|'admin';
 
 
@@ -33,21 +33,21 @@ export class User {
     @CreateDateColumn()
     createdAt:Date;
 
-    @OneToMany(()=>Course,(course)=>course.creator)
+    @OneToMany(()=>Course,(course)=>course.creator, { cascade: true, onDelete: 'CASCADE' })
     courses:Course[];
 
-    @OneToMany(()=>Enrollment,(enrollment)=>enrollment.user)
+    @OneToMany(()=>Enrollment,(enrollment)=>enrollment.user, { cascade: true, onDelete: 'CASCADE' })
     enrollments:Enrollment[];
 
-    @OneToMany(()=>Attempt,(attempt)=>attempt.user)
+    @OneToMany(()=>Attempt,(attempt)=>attempt.user, { cascade: true, onDelete: 'CASCADE' })
     attempts:Attempt[];
 
-    @OneToMany(()=>Comment,(comment)=>comment.user)
+    @OneToMany(()=>Comment,(comment)=>comment.user, { cascade: true, onDelete: 'CASCADE' })
     comments:Comment[];
 
-    @OneToMany(()=>Review,(review)=>review.user)
+    @OneToMany(()=>Review,(review)=>review.user, { cascade: true, onDelete: 'CASCADE' })
     reviews:Review[];
 
-    @OneToMany(() =>Progress,(progress)=>progress.user)
+    @OneToMany(() =>Progress,(progress)=>progress.user, { cascade: true, onDelete: 'CASCADE' })
     progress: Progress[];
 }

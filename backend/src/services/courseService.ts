@@ -2,6 +2,11 @@ import { Course } from "../models/Course";
 import { courseRepository } from "../repositories/courseRepository";
 
 export class CourseService{
+    async createCourse(courseData: Partial<Course>){
+        const course = courseRepository.create(courseData);
+        return await courseRepository.save(course);
+    }
+
 
     async getCourseById(id:number){
         const course= await courseRepository.findOne({where:{course_id:id}})
