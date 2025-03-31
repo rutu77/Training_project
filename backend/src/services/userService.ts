@@ -4,18 +4,18 @@ import { userRepository } from "../repositories/userRepository";
 export class UserService{
 
     async getUserByEmail(email:string){
-        return userRepository.findOne({where:{email}})
+        return await userRepository.findOne({where:{email}})
     }
 
     async getUserById(id:number){
-        const user=userRepository.findOne({where:{id}})
+        const user= await userRepository.findOne({where:{id}})
         if(!user) throw Error("User not found!")
         return user;
     }
 
     async updateUserById(id:number,data:Partial<User>){
         await userRepository.update(id,data)
-        const updatedUser= userRepository.findOne({where:{id}});
+        const updatedUser= await userRepository.findOne({where:{id}});
         if(!updatedUser) throw new Error("User not found!")
         return updatedUser;
     }

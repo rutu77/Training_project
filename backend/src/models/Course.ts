@@ -1,16 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 import { User } from './User';
 import { Lesson } from './Lesson';
 import { Quiz } from './Quiz';
 import { Comment } from './Comment';
 import { Review } from './Review';
-import { Category } from './Category';
+// import { Category } from './Category';
 import { Enrollment } from './Enrollment';
 
 @Entity({name:"Course_tbl47"})
 export class Course {
   @PrimaryGeneratedColumn()
-  course_id:number;
+  id:number;
 
   @Column()
   title:string;
@@ -42,8 +42,9 @@ export class Course {
   @ManyToOne(() =>User,(user)=>user.courses,{ cascade: true })
   creator:User;
 
-  @ManyToOne(()=> Category,(category)=>category.courses,{ nullable: true })
-  category:Category;
+  // @ManyToOne(()=> Category,(category)=>category.courses,{ nullable: true })
+  // @JoinColumn({ name: "category_id" }) 
+  // category:Category;
 
   @OneToMany(()=>Lesson,(lesson)=>lesson.course,{ cascade: true , onDelete: 'CASCADE' })
   lessons:Lesson[];

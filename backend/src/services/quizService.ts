@@ -9,14 +9,14 @@ export class QuizService {
   }
 
   async getQuizById(id: number){
-    const quiz = await quizRepository.findOne({where:{quiz_id:id}});
+    const quiz = await quizRepository.findOne({where:{id}});
     if (!quiz) throw new Error("Quiz not found!");
     return quiz;
   }
 
   async updateQuizById(id: number, data: Partial<Quiz>){
     await quizRepository.update(id, data);
-    const updatedQuiz = await quizRepository.findOne({where:{quiz_id:id}});
+    const updatedQuiz = await quizRepository.findOne({where:{id}});
     if (!updatedQuiz) throw new Error("Quiz not found!");
     return updatedQuiz;
   }

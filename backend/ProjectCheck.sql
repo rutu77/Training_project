@@ -8,7 +8,7 @@ select * from Category_tbl47
 
 select * from Quiz_tbl47
 
-select * from Attempt_tbl47
+select * from Question_tbl47
 
 select * from Review_tbl47
 

@@ -1,13 +1,26 @@
 import { Request, Response } from "express";
 import { CommentService } from "../services/commentService";
 
+const commentService = new CommentService();
+
 export class CommentController {
-    commentService = new CommentService();
+
+  async createComment(req: Request, res: Response){
+    const commentData = req.body;
+    try {
+      const comment = await commentService.createComment(commentData);
+      res.status(201).json({ message: "comment created successfully!", data: comment });
+    } catch (error) {
+      // res.status(500).json({ error: "Error creating comment" });
+      res.status(500).json({ error: error });
+
+    }
+  }  
 
     async getCommentById(req: Request, res: Response): Promise<void> {
       const commentId = Number(req.params.id);
       try {
-        const comment = await this.commentService.getCommentById(commentId);
+        const comment = await commentService.getCommentById(commentId);
         res.status(200).json({ data: comment });
       } catch (error) {
         res.status(404).json({ message: (error as Error).message });
@@ -18,7 +31,7 @@ export class CommentController {
       const commentId = Number(req.params.id);
       const data = req.body;
       try {
-        const updatedComment = await this.commentService.updateCommentById(commentId, data);
+        const updatedComment = await commentService.updateCommentById(commentId, data);
         res.status(200).json({message:"Comment updated successfully", data: updatedComment });
       } catch (error) {
         res.status(404).json({ message: (error as Error).message });
@@ -28,7 +41,7 @@ export class CommentController {
     async deleteComment(req: Request, res: Response): Promise<void> {
       const commentId = Number(req.params.id);
       try {
-        await this.commentService.deleteComment(commentId);
+        await commentService.deleteComment(commentId);
         res.status(200).json({ message: "Comment deleted successfully!" });
       } catch (error) {
         res.status(404).json({ message: (error as Error).message });
@@ -37,10 +50,10 @@ export class CommentController {
   
     async getAllComments(req: Request, res: Response): Promise<void> {
       try {
-        const comments = await this.commentService.getAllComments();
+        const comments = await commentService.getAllComments();
         res.status(200).json(comments);
       } catch (error) {
         res.status(500).json({ error: "Error fetching comments" });
       }
     }
-  }
+}

@@ -9,8 +9,9 @@ import { RippleModule } from 'primeng/ripple';
 import { DropdownModule } from 'primeng/dropdown';
 import {MultiSelectModule} from 'primeng/multiselect'
 import { FormsModule } from '@angular/forms';
+import { MenubarModule } from 'primeng/menubar';
 
-const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule, DropdownModule, MultiSelectModule, RippleModule]
+const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule, DropdownModule,MenubarModule, MultiSelectModule, RippleModule]
 
 
 @NgModule({

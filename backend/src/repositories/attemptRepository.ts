@@ -1,4 +1,4 @@
 import { AppDataSource } from "../config/database";
-import { Attempt } from "../models/Attempt";
+import { Question } from "../models/Question";
 
-export const attemptRepository=AppDataSource.getRepository(Attempt)
+export const QuestionRepository=AppDataSource.getRepository(Question)

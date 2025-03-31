@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from './User';
 import { Course } from './Course';
 
@@ -6,12 +6,13 @@ import { Course } from './Course';
 @Entity({name:'Review_tbl47'})
 export class Review {
   @PrimaryGeneratedColumn()
-  review_id:number;
+  id:number;
 
   @ManyToOne(()=>User,(user)=>user.reviews, {onDelete: 'CASCADE' })
   user:User;
 
   @ManyToOne(()=>Course,(course) =>course.reviews, {onDelete: 'CASCADE' })
+  @JoinColumn({name:'course_id'})
   course:Course;
 
   @Column()

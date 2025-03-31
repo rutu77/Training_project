@@ -1,10 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Course } from './Course';
 import { Enrollment } from './Enrollment';
-import { Attempt } from './Attempt';
 import { Comment } from './Comment';
 import { Review } from './Review';
 import { Progress } from './Progress';
+import { Quiz } from './Quiz';
+import { Question } from './Question';
 
 @Entity({name:"User_tbl47"})
 export class User {
@@ -23,7 +24,6 @@ export class User {
     @Column({default:'user'})
     role: 'user'|'teacher'|'admin';
 
-
     @Column({nullable:true})
     profilePicture: string;
 
@@ -33,14 +33,12 @@ export class User {
     @CreateDateColumn()
     createdAt:Date;
 
-    @OneToMany(()=>Course,(course)=>course.creator, { cascade: true, onDelete: 'CASCADE' })
+    @OneToMany(()=>Course,(course)=>course.creator)
     courses:Course[];
 
     @OneToMany(()=>Enrollment,(enrollment)=>enrollment.user, { cascade: true, onDelete: 'CASCADE' })
     enrollments:Enrollment[];
-
-    @OneToMany(()=>Attempt,(attempt)=>attempt.user, { cascade: true, onDelete: 'CASCADE' })
-    attempts:Attempt[];
+ 
 
     @OneToMany(()=>Comment,(comment)=>comment.user, { cascade: true, onDelete: 'CASCADE' })
     comments:Comment[];

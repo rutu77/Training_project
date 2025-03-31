@@ -9,14 +9,13 @@ import { NotfoundComponent } from './notfound/notfound.component';
 import { RouterModule } from '@angular/router';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { AdminModule } from './admin/admin.module';
-import { HomeComponent } from './home/home.component';
 import {SharedModule } from "./shared/shared.module";
+import { HomeModule } from './home/home.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotfoundComponent,
-    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,7 +24,8 @@ import {SharedModule } from "./shared/shared.module";
     RouterModule,
     HttpClientModule,
     SharedModule,
-    AdminModule
+    AdminModule,
+    HomeModule
 ],
   providers: [{
     provide:HTTP_INTERCEPTORS,

@@ -7,6 +7,7 @@ const secretKey= "Rutuja1147"
 
 interface Decoded{ //decoded JWT payload
     email:string;
+    id:number;
     iat:number; //issued at
     exp:string; //expiration
 }
@@ -26,6 +27,7 @@ export const authenticateUser: RequestHandler= async(
         return;
     }
 
+
     const token= req.header("Authorization")?.split(" ")[1]; //extract token from header
     try{
         const decoded= jwt.verify(token!, secretKey) as JwtPayload & Decoded // Verifies the token using the secret key and casts the result to JwtPayload & Decoded.
@@ -33,7 +35,6 @@ export const authenticateUser: RequestHandler= async(
         const freshUser= await authService.getUserByEmail(decoded.email);
         console.log(freshUser);
 
-        
         (req as AuthRequest).user= freshUser; // Attaches the fetched user to the request object.
 
         next();

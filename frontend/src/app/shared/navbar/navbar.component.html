@@ -1,9 +1,91 @@
-<nav *ngIf="isLoggedIn">
-    <a routerLink="/index">Home</a> 
-    <a routerLink="/courses">Courses</a> 
-    <a routerLink="/assessments">Assessment</a> 
-    <a routerLink="/admin/updateRole">Admin Check</a> 
-    <a routerLink="/profile">Profile</a> 
-    <button (click)="logout()">Logout</button>
-</nav>
-  
+<p-menubar>
+    <ng-template pTemplate="start">
+        <a routerLink="/home" class="p-menuitem-link">Home</a>
+
+        <!-- Categories Dropdown (Fixed) -->
+        <p-dropdown 
+            [options]="categories" 
+            placeholder="Categories" 
+            (onChange)="filterCourses($event)" 
+            styleClass="category-dropdown">
+        </p-dropdown>
+
+        <!-- Search Bar -->
+        <input type="text" pInputText placeholder="Search courses..." (input)="searchCourses($event)" class="search-bar">
+        
+        <!-- Progress Link -->
+        <a routerLink="/progress" class="p-menuitem-link">Progress</a>
+    </ng-template>
+    
+    <ng-template pTemplate="end">
+        <div *ngIf="isLoggedIn" class="profile-dropdown">
+            <button pButton type="button" label="Profile" icon="pi pi-user" class="p-button-text"></button>
+            <div class="dropdown-content">
+                <a routerLink="/profile" class="p-menuitem-link">Edit Profile</a>
+                <a routerLink="/my-learnings" class="p-menuitem-link">My Learnings</a>
+                <button pButton type="button" label="Logout" class="p-button-text" (click)="logout()"></button>
+            </div>
+        </div>
+        
+        <div *ngIf="!isLoggedIn" class="auth-buttons">
+            <button pButton type="button" label="Login" routerLink="/auth/login" class="p-button-text"></button>
+            <button pButton type="button" label="Register" routerLink="/auth/register" class="p-button-text"></button>
+        </div>
+    </ng-template>
+</p-menubar>
+
+
+<!-- <nav>
+    <div class="left-section">
+        <a routerLink="/home">Home</a>
+        <div class="dropdown">
+            <button class="dropbtn">Categories</button>
+            <div class="dropdown-content">
+                <a href="#" (click)="filterCourses('Category 1')">Category 1</a>
+                <a href="#" (click)="filterCourses('Category 2')">Category 2</a>
+                <a href="#" (click)="filterCourses('Category 3')">Category 3</a>
+            </div>
+        </div>
+        <input type="text" placeholder="Search courses..." class="search-bar">
+        <a routerLink="/progress">Progress</a>
+    </div>
+
+    <div class="right-section">
+        <div *ngIf="isLoggedIn" class="profile-dropdown">
+            <button class="dropbtn">Profile</button>
+            <div class="dropdown-content">
+                <a routerLink="/profile">Edit Profile</a>
+                <a routerLink="/my-learnings">My Learnings</a>
+                <button (click)="logout()">Logout</button>
+            </div>
+        </div>
+        <div *ngIf="!isLoggedIn">
+            <button routerLink="/auth/login">Login</button>
+            <button routerLink="/auth/register">Register</button>
+        </div>
+    </div>
+</nav> -->
+
+<!-- <p-menubar>
+    <ng-template pTemplate="start">
+        <a routerLink="/home" class="p-menuitem-link">Home</a>
+        <p-dropdown [options]="categories" placeholder="Categories" (onChange)="filterCourses($event.value)" styleClass="category-dropdown"></p-dropdown>
+        <input type="text" pInputText placeholder="Search courses..." (input)="searchCourses($event)" class="search-bar">
+        <a routerLink="/progress" class="p-menuitem-link">Progress</a>
+    </ng-template>
+    
+    <ng-template pTemplate="end">
+        <div *ngIf="isLoggedIn" class="profile-dropdown">
+            <button pButton type="button" label="Profile" icon="pi pi-user" class="p-button-text"></button>
+            <div class="dropdown-content">
+                <a routerLink="/profile" class="p-menuitem-link">Edit Profile</a>
+                <a routerLink="/my-learnings" class="p-menuitem-link">My Learnings</a>
+                <button pButton type="button" label="Logout" class="p-button-text" (click)="logout()"></button>
+            </div>
+        </div>
+        <div *ngIf="!isLoggedIn">
+            <button pButton type="button" label="Login" routerLink="/auth/login" class="p-button-text"></button>
+            <button pButton type="button" label="Register" routerLink="/auth/register" class="p-button-text"></button>
+        </div>
+    </ng-template>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+</p-menubar> -->

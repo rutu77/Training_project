@@ -1,30 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Course } from './Course';
-import { Attempt } from './Attempt';
+import { Question } from './Question';
 
 @Entity({name:'Quiz_tbl47'})
 export class Quiz {
   @PrimaryGeneratedColumn()
-  quiz_id:number;
+  id:number;
 
   @ManyToOne(()=>Course,(course)=>course.quizzes, { onDelete: 'CASCADE' })
+  @JoinColumn({name:'course_id'})
   course:Course;
 
-  @Column()
-  question:string;
-
-  @Column('simple-array')
-  options: string[];
-
-  @Column()
-  correctAnswer:string;
-
-  @Column({nullable:true})
-  explanation:string;
-
-  @Column({nullable:true})
-  timeLimit: number;
-
-  @OneToMany(()=>Attempt,(attempt)=>attempt.quiz,{cascade:true})
-  attempts:Attempt[];
+  @OneToMany(()=>Question,(question)=>question.quiz,{cascade:true})
+  questions:Question[];
 }

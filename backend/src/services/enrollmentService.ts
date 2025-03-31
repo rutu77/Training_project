@@ -1,8 +1,6 @@
 import { Enrollment } from "../models/Enrollment";
 import { enrollRepository } from "../repositories/enrollmentRepository";
 
-
-
 export class EnrollmentService {
 
     async createEnrollment(enrollmentData: Partial<Enrollment>){
@@ -11,14 +9,14 @@ export class EnrollmentService {
     }
   
     async getEnrollmentById(id: number){
-      const enrollment = await enrollRepository.findOne({ where: { enrollment_id: id } });
+      const enrollment = await enrollRepository.findOne({ where: {id } });
       if (!enrollment) throw new Error("Enrollment not found!");
       return enrollment;
     }
   
     async updateEnrollmentById(id: number, data: Partial<Enrollment>){
       await enrollRepository.update(id, data);
-      const updatedEnrollment = await enrollRepository.findOne({ where: { enrollment_id: id } });
+      const updatedEnrollment = await enrollRepository.findOne({ where: {id } });
       if (!updatedEnrollment) throw new Error("Enrollment not found!");
       return updatedEnrollment;
     }

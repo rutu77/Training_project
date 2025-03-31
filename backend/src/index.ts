@@ -6,8 +6,16 @@ import { AppDataSource } from "./config/database";
 import dotenv from "dotenv"
 import { authRoutes } from "./routes/authRoutes";
 import { adminRoutes } from "./routes/adminRoutes";
-import { AdminService } from "./services/adminService";
 import { userRoutes } from "./routes/userRoutes";
+import { courseRoutes } from "./routes/courseRoutes";
+import { lessonRoutes } from "./routes/lessonRoutes";
+import { commentRoutes } from "./routes/commentRoutes";
+import { quizRoutes } from "./routes/quizRoutes";
+import { enrollRoutes } from "./routes/enrollmentRoutes";
+// import { categoryRoutes } from "./routes/categoryRoutes";
+import { questionRoutes } from "./routes/questionRoutes";
+import { reviewRoutes } from "./routes/reviewRoutes";
+import { progressRoutes } from "./routes/progressRoutes";
 
 const app = express();
 
@@ -24,6 +32,19 @@ app.use(express.json());
 app.use('/auth',authRoutes)
 app.use('/admin',adminRoutes)
 app.use('/user',userRoutes)
+app.use('/course',courseRoutes)
+// app.use('/category',categoryRoutes)
+app.use('/lesson',lessonRoutes)
+app.use('/comment',commentRoutes)
+app.use('/quiz',quizRoutes)
+app.use('/enrollment',enrollRoutes)
+app.use('/review',reviewRoutes)
+app.use('/question',questionRoutes)
+app.use('/progress',progressRoutes)
+
+
+
+
 
 // const admin= new AdminService()
 AppDataSource.initialize().then(async ()=>{

@@ -3,20 +3,20 @@ import { courseRepository } from "../repositories/courseRepository";
 
 export class CourseService{
     async createCourse(courseData: Partial<Course>){
-        const course = courseRepository.create(courseData);
+        const course =await courseRepository.create(courseData);
         return await courseRepository.save(course);
     }
 
 
     async getCourseById(id:number){
-        const course= await courseRepository.findOne({where:{course_id:id}})
+        const course= await courseRepository.findOne({where:{id}})
         if(!course) throw new Error("Course not found!")
         return course
     }
 
     async updateCourse(id:number, data:Partial<Course>){
         await courseRepository.update(id,data)
-        const updateCourse= await courseRepository.findOne({where:{course_id:id}})
+        const updateCourse= await courseRepository.findOne({where:{id}})
         if(!updateCourse) throw new Error("Course not found")
         return updateCourse
     }

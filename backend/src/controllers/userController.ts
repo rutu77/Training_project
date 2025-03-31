@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/userService";
+const userService= new UserService()
 
 export class UserController{
-    userService= new UserService()
 
     async getUserById(req:Request,res:Response){
         const userId= Number(req.params.id)
         try{
-        const user= await this.userService.getUserById(userId)
+        const user= await userService.getUserById(userId)
         res.status(200).json({data:user});
         }catch(error){
             res.status(404).json({ message: (error as Error).message });
@@ -19,7 +19,7 @@ export class UserController{
         const userId= Number(req.params.id)
         const data= req.body
         try{
-        const updatedUser= await this.userService.updateUserById(userId,data)
+        const updatedUser= await userService.updateUserById(userId,data)
         res.status(200).json({message:"User updated successfully",data:updatedUser})
         }
         catch(error){
@@ -30,7 +30,7 @@ export class UserController{
     async deleteUser(req:Request,res:Response){
         const userId= Number(req.params.id)
         try{
-        await this.userService.deleteUser(userId)
+        await userService.deleteUser(userId)
         res.status(200).json({message:"User deleted successfully"})
         } catch(error){
         res.status(404).json({ message:(error as Error).message });
@@ -39,7 +39,7 @@ export class UserController{
 
     async getAllUsers(req:Request,res:Response){
         try{
-            const users= await this.userService.getAllUsers();
+            const users= await userService.getAllUsers();
             res.status(200).json(users)
         }
         catch(error){

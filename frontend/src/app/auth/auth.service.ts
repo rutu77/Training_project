@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../models/model';
 import { BehaviorSubject } from 'rxjs';
 import Swal from 'sweetalert2';
+import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -32,10 +33,13 @@ export class AuthService {
           localStorage.setItem('loggedIn', 'true');
           this.authState.next(true);
           this.roleSubject.next(res.data.user.role);
+          const decodedToken = jwt_decode(res.data.token) as { id: string, email: string, iat: number, exp: number };
+          const userId = decodedToken.id;
+          localStorage.setItem('userId',userId)
         } 
-        // else {
-        //   console.error("Token is undefined in the response");
-        // }
+        else{
+          console.error("Token not foun");
+        }
       },
       (error: any) => {
         console.error("Error during login:", error);

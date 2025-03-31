@@ -10,14 +10,14 @@ export class CommentService{
       
     
     async getCommentById(id: number){
-    const comment = await commentRepository.findOne({ where: { comment_id: id } });
+    const comment = await commentRepository.findOne({ where: {id } });
     if (!comment) throw new Error("Comment not found!");
     return comment;
     }
 
     async updateCommentById(id: number, data: Partial<Comment>){
     commentRepository.update(id, data);
-    const updatedComment = await commentRepository.findOne({ where: { comment_id: id } });
+    const updatedComment = await commentRepository.findOne({ where: {id } });
     if (!updatedComment) throw new Error("Comment not found!");
     return updatedComment;
     }
