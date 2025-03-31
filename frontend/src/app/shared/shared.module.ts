@@ -10,8 +10,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import {MultiSelectModule} from 'primeng/multiselect'
 import { FormsModule } from '@angular/forms';
 import { MenubarModule } from 'primeng/menubar';
+import { SidebarModule } from 'primeng/sidebar';
+import { ScrollTopModule } from 'primeng/scrolltop';
 
-const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule, DropdownModule,MenubarModule, MultiSelectModule, RippleModule]
+const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModule,ScrollTopModule, DropdownModule,MenubarModule, MultiSelectModule, RippleModule]
 
 
 @NgModule({

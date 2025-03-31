@@ -1,29 +1,94 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #007bff;
+  margin: 0 10px;
+}
+
 .search-bar {
-  width: 200px;
-  margin-left: 10px;
   padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.dropdown, .profile-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: block;
+  position: absolute;
+  background-color: white;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  z-index: 1000;
+  border-radius: 5px;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  color: black;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+/* .custom-menubar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 15px; 
+}
+
+.search-bar {
+  width: 220px;
+  padding: 6px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
 .category-dropdown {
-  margin-left: 15px;
-  width: 150px;
+  width: 160px;
 }
 
 .profile-dropdown {
   position: relative;
-  display: inline-block;
 }
 
-.dropdown-content {
+.profile-dropdown .dropdown-content {
   display: none;
   position: absolute;
   background: white;
+  right: 0;
   min-width: 160px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  right: 0;
-  z-index: 10;
 }
 
 .profile-dropdown:hover .dropdown-content {
@@ -34,124 +99,14 @@
   margin-left: 10px;
 }
 
-
-
-/* body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f8ff; 
-  color: #333;
-  margin: 0;
-  padding: 0;
-}
-
-.p-menubar {
-  background-color: #e0f7fa !important; 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.p-menuitem-link, .p-button-text {
-  color: #007bb5 !important;
-}
-
 .category-dropdown {
-  margin: 0 10px;
+  width: 160px;
 }
 
-.search-bar {
-  margin: 0 10px;
-}
-
-.profile-dropdown .dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #ffffff; 
+.p-dropdown {
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
 }
 
-.profile-dropdown:hover .dropdown-content {
-  display: block;
-}
-
-.dropdown-content a, .dropdown-content button {
-  color: #007bb5; 
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-}
-
-.dropdown-content a:hover, .dropdown-content button:hover {
-  background-color: #e0f7fa; 
-} */
-
-/* nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: lightskyblue; 
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-nav a, nav button {
-  color: rgb(11, 92, 124); 
-  padding: 14px 20px;
-  text-decoration: none;
-  text-align: center;
-  margin: 0 10px;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-
-nav .search-bar {
-  padding: 6px;
-  margin-left: 10px;
-  border: 1px solid rgb(11, 92, 124);
-  border-radius: 4px;
-}
-
-
-nav .dropdown, nav .profile-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-nav .dropbtn {
-  color:  rgb(11, 92, 124);
-  border: none;
-  cursor: pointer;
-}
-
-nav .dropdown-content, nav .profile-dropdown .dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #ffffff; 
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-nav .dropdown-content a, nav .profile-dropdown .dropdown-content a, nav .profile-dropdown .dropdown-content button {
-  color: #007bb5; 
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-}
-
-nav .dropdown-content a:hover, nav .profile-dropdown .dropdown-content a:hover, nav .profile-dropdown .dropdown-content button:hover {
-  background-color: #e0f7fa; 
-}
-
-nav .dropdown:hover .dropdown-content, nav .profile-dropdown:hover .dropdown-content {
-  display: block;
+.p-dropdown-panel {
+  z-index: 1000 !important;
 } */

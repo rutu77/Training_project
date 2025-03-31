@@ -1,0 +1,260 @@
+<div class=" bg-cover bg-no-repeat bg-bottom py-6 px-3 md:px-6 relative surface-900">
+    <!-- style="background: url(assets/images/header2.jpg);" -->
+    <div class="my-0 mx-auto w-full z-2 relative" style="max-width: 1200px;">
+        <div class="flex flex-column gap-5 lg:flex-row justify-content-between">
+            <div class="flex justify-content-center lg:justify-content-start align-items-center gap-4">
+
+                <ul class=" list-none flex gap-3 p-0 m-0">
+                    <!-- <a routerLink="/article/home" routerLinkActive='active' (click)="scrollWindow()"
+                        class="no-underline text-sm text-white cursor-pointer transition-duration-200 hover:text-primary-100">
+                        <li>Home</li>
+                    </a>
+                    <a routerLink="/article/aboutus" (click)="scrollWindow()"
+                        class="no-underline text-sm  text-white cursor-pointer transition-duration-200 hover:text-primary-100">
+                        <li>About us</li>
+                    </a>
+                    <a routerLink="/article/contact" (click)="scrollWindow()"
+                        class="no-underline text-sm  text-white cursor-pointer transition-duration-200 hover:text-primary-100">
+                        <li>Contact us</li>
+                    </a>
+                    <a *ngIf="showAddArticleOption"
+                        class="dropdown text-sm text-white cursor-pointer transition-duration-200 hover:text-primary-100">
+                        <li class="dropbtn">Articles</li>
+                        <div class="dropdown-content">
+                            <a routerLink="/article/add-article" (click)="scrollWindow()"
+                                class="hover:text-primary-100">Add Article</a>
+                            <a class="hover:text-primary-100">Link 2</a>
+                            <a class="hover:text-primary-100">Link 3</a>
+                        </div>
+                    </a> -->
+
+                    <li   (click)="scrollWindow()">
+                        <a routerLinkActive="active"  routerLink="/article/home"
+                            class="no-underline  p-element cursor-pointer px-4 py-3 flex align-items-center  text-white hover:text-gray-900 transition-duration-200 hover:bg-white "
+                            style="border-radius: 30px;" >
+                            <span routerLinkActive="active" class="font-xs">Home</span>
+                        </a>
+                    </li>
+                    <li class=" ">
+                        <a routerLink="/article/aboutus" routerLinkActive="active" (click)="scrollWindow()"
+                            class="no-underline p-ripple p-element cursor-pointer px-4 py-3 flex align-items-center  text-white hover:text-gray-900 transition-duration-200 hover:bg-white "
+                            style="border-radius: 30px;">
+                            <span routerLinkActive="active" class="font-xs">About us</span>
+                        </a>
+                    </li>
+                    <li class=" ">
+                        <a routerLink="/article/contact" routerLinkActive="active" (click)="scrollWindow()"
+                            class="no-underline p-ripple p-element cursor-pointer px-4 py-3 flex align-items-center  text-white hover:text-gray-900 transition-duration-200 hover:bg-white "
+                            style="border-radius: 30px;">
+                            <span routerLinkActive="active" class="font-xs">Contact us</span>
+                        </a>
+                    </li>
+                    <li class="" *ngIf="showAddArticleOption">
+                        <a routerLinkActive="active" routerLink="/article/add-article" (click)="scrollWindow()"  class="no-underline p-ripple p-element cursor-pointer px-4 py-3 flex align-items-center  text-white hover:text-gray-900 transition-duration-200 hover:bg-white "
+                            style="border-radius: 30px;">
+                            <span routerLinkActive="active" class="font-xs">Publish Articles</span>
+                        </a>
+
+                        <!-- <a *ngIf="showAddArticleOption" routerLink="/article/add-article" (click)="scrollWindow()"
+                            class="no-underline p-ripple p-element cursor-pointer px-4 py-3 flex align-items-center  text-white hover:text-gray-900 transition-duration-200 hover:bg-white"
+                            style="border-radius: 30px;">
+
+                    <li class="dropbtn hover:text-gray-900">Articles</li>
+
+                    <div class="dropdown-content">
+                        <a routerLink="/article/add-article" (click)="scrollWindow()" class="hover:text-primary-100">Add
+                            Article</a>
+                        <a class="hover:text-primary-100">Link 2</a>
+                        <a class="hover:text-primary-100">Link 3</a>
+                    </div>
+
+                    </a> -->
+
+                    </li>
+
+
+                    <!-- <a routerLink="/article/test" (click)="scrollWindow()"
+                        class=" no-underline  text-white cursor-pointer transition-duration-200 hover:text-primary-100">
+                        <li>Test</li>
+                    </a> -->
+                </ul>
+            </div>
+            <div class="flex justify-content-center lg:justify-content-end align-items-center gap-3">
+
+                <!-- <button pbutton="" pripple="" label="Login" routerLink="/auth/login" *ngIf="showLogout" (click)="onLogout()"
+                    class="text-sm p-element p-ripple w-8rem p-button-outlined text-white hover:text-gray-700 transition-duration-200 hover:bg-white p-button ">
+                    <span class="p-button-label">Logout</span>
+                </button> -->
+
+                <button pbutton="" pripple="" label="Login" routerLink="/auth/login"  *ngIf="showLogin"
+                    class="text-sm p-element p-ripple w-8rem p-button-outlined text-white hover:text-gray-700 transition-duration-200 hover:bg-white p-button ">
+                    <span class="p-button-label">Login</span>
+                </button>
+
+                <button pbutton="" pripple="" label="Register" routerLink="/auth/signup" *ngIf="showRegister"
+                    class="text-sm p-element p-ripple w-8rem p-button-outlined text-white hover:text-gray-700 transition-duration-200 hover:bg-white p-button ">
+                    <span class="p-button-label">Register</span>
+                </button>
+
+                <button pbutton="" pripple="" label="Register" *ngIf="showProfile" (click)="onProfileClick()"
+                    class="text-sm p-element p-ripple  p-button-outlined text-white hover:text-gray-700 transition-duration-200 hover:bg-white p-button ">
+                    <span class="p-button-label"><i class="pi pi-user" style="font-size: 1rem"></i></span>
+                </button>
+
+
+
+            </div>
+        </div>
+        <!-- Center text -->
+
+        <div class="text-center my-6 relative">
+            <div class="text-6xl font-bold mb-1 text-white">CONTENMAN</div>
+            <div class="text-4xl  font-bold mb-4 text-white">Fascism is not an article for export</div>
+            <p class="mt-0 mb-3 line-height-3 text-center mx-auto text-white " style="max-width: 500px;">
+                Lorem
+                ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua.
+            </p>
+            <div class="flex align-items-center justify-content-center flex-wrap">
+
+                <button pbutton="" pripple="" label="Register" (click)="scrollWindow()"
+                    routerLink="/article/other-articles"
+                    class=" p-3 mt-3 text-sm p-element p-ripple w-8rem p-button-outlined text-white hover:text-gray-700 transition-duration-200 hover:bg-white p-button ">
+                    <span class="p-button-label">Explore More</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- completer your profile section -->
+<!-- <div class="completeProfile" *ngIf="completeProfile">
+    <div class="md:px-8 px-4 my-4 surface-section ng-star-inserted">
+        <div class="shadow-2 flex flex-wrap justify-content-between align-content-center px-4 md:px-8"
+            style="background: linear-gradient(90deg, #fff 0%, #fff 100%); border-radius: 8px;">
+            <div class="flex align-items-start py-3">
+                <div>
+                    <span
+                        class="inline-flex border-circle justify-content-center align-items-center text-white bg-green-500 mr-4"
+                        style="width: 38px; height: 38px;"><i class="pi pi-check-circle text-xl"></i>
+                    </span>
+                </div>
+                <div>
+                    <div class="text-700 font-bold mb-1">Complete your profile</div><span
+                        class="text-600">Now is the time to fill all the necessaru information to complete your
+                        profile</span>
+                </div>
+                
+            </div>
+
+            <div class=" py-3">
+                <p-knob [(ngModel)]="value" valueColor="green"  [readonly]="true" [size]="60"></p-knob>
+            </div>
+        
+            <a pripple="" (click)="completeProfileBtn()" *ngIf="showCompleteProfileBtn"
+                class="no-underline p-ripple p-element cursor-pointer bg-bluegray-500 text-white px-3 py-2 line-height-3 my-3 hover:bg-bluegray-400 transition-colors transition-duration-150"
+                style="border-radius: 35px;"><span>Take me there!</span><i class="ml-2 pi pi-arrow-right"></i><span
+                    class="p-ink"></span>
+            </a>
+           
+           
+
+        </div>
+    </div>
+</div> -->
+
+<p-sidebar [(visible)]="sidebarVisible" position="right">
+
+    <div class="p-sidebar-content ">
+
+        <div class="flex flex-column mx-auto md:mx-0 ">
+            <span class="mb-2 font-semibold">Welcome</span>
+            <span class="text-color-secondary font-medium mb-5">{{activeUserData.firstname
+                }}&nbsp;{{activeUserData.lastname}}</span>
+
+            <ul class="list-none m-0 p-0">
+                <li routerLink="/article/profile" routerLinkActive="active-link" >
+                    <a (click)="scrollWindow()" 
+                        class="no-underline cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
+                        <span>
+                            <i class="pi pi-user text-xl text-primary"></i>
+                        </span>
+                        <div class="ml-3">
+                            <span class="mb-2 font-semibold text-dark">Profile</span>
+                        </div>
+                    </a>
+                </li>
+
+                <li routerLink="/article/myArticles">
+                    <a (click)="scrollWindow()"
+                        class="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
+                        <span>
+                            <i class="pi pi-file text-xl text-primary"></i>
+                        </span>
+                        <div class="ml-3">
+                            <span class="mb-2 font-semibold">My Articles</span>
+                        </div>
+                    </a>
+                </li>
+
+                <li routerLink="/admin/dashboard" *ngIf="showAdminDashboard">
+                    <a
+                        class="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
+                        <span>
+                            <i class="pi pi-shield text-xl text-primary"></i>
+                        </span>
+                        <div class="ml-3">
+                            <span class="mb-2 font-semibold">Dashboard</span>
+                        </div>
+                    </a>
+                </li>
+
+                <li>
+                    <a (click)="onLogout()"
+                        class="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
+                        <span>
+                            <i class="pi pi-power-off text-xl text-primary"></i>
+                        </span>
+                        <div class="ml-3">
+                            <span class="mb-2 font-semibold">Sign Out</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+
+
+        <!-- <div class="flex flex-column mt-5 mx-auto md:mx-0 "><span class="mb-2 font-semibold">Notifications</span><span
+                class="text-color-secondary font-medium mb-5">You
+                have 3 notifications</span>
+            <ul class="list-none m-0 p-0">
+                <li><a
+                        class="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150"><span><i
+                                class="pi pi-comment text-xl text-primary"></i></span>
+                        <div class="ml-3"><span class="mb-2 font-semibold">Your post has new comments</span>
+                            <p class="text-color-secondary m-0">5 min ago</p>
+                        </div>
+                    </a></li>
+                <li><a
+                        class="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150"><span><i
+                                class="pi pi-trash text-xl text-primary"></i></span>
+                        <div class="ml-3"><span class="mb-2 font-semibold">Your post has been deleted</span>
+                            <p class="text-color-secondary m-0">15min ago</p>
+                        </div>
+                    </a></li>
+                <li><a
+                        class="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150"><span><i
+                                class="pi pi-folder text-xl text-primary"></i></span>
+                        <div class="ml-3"><span class="mb-2 font-semibold">Post has been updated</span>
+                            <p class="text-color-secondary m-0">3h ago</p>
+                        </div>
+                    </a></li>
+            </ul>
+        </div> -->
+
+
+
+    </div>
+
+</p-sidebar>
