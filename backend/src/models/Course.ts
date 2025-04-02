@@ -45,7 +45,7 @@ export class Course {
   // @ManyToOne(()=> Category,(category)=>category.courses,{ nullable: true })
   // @JoinColumn({ name: "category_id" }) 
   // category:Category;
-
+  
   @OneToMany(()=>Lesson,(lesson)=>lesson.course,{ cascade: true , onDelete: 'CASCADE' })
   lessons:Lesson[];
 

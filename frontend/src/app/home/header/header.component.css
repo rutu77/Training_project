@@ -1,0 +1,11 @@
+.header {
+  background-repeat: no-repeat;
+  background-position: bottom;
+  padding: 1.5rem 1rem;
+  position: relative;
+  background-color: #122850; 
+}
+
+.explore-button{
+  background-color: rgb(57, 69, 124);
+}

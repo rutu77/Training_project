@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import { User } from './User';
 import { Course } from './Course';
 
@@ -14,7 +14,7 @@ export class Enrollment {
     @JoinColumn({name:'course_id'})
     course:Course;
 
-    @Column()
+    @CreateDateColumn()
     enrollment_date:Date;
 
     @Column({default:"in_progress"})

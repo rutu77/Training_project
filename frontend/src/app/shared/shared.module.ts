@@ -12,8 +12,11 @@ import { FormsModule } from '@angular/forms';
 import { MenubarModule } from 'primeng/menubar';
 import { SidebarModule } from 'primeng/sidebar';
 import { ScrollTopModule } from 'primeng/scrolltop';
+import { MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
 
-const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModule,ScrollTopModule, DropdownModule,MenubarModule, MultiSelectModule, RippleModule]
+
+const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModule,ScrollTopModule, DropdownModule,MenubarModule, MenuModule, MultiSelectModule, RippleModule]
 
 
 @NgModule({

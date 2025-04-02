@@ -55,4 +55,14 @@ export class ReviewController {
       res.status(500).json({ error: "Error fetching reviews" });
     }
   }
+
+  // async getMeanRatings(req: Request, res: Response): Promise<void> {
+  //   const courseId= Number(req.params.id);
+  //   try {
+  //     const ratings = await reviewService.getMeanRating(courseId);
+  //     res.status(200).json(ratings);
+  //   } catch (error) {
+  //     res.status(500).json({ error: "Error fetching ratings" });
+  //   }
+  // }
 }

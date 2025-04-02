@@ -11,96 +11,36 @@
             </div>
         </div>
 
-        <input type="text" placeholder="Search courses..." class="search-bar" (input)="searchCourses($event)">
+        <input type="text" pInputText placeholder="Search courses..." class="search-bar" (input)="searchCourses($event)">
 
         <a routerLink="/progress" class="nav-link">Progress</a>
+
+        <div *ngIf="isTeacher || isAdmin" class="course-dropdown">
+            <button pButton type="button" label="Course Settings" class="dropbtn" (click)="toggleCourseDropdown()"></button>
+            <div class="dropdown-content" *ngIf="courseDropdownOpen">
+                <a routerLink="/home/addCourse" class="nav-link">Add Course</a>
+                <a routerLink="/home/updateCourse" class="nav-link">Update Course</a>
+                <a routerLink="/home/deleteCourse" class="nav-link">Delete Course</a>
+            </div>
+        </div>
+        
     </div>
 
     <div class="right-section">
         <div *ngIf="isLoggedIn" class="profile-dropdown">
-            <button class="dropbtn" (click)="toggleProfileDropdown()">Profile</button>
+            <button pButton type="button" label="Profile" icon="pi pi-user" class="dropbtn" (click)="toggleProfileDropdown()"></button>
             <div class="dropdown-content" *ngIf="profileDropdownOpen">
                 <a routerLink="/profile">Edit Profile</a>
-                <a routerLink="/my-learnings">My Learnings</a>
+                <a routerLink="/home/mylearnings">My Learnings</a>
                 <button (click)="logout()">Logout</button>
             </div>
-        </div>
+        </div>  
 
       
         <div *ngIf="!isLoggedIn">
-            <button routerLink="/auth/login">Login</button>
-            <button routerLink="/auth/register">Register</button>
+            <button pButton type="button" label="Login" routerLink="/auth/login"></button>
+            <button pButton type="button" label="Register" routerLink="/auth/register"></button>
         </div>
     </div>
 </nav>
 
-<!-- <nav>
-    <div class="left-section">
-        <a routerLink="/home">Home</a>
-        <div class="dropdown">
-            <button class="dropbtn">Categories</button>
-            <div class="dropdown-content">
-                <a href="#" (click)="filterCourses('Category 1')">Category 1</a>
-                <a href="#" (click)="filterCourses('Category 2')">Category 2</a>
-                <a href="#" (click)="filterCourses('Category 3')">Category 3</a>
-            </div>
-        </div>
-        <input type="text" placeholder="Search courses..." class="search-bar">
-        <a routerLink="/progress">Progress</a>
-    </div>
-
-    <div class="right-section">
-        <div *ngIf="isLoggedIn" class="profile-dropdown">
-            <button class="dropbtn">Profile</button>
-            <div class="dropdown-content">
-                <a routerLink="/profile">Edit Profile</a>
-                <a routerLink="/my-learnings">My Learnings</a>
-                <button (click)="logout()">Logout</button>
-            </div>
-        </div>
-        <div *ngIf="!isLoggedIn">
-            <button routerLink="/auth/login">Login</button>
-            <button routerLink="/auth/register">Register</button>
-        </div>
-    </div>
-</nav> -->
-
-<!-- <p-menubar class="custom-menubar">
-    <ng-template pTemplate="start">
-        <div class="left-section">
-            <a routerLink="/home" class="p-menuitem-link">Home</a>
-            
-            <p-dropdown 
-            [options]="categories" 
-            optionLabel="label" 
-            placeholder="Categories" 
-            (onChange)="filterCourses($event.value)" 
-            styleClass="category-dropdown">
-            </p-dropdown>
-
-            <input type="text" 
-                   pInputText 
-                   placeholder="Search courses..." 
-                   (input)="searchCourses($event)" 
-                   class="search-bar">
-            
-            <a routerLink="/progress" class="p-menuitem-link">Progress</a>
-        </div>
-    </ng-template>
-    
-    <ng-template pTemplate="end">
-        <div *ngIf="isLoggedIn" class="profile-dropdown">
-            <button pButton type="button" label="Profile" icon="pi pi-user" class="p-button-text"></button>
-            <div class="dropdown-content">
-                <a routerLink="/profile" class="p-menuitem-link">Edit Profile</a>
-                <a routerLink="/my-learnings" class="p-menuitem-link">My Learnings</a>
-                <button pButton type="button" label="Logout" class="p-button-text" (click)="logout()"></button>
-            </div>
-        </div>
-
-        <div *ngIf="!isLoggedIn" class="auth-buttons">
-            <button pButton type="button" label="Login" routerLink="/auth/login" class="p-button-text"></button>
-            <button pButton type="button" label="Register" routerLink="/auth/register" class="p-button-text"></button>
-        </div>
-    </ng-template>
-</p-menubar> -->

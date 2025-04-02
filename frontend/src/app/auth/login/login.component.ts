@@ -29,7 +29,7 @@ export class LoginComponent {
             text: "Login Successful!",
             icon: "success"
           });
-          this.router.navigate(['/index']);
+          this.router.navigate(['/home']);
         }
       })
   }

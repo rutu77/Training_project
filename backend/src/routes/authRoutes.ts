@@ -11,3 +11,4 @@ router.post('/login',authController.login)
 
 
 export {router as authRoutes}
+

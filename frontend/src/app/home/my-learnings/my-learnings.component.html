@@ -1,0 +1,24 @@
+<!-- <div class="course-list" id="courseList">
+  <div *ngFor="let course of courses" *ngIf="isEnrolled(course.id)" class="course-card">
+      <img src="{{ course.thumbnail }}" alt="{{ course.title }}" class="course-thumbnail">
+      <div class="course-details">
+          <h2 class="course-title">{{ course.title }}</h2>
+          <p class="course-description">{{ course.description }}</p>
+      </div>
+  </div>
+</div>
+Can't have multiple template bindings on one element. Use only one attribute prefixed with * -->
+
+<div class="course-list" id="courseList">
+  <ng-container *ngFor="let course of courses">
+      <ng-container *ngIf="isEnrolled(course.id)">
+          <div class="course-card">
+              <img src="{{ course.thumbnail }}" alt="{{ course.title }}" class="course-thumbnail">
+              <div class="course-details">
+                  <h2 class="course-title">{{ course.title }}</h2>
+                  <p class="course-description">{{ course.description }}</p>
+              </div>
+          </div>
+      </ng-container>
+  </ng-container>
+</div>

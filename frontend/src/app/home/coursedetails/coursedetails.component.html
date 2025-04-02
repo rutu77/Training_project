@@ -1,0 +1,11 @@
+<div *ngIf="course" class="course-detail">
+    <h1>{{ course.title }}</h1>
+    <img [src]="course.thumbnail" alt="{{ course.title }}" class="course-thumbnail">
+    <p>{{ course.description }}</p>
+    <div class="course-meta">
+      <span>Price: ₹{{ course.price }}</span>
+      <!-- <span>Rating: {{ course.rating }}</span> -->
+    </div>
+    <!-- <button (click)="enroll(course.course_id)" class="enroll-button">Enroll</button> -->
+</div>
+  

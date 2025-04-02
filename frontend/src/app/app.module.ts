@@ -11,13 +11,12 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { AdminModule } from './admin/admin.module';
 import {SharedModule } from "./shared/shared.module";
 import { HomeModule } from './home/home.module';
-import { FooterComponent } from './footer/footer.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     NotfoundComponent,
-    FooterComponent,
   ],
   imports: [
     BrowserModule,

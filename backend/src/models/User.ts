@@ -4,8 +4,7 @@ import { Enrollment } from './Enrollment';
 import { Comment } from './Comment';
 import { Review } from './Review';
 import { Progress } from './Progress';
-import { Quiz } from './Quiz';
-import { Question } from './Question';
+
 
 @Entity({name:"User_tbl47"})
 export class User {
@@ -39,7 +38,6 @@ export class User {
     @OneToMany(()=>Enrollment,(enrollment)=>enrollment.user, { cascade: true, onDelete: 'CASCADE' })
     enrollments:Enrollment[];
  
-
     @OneToMany(()=>Comment,(comment)=>comment.user, { cascade: true, onDelete: 'CASCADE' })
     comments:Comment[];
 

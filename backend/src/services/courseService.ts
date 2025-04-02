@@ -1,9 +1,13 @@
 import { Course } from "../models/Course";
+import { User } from "../models/User";
 import { courseRepository } from "../repositories/courseRepository";
+import { userRepository } from "../repositories/userRepository";
 
 export class CourseService{
-    async createCourse(courseData: Partial<Course>){
-        const course =await courseRepository.create(courseData);
+    async createCourse(courseData: { title:string, description:string, isPublished:boolean, thumbnail:string, price:number, tags:string[], creatorId:number, level:'beginner' | 'intermediate' | 'advanced', duration:number } ){
+        console.log(courseData.creatorId);
+        const user= await userRepository.findOne({where:{id:courseData.creatorId}}) as User
+        const course = courseRepository.create({...courseData, creator:user});
         return await courseRepository.save(course);
     }
 
@@ -15,15 +19,20 @@ export class CourseService{
     }
 
     async updateCourse(id:number, data:Partial<Course>){
-        await courseRepository.update(id,data)
-        const updateCourse= await courseRepository.findOne({where:{id}})
+        // console.log(data);
+        data = {...data,id:undefined}
+        await courseRepository.update({
+            id:+id
+        },
+        {...data})
+        const updateCourse= await courseRepository.findOne({where:{id:+id}})
         if(!updateCourse) throw new Error("Course not found")
         return updateCourse
     }
 
     async deleteCourse(id:number){
         const result= await courseRepository.delete(id)
-        if(result.affected===0) throw new Error("User not found!")
+        if(result.affected===0) throw new Error("Course not found!")
     }
 
     async getAllCourses(){

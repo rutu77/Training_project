@@ -9,17 +9,36 @@ export interface User{
 }
 
 export interface Course{
-    course_id:number
+    id:number
     title:string
     description:string
     isPublished:boolean
     thumbnail?:string
     price:number
-    tags?:string[]
+    tags?:string[],
+    creatorId:number,
+    level:string,
+    duration:number
+}
+
+export interface AddCourse{
+    title:string,
+    description:string,
+    isPublished:boolean,
+    thumbnail:string,
+    price:number,
+    tags:string[],
+    creatorId:number,
+    level:string,
+    duration:number
 }
 
 export interface Enrollment{
-    enrollment_id:number
+    enrollment_id:number,
+    enrollment_date:Date,
+    user:User,
+    course:Course
+    status: "in_progress"|"completed"; 
 }
 
 export interface Lesson{
@@ -46,8 +65,11 @@ export interface Category{
 
 export interface Review{
     review_id:number,
-    ratring:number,
+    user:User,
+    course:Course
+    rating:number,
     comment?:string
+
 }
 
 export interface Comment{

@@ -7,12 +7,17 @@ export class EnrollmentController {
 
   
     async createEnrollment(req: Request, res: Response){
-      const enrollmentData: Partial<Enrollment> = req.body;
+      const enrollmentData: any = req.body; 
+      // console.log(enrollmentData.userId, enrollmentData.courseId);
+      // const userId=enrollmentData.userId;
+      // const courseId=enrollmentData.courseId;
+           
+
       try {
         const enrollment = await enrollmentService.createEnrollment(enrollmentData);
         res.status(201).json({ message: "Enrollment created successfully!", data: enrollment });
       } catch (error) {
-        res.status(500).json({ error: "Error creating enrollment" });
+        res.status(500).json({ error: (error as Error).message});
       }
     }
   
