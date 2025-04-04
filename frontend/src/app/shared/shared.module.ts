@@ -14,14 +14,18 @@ import { SidebarModule } from 'primeng/sidebar';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
+import { FooterComponent } from './footer/footer.component';
+import { DialogModule } from 'primeng/dialog';
+import { TableModule } from 'primeng/table';
 
 
-const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModule,ScrollTopModule, DropdownModule,MenubarModule, MenuModule, MultiSelectModule, RippleModule]
+const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModule,ScrollTopModule,TableModule, DropdownModule,MenubarModule, MenuModule, MultiSelectModule, RippleModule, DialogModule]
 
 
 @NgModule({
   declarations: [
-    NavbarComponent
+    NavbarComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,
@@ -31,6 +35,7 @@ const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModul
   ],
   exports:[
     NavbarComponent,
+    FooterComponent,
     ngPrimeModule
   ]
 })

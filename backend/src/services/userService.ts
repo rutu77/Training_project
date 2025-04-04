@@ -14,7 +14,8 @@ export class UserService{
     }
 
     async updateUserById(id:number,data:Partial<User>){
-        await userRepository.update(id,data)
+        data={...data,id:undefined}
+        await userRepository.update({id:+id},{...data})
         const updatedUser= await userRepository.findOne({where:{id}});
         if(!updatedUser) throw new Error("User not found!")
         return updatedUser;
@@ -28,4 +29,20 @@ export class UserService{
     async getAllUsers(){
         return await userRepository.find();
     }
+
+   async updateProfilePicture(userId: string, filename: string) {
+            const user = await userRepository.findOne({ where: { id: +userId } });
+            if (!user) throw new Error("User not found!");
+            user.profilePicture = filename;
+            await userRepository.save(user);
+            return user;
+            
+            // return { userId, filename };
+    }
+
+        // async updateProfilePicture(userId, profilePicture) {
+        //   await userRepository.update(userId, { profilePicture });
+        //   return await userRepository.findOne(userId);
+        // }
+      
 }

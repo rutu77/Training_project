@@ -7,5 +7,20 @@
       <!-- <span>Rating: {{ course.rating }}</span> -->
     </div>
     <!-- <button (click)="enroll(course.course_id)" class="enroll-button">Enroll</button> -->
+  
+    <button *ngIf="isAdmin || isTeacher" (click)="updateCourse(course.id)" class="update-button">Update</button>
+    
+    <div *ngIf="isEnrolled(course.id)">
+          <h2>Lessons</h2>
+          <div *ngIf="lessons.length === 0" class="no-lessons">No lessons found!</div>
+          <div *ngFor="let lesson of lessons" class="lesson-card" (click)="viewLesson(lesson.id)">
+            <div class="lesson-details">
+              <h2 class="lesson-title">{{ lesson.title }}</h2>
+              <span class="lesson-duration">{{ lesson.duration }}</span>
+            </div>
+          </div>
+      </div>
 </div>
+
+    
   

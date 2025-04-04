@@ -17,4 +17,21 @@ export class AdminService {
   registerAdmin(data:any){
     return this.http.post(`${this.api}/admin/AdminRegister`,data)
   }
+
+  deleteUser(id:number){
+    return this.http.delete(`${this.api}/user/${id}`)
+  }
+
+  getUserById(id:number){
+    return this.http.get(`${this.api}/user/${id}`)
+  }
+
+  updateUser(id:number, data:any){
+    return this.http.put(`${this.api}/user/${id}`,data)
+  }
+
+  getUsers(){
+    return this.http.get(`${this.api}/user/`)
+  }
+
 }

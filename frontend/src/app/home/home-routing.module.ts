@@ -6,20 +6,20 @@ import { CourseListComponent } from './courselist/courselist.component';
 import { CoursedetailsComponent } from './coursedetails/coursedetails.component';
 import { EnrollComponent } from './enroll/enroll.component';
 import { AuthGuard } from '../guard/auth.guard';
-import { AddCourseComponent } from './add-course/add-course.component';
-import { UpdateCourseComponent } from './update-course/update-course.component';
-import { DeleteCourseComponent } from './delete-course/delete-course.component';
 import { MyLearningsComponent } from './my-learnings/my-learnings.component';
+import { AboutComponent } from './about/about.component';
+import { ContactComponent } from './contact/contact.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {path:"",component:HomeComponent},
   {path:'courses',component:CourseListComponent},
   {path:'course/:id',component:CoursedetailsComponent},
   {path: 'enrollment', component: EnrollComponent, canActivate:[AuthGuard] },
-  {path:'addCourse',component:AddCourseComponent},
-  {path:'updateCourse',component:UpdateCourseComponent},
-  {path:'deleteCourse',component:DeleteCourseComponent},
-  {path:'mylearnings',component:MyLearningsComponent}
+  {path:'mylearnings',component:MyLearningsComponent},
+  {path:'about',component:AboutComponent},
+  {path:'contact',component:ContactComponent},
+  {path:'profile',component:ProfileComponent}
 ];
 
 @NgModule({

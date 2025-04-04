@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CourseService } from '../course.service';
+import { HomeService } from '../../services/home.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,7 +15,7 @@ export class EnrollComponent{
     userName: string = '';
     userId= Number(localStorage.getItem('userId'));
   
-    constructor(private route: ActivatedRoute,private router: Router,private courseService: CourseService){}
+    constructor(private route: ActivatedRoute,private router: Router,private homeService: HomeService){}
 
     
     // ngOnInit(): void {
@@ -24,7 +24,7 @@ export class EnrollComponent{
     // }
   
     enroll(){
-      this.courseService.enrollCourse(this.userId, this.courseId).subscribe(() => {
+      this.homeService.enrollCourse(this.userId, this.courseId).subscribe(() => {
         this.router.navigate(['/home/courses']);
         console.log("enrolled successfully")
         this.showEnrollSuccess();

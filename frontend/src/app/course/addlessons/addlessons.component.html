@@ -1,0 +1,20 @@
+<form class="addLesson" [formGroup]="lessonForm" (ngSubmit)="onSubmit()">
+
+    <h2>Add Lesson</h2>
+    
+    <label for="title">Title:</label>
+    <input type="text" id="title" placeholder="Enter Course Title..." formControlName="title">
+
+    <label for="videoUrl">Video URL:</label>
+    <input type="text" id="videoUrl" placeholder="Enter Video URL..." formControlName="videoUrl">
+
+
+    <label for="duration">Duration:</label>
+    <input type="text" id="duration" placeholder="Enter Course Duration..." formControlName="duration">
+
+    <label for="courseId">Course Id:</label>
+    <input type="number" id="courseId" placeholder="Enter Course Id..." formControlName="courseId">
+
+
+    <button type="submit">Submit</button>
+</form>

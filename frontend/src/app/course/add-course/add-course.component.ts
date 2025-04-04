@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { title } from 'process';
-import { CourseService } from '../course.service';
+import { CourseService } from '../../services/course.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -26,7 +26,7 @@ export class AddCourseComponent implements OnInit{
       isPublished: new FormControl(false),
       thumbnail: new FormControl(''),
       price: new FormControl(0),
-      tags: new FormControl(''),
+      // tags: new FormControl(''),
       creatorId: new FormControl(this.userId),
       level: new FormControl(''),
       duration: new FormControl(0)
@@ -34,18 +34,6 @@ export class AddCourseComponent implements OnInit{
 
 
   }
-
-  // addCourseForm = new FormGroup({
-  //   title: new FormControl(''),
-  //   description: new FormControl(''),
-  //   isPublished: new FormControl(false),
-  //   thumbnail: new FormControl(''),
-  //   price: new FormControl(0),
-  //   tags: new FormControl(''),
-  //   creatorId: new FormControl(this.userId),
-  //   level: new FormControl(''),
-  //   duration: new FormControl(0)
-  // }); 
 
   onSubmit(){
     if(this.courseForm.valid){

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { UserService } from "../services/userService";
 const userService= new UserService()
 
+
 export class UserController{
 
     async getUserById(req:Request,res:Response){
@@ -46,4 +47,22 @@ export class UserController{
             res.status(500).json({error:"Error getting all users"})
         }
     }
-}
+
+
+
+    async uploadProfilePicture(req:Request,res:Response): Promise<void> {
+      if (!req.file) {
+       res.status(400).json({ error: "No file uploaded" });
+       return 
+      }
+      try {
+        const userId = req.params.id;
+        const updatedUser = await userService.updateProfilePicture(userId, req.file.filename);
+        res.status(200).json({ message: "Profile picture updated successfully", data: updatedUser });
+      } catch (error) {
+        res.status(500).json({ error: "Error updating profile picture" });
+      }
+    };
+};
+
+

@@ -1,0 +1,17 @@
+<div *ngIf="lesson" class="lesson-detail">
+    <h1>{{ lesson.title }}</h1>
+    <video width="320" height="240"  class="lesson-videourl" autoplay muted>
+      <source src="lesson.videoUrl" type="video/mp4">
+    </video>
+    <!-- <video [src]="lesson.videoUrl" type="video/mp4" class="lesson-videourl"></video> -->
+    <div class="lesson-meta">
+      <span>Duration: {{ lesson.duration }}</span>
+    </div>
+
+    <button (click)="updateLesson(lesson.id)" class="update-button">Update</button>
+</div>
+    <!-- <button (click)="enroll(lesson.lesson_id)" class="enroll-button">Enroll</button> -->
+    <!-- <button (click)="updatelesson(lesson.id)" class="enroll-button">Update</button> -->
+
+
+  

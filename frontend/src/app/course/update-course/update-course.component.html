@@ -1,0 +1,33 @@
+<div class="update-course-container">
+  <h2>Update Course</h2>
+
+  <form [formGroup]="updateCourseForm" (ngSubmit)="onSubmit()">
+    <label for="title">Title:</label>
+    <input id="title" formControlName="title" type="text">
+
+    <label for="description">Description:</label>
+    <textarea id="description" formControlName="description"></textarea>
+
+    <label for="price">Price:</label>
+    <input id="price" formControlName="price" type="number">
+
+    <label for="thumbnail">Thumbnail URL:</label>
+    <input id="thumbnail" formControlName="thumbnail" type="text">
+
+    <label for="level">Level:</label>
+    <select id="level" formControlName="level">
+      <option value="beginner">Beginner</option>
+      <option value="intermediate">Intermediate</option>
+      <option value="advanced">Advanced</option>
+    </select>
+
+    <!-- <label for="tags">Tags (comma separated):</label>
+    <input id="tags" formControlName="tags" type="text"> -->
+
+    <label for="duration">Duration:</label>
+    <input id="duration" formControlName="duration" type="text">
+
+    <button type="submit" [disabled]="updateCourseForm.invalid">Update Course</button>
+  </form>
+</div>
+

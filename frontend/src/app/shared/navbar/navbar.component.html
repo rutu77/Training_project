@@ -2,26 +2,27 @@
     <div class="left-section">
         <a routerLink="/home" class="nav-link">Home</a>
 
-        <div class="dropdown">
-            <button class="dropbtn" (click)="toggleDropdown()">Categories</button>
-            <div class="dropdown-content" *ngIf="dropdownOpen">
-                <a href="#" *ngFor="let category of categories" (click)="filterCourses(category.value)">
-                    {{ category.label }}
-                </a>
-            </div>
+        <input type="text" pInputText placeholder="Search courses..." class="search-bar" (input)="searchCourses($event)" />
+      
+        <div *ngIf="isLoggedIn">
+            <a routerLink="/progress" class="nav-link">Progress</a>
         </div>
 
-        <input type="text" pInputText placeholder="Search courses..." class="search-bar" (input)="searchCourses($event)">
-
-        <a routerLink="/progress" class="nav-link">Progress</a>
 
         <div *ngIf="isTeacher || isAdmin" class="course-dropdown">
             <button pButton type="button" label="Course Settings" class="dropbtn" (click)="toggleCourseDropdown()"></button>
             <div class="dropdown-content" *ngIf="courseDropdownOpen">
                 <a routerLink="/home/addCourse" class="nav-link">Add Course</a>
-                <a routerLink="/home/updateCourse" class="nav-link">Update Course</a>
                 <a routerLink="/home/deleteCourse" class="nav-link">Delete Course</a>
+                <a routerLink="/course/addLesson" class="nav-link">Add Lesson</a>
+                <a routerLink="/course/deleteLesson" class="nav-link">Delete Lesson</a>
+                <a routerLink="/course/courselist" class="nav-link">Manage Course</a>
+                <a routerLink="/course/lessonlist" class="nav-link">Manage Lessons</a>
             </div>
+        </div>
+
+        <div *ngIf="isAdmin" class="course-dropdown">
+                <a routerLink="/admin/userList" class="nav-link">Mange Users</a>
         </div>
         
     </div>
@@ -30,7 +31,7 @@
         <div *ngIf="isLoggedIn" class="profile-dropdown">
             <button pButton type="button" label="Profile" icon="pi pi-user" class="dropbtn" (click)="toggleProfileDropdown()"></button>
             <div class="dropdown-content" *ngIf="profileDropdownOpen">
-                <a routerLink="/profile">Edit Profile</a>
+                <a routerLink="/home/profile">My Profile</a>
                 <a routerLink="/home/mylearnings">My Learnings</a>
                 <button (click)="logout()">Logout</button>
             </div>

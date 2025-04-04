@@ -6,25 +6,27 @@ import { SharedModule } from '../shared/shared.module';
 import { HomeComponent } from './home.component';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
+import { FooterComponent } from '../shared/footer/footer.component';
 import { CourseListComponent } from './courselist/courselist.component';
 import { CoursedetailsComponent } from './coursedetails/coursedetails.component';
 import { EnrollComponent } from './enroll/enroll.component';
-import { AddCourseComponent } from './add-course/add-course.component';
-import { UpdateCourseComponent } from './update-course/update-course.component';
-import { DeleteCourseComponent } from './delete-course/delete-course.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MyLearningsComponent } from './my-learnings/my-learnings.component';
+import { AboutComponent } from './about/about.component';
+import { ContactComponent } from './contact/contact.component';
+import { CourseModule } from '../course/course.module';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
-  declarations: [HomeComponent, HeaderComponent, FooterComponent, CourseListComponent, CoursedetailsComponent, EnrollComponent, AddCourseComponent, UpdateCourseComponent, DeleteCourseComponent,MyLearningsComponent],
+  declarations: [HomeComponent, HeaderComponent, CourseListComponent, ProfileComponent, CoursedetailsComponent, EnrollComponent,MyLearningsComponent, AboutComponent, ContactComponent, ProfileComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,
     SharedModule,
     RouterModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    CourseModule
   ]
 })
 

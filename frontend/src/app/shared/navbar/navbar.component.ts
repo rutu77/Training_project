@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../../auth/auth.service';
+import { Component, Output, EventEmitter } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { CourseService } from '../../home/course.service';
+import { HomeService } from '../../services/home.service';
 import { Course } from '../../models/model';
 
 
@@ -12,6 +12,7 @@ import { Course } from '../../models/model';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
+
 export class NavbarComponent {
   isLoggedIn:boolean=false;
   dropdownOpen = false;
@@ -19,39 +20,33 @@ export class NavbarComponent {
   courseDropdownOpen = false;
   isTeacher:boolean=false;
   isAdmin:boolean=false;
-  courses:Course[]=[]
-  filteredCourses:Course[]=[]
 
-  constructor(private _auth:AuthService, private route:Router, private courseService:CourseService){
+  // @Output() filterByTag= new EventEmitter<string>()
+  @Output() search= new EventEmitter<string>();
+
+  constructor(private _auth:AuthService, private route:Router, private homeService:HomeService){
     this._auth.$authState.subscribe(status=>this.isLoggedIn=status)
     this._auth.$role.subscribe(role=>this.isTeacher=role==='teacher')
     this._auth.$role.subscribe(role=>this.isAdmin=role==='admin')
   }
 
-  categories = [
-    { label: 'Web Development', value: 'Web Development' },
-    { label: 'Data Science', value: 'Data Science' },
-    { label: 'AI', value: 'AI' },
-    { label: 'Design', value: 'Design' }
-  ];
+  // categories = [
+  //   { label: 'Web Development', value: 'Web Development' },
+  //   { label: 'Data Science', value: 'Data Science' },
+  //   { label: 'AI', value: 'AI' },
+  //   { label: 'Design', value: 'Design' },
+  //   { label: 'Angular', value: 'Angular' }
+  // ];
 
-  searchQuery = '';
-
-  ngOnInit():void{
-    this.courseService.getCourses().subscribe((data:any)=>{
-      this.courses=data;
-      this.filteredCourses=data;
-    })
-  }
-
-
-  filterCourses(tag: string) {
-    this.filteredCourses = this.courses.filter(course => course.tags?.includes(tag));
-  }
+  // onFilter(tag: string) {
+  //   this.filterByTag.emit(tag)
+  //   // console.log("tag from navbar", tag);
+  // }
 
   searchCourses(event: any) {
-    const query = event.target.value.toLowerCase();
-    this.filteredCourses = this.courses.filter(course => course.title.toLowerCase().includes(query) || course.description.toLowerCase().includes(query));
+   const searchQuery= event.target.value
+    // console.log(searchQuery);
+    this.search.emit(searchQuery)
   }
 
   

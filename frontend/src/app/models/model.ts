@@ -15,7 +15,7 @@ export interface Course{
     isPublished:boolean
     thumbnail?:string
     price:number
-    tags?:string[],
+    // tags?:string[],
     creatorId:number,
     level:string,
     duration:number
@@ -27,11 +27,23 @@ export interface AddCourse{
     isPublished:boolean,
     thumbnail:string,
     price:number,
-    tags:string[],
+    // tags:string[],
     creatorId:number,
     level:string,
     duration:number
 }
+
+export interface UpdateCourse {
+    title?: string;
+    description?: string;
+    isPublished?: boolean;
+    thumbnail?: string;
+    price?: number;
+    // tags?: string[];
+    level?: string;
+    duration?: number;
+  }
+  
 
 export interface Enrollment{
     enrollment_id:number,
@@ -42,11 +54,11 @@ export interface Enrollment{
 }
 
 export interface Lesson{
-    lesson_id:number
+    id:number
     title:string
     videoUrl:string
     duration?:number
-    position:number
+    courseId:number
 }
 
 export interface Quiz{

@@ -33,8 +33,8 @@ export class Course {
   @Column({type: 'decimal',default: 0})
   price: number;
 
-  @Column('simple-array',{ nullable: true })
-  tags: string[];
+  // @Column('simple-array',{ nullable: true })
+  // tags: string[];
 
   @CreateDateColumn()
   createdAt:Date;

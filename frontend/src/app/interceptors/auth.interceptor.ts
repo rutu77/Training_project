@@ -5,10 +5,10 @@ import { catchError, Observable, throwError } from 'rxjs';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log("---------------------------");
+    // console.log("---------------------------");
     const token= localStorage.getItem('token');
 
-    console.log(token);
+    // console.log(token);
 
     
     let modifiedreq= req;

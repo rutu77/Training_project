@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<!-- <app-navbar (search)="onSearch($event)">
+</app-navbar> -->
 <app-header></app-header>
-<app-courselist></app-courselist>
-<app-footer></app-footer>
+<app-courselist [filteredCourses]="filteredCourses"></app-courselist>

@@ -1,0 +1,17 @@
+<div class="update-lesson-container">
+    <h2>Update Lesson</h2>
+  
+    <form [formGroup]="updateLessonForm" (ngSubmit)="onSubmit()">
+      <label for="title">Title:</label>
+      <input id="title" formControlName="title" type="text">
+  
+      <label for="videourl">Video URL:</label>
+      <input id="videourl" formControlName="videoUrl" type="text">
+
+      <label for="duration">Duration:</label>
+      <input id="duration" formControlName="duration" type="text">
+  
+
+      <button type="submit" [disabled]="updateLessonForm.invalid">Update lesson</button>
+    </form>
+  </div>

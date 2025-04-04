@@ -1,7 +1,7 @@
 select * from User_tbl47
 
 select * from Course_tbl47
-
+ 
 select * from Enrollment_tbl47
 
 select * from Category_tbl47

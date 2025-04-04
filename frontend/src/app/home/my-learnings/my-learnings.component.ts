@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CourseService } from '../course.service';
+import { HomeService } from '../../services/home.service';
 import { Course, Enrollment } from '../../models/model';
+import { CourseService } from '../../services/course.service';
 
 @Component({
   selector: 'app-my-learnings',
@@ -14,14 +15,14 @@ export class MyLearningsComponent implements OnInit {
   enrollments:Enrollment[]=[]
   userId= Number(localStorage.getItem('userId'))
 
-  constructor(private courseservice:CourseService){}
+  constructor(private homeservice:HomeService, private courseService:CourseService){}
 
   ngOnInit(): void {
-    this.courseservice.getCourses().subscribe((data:any)=>{
+    this.courseService.getCourses().subscribe((data:any)=>{
       this.courses=data;
     })
 
-    this.courseservice.getEnrollments().subscribe((data:any)=>{
+    this.homeservice.getEnrollments().subscribe((data:any)=>{
       this.enrollments=data;
     })
   }

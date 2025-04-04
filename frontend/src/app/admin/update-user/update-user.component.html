@@ -1,0 +1,33 @@
+<form [formGroup]="updateUserForm" (ngSubmit)="onSubmit()">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="name">Name</label>
+        <input id="name" pInputText formControlName="name">
+      </div>
+      <div class="p-field">
+        <label for="email">Email</label>
+        <input id="email" pInputText formControlName="email">
+      </div>
+      <div class="p-field">
+        <label for="role">Role</label>
+        <input id="role" pInputText formControlName="role">
+      </div>
+      <!-- <div class="p-field">
+        <label for="password">Password</label>
+        <input id="password" pInputText formControlName="password" type="password">
+      </div>
+      <div class="p-field">
+        <label for="profilePicture">Profile Picture</label>
+        <input id="profilePicture" pInputText formControlName="profilePicture">
+      </div>
+      <div class="p-field">
+        <label for="bio">Bio</label>
+        <textarea id="bio" pInputTextarea formControlName="bio"></textarea>
+      </div> -->
+      <div class="p-dialog-footer">
+        <button pButton type="button" label="Cancel" (click)="onCancel()"></button>
+        <button pButton type="submit" label="Update"></button>
+      </div>
+    </div>
+  </form>
+  

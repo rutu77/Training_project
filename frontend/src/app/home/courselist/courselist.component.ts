@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Course, Enrollment, Review } from '../../models/model';
-import { CourseService } from '../course.service';
+import { Course, Enrollment, Lesson, Review } from '../../models/model';
+import { HomeService } from '../../services/home.service';
+import { CourseService } from '../../services/course.service';
 
 @Component({
   selector: 'app-courselist',
@@ -12,57 +13,50 @@ import { CourseService } from '../course.service';
 
 
 export class CourseListComponent implements OnInit {
-
-  courses: Course[] = [];
+ 
   enrollments: Enrollment[] = [];
   userId = Number(localStorage.getItem('userId'))
   backendUrl: string="http://localhost:3000/";
   reviews: Review[]=[];
   ratings: { [key: number]: any } = {}; 
+  @Input()  filteredCourses: Course[] = [];
 
 
 
-  constructor(private courseService: CourseService, private router: Router) {}
+  constructor(private homeService: HomeService, private router: Router) {}
 
-  ngOnInit(): void {
-    this.courseService.getCourses().subscribe((data: any) => {
-      this.courses = data;
-      // this.courses.forEach(course => {
-      //   console.log('Course ID:', course.id);
-      // });
-    });
+  ngOnInit(): void {    
+    // this.courseService.getCourses().subscribe((data: any) => {
+    //   this.courses = data;
+    //   // this.courses.forEach(course => {
+    //   //   console.log('Course ID:', course.id);
+    //   // });
+    // });
+ 
     
-
-      // Fetch ratings for each course
-      // this.courses.forEach(course => {
-      //   this.courseService.getRatings(course.id).subscribe((ratingData: any) => {
-      //     this.ratings[course.id] = ratingData;
-      //     console.log(`Ratings for course ${course.id}:`, ratingData);
-      //   });
-      // });
-    
-
-    this.courseService.getReviews().subscribe((data:any)=>{
+    this.homeService.getReviews().subscribe((data:any)=>{
       this.reviews= data;
       this.calculateMeanRatings();
 
     })
 
-    this.courseService.getEnrollments().subscribe((data:any) => {
+    this.homeService.getEnrollments().subscribe((data:any) => {
       this.enrollments = data;
       // console.log(this.enrollments);
     });
   }
 
+  
 
-  // getReview(courseId: number){
-  //   const review= this.reviews.find(review=>review.course.id===courseId)
-  //   this.rating= review?.rating
-  // }
+  getReview(courseId: number){
+    const review= this.reviews.find(review=>review.course.id===courseId)
+    // this.rating= review?.rating
+  }
 
   
   calculateMeanRatings(): void {
-    this.courses.forEach(course => {
+    // console.log(this.filteredCourses);
+    this.filteredCourses.forEach(course => {
       const courseReviews = this.reviews.filter(review => review.course.id === course.id);
       if (courseReviews.length > 0) {
         const totalRating = courseReviews.reduce((sum, review) => sum + review.rating, 0);
@@ -88,5 +82,7 @@ export class CourseListComponent implements OnInit {
     const enroll = this.enrollments.some(enrollment => enrollment.user.id === this.userId && enrollment.course.id === courseId);
     return enroll;
   }
+
+  
 }
 

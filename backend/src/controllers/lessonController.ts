@@ -1,18 +1,21 @@
 import { Request, Response } from "express";
 import { LessonService } from "../services/lessonService";
 import { error } from "console";
+import { title } from "process";
+import { Course } from "../models/Course";
+import { Lesson } from "../models/Lesson";
 
 const lessonService = new LessonService()
 
 export class LessonController{
   
     async createLesson(req: Request, res: Response){
-      const lessonData = req.body;
+      const {title,videoUrl,description,duration,courseId} = req.body;
       try {
-        const lesson = await lessonService.createlesson(lessonData);
+        const lesson = await lessonService.createlesson({title,videoUrl,description,duration,courseId}) as Lesson;
         res.status(201).json({ message: "lesson created successfully!", data: lesson });
       } catch (error) {
-        res.status(500).json({ error: "Error creating lesson" });
+        res.status(500).json({ error: error });
       }
     }
 
@@ -26,6 +29,18 @@ export class LessonController{
             res.status(404).json({message:(error as Error).message})
         }
     }
+
+    
+    async getLessonByCourseId(req:Request, res:Response){
+      const courseId= Number(req.params.id)
+      try{
+          const lesson= await lessonService.getLessonsByCourseId(courseId)
+          res.status(200).json({data:lesson})
+      }
+      catch(error){
+          res.status(404).json({message:(error as Error).message})
+      }
+  }
 
     async updateLesson(req: Request, res:Response){
         const lessonId = Number(req.params.id);

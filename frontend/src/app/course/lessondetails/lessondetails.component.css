@@ -1,0 +1,51 @@
+.lesson-detail {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.lesson-detail h1 {
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+}
+
+.lesson-videourl {
+  display: block;
+  width: 70%;
+  height: 70vh; 
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-width: 100%;
+}
+
+.lesson-meta {
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+}
+
+.update-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto;
+}
+
+.update-button:hover {
+  background-color: #0056b3;
+}
+
+
+
+
+

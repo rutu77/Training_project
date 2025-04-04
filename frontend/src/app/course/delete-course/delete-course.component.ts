@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CourseService } from '../course.service';
+import { CourseService } from '../../services/course.service';
 import Swal from 'sweetalert2';
 
 @Component({
