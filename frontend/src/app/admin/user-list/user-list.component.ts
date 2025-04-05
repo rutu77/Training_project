@@ -11,60 +11,119 @@ import { UpdateUserComponent } from '../update-user/update-user.component';
   styleUrl: './user-list.component.css'
 })
 export class UserListComponent implements OnInit {
+ 
+
+  users: User[] = [];
+  displayUpdateDialog: boolean = false;
+  displayAddDialog: boolean = false;
+  selectedUserId!: number;
+
+  constructor(private admin: AdminService) {}
+
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
+  loadUsers() {
+    this.admin.getUsers().subscribe((data: any) => {
+      this.users = data;
+    });
+  }
+
+  openUpdateDialog(userId: number) {
+    this.selectedUserId = userId;
+    this.displayUpdateDialog = true;
+  }
+
+  openAddDialog() {
+    this.displayAddDialog = true;
+  }
+
+  onUserUpdated() {
+    this.loadUsers();
+    this.displayUpdateDialog = false;
+  }
+
+  onCancel() {
+    this.displayUpdateDialog = false;
+    this.displayAddDialog = false;
+  }
+
+  deleteUser(userId: number) {
+    this.admin.deleteUser(userId).subscribe(
+      () => {
+        Swal.fire({
+          title: 'User Deleted',
+          text: 'The user has been deleted successfully!',
+          icon: 'success',
+        });
+        this.loadUsers();
+      },
+      (error: any) => {
+        console.error('Error deleting user:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'An error occurred while deleting the user.',
+          icon: 'error',
+        });
+      }
+    );
+  }
+}
+
   
+  //   users: User[] = [];
+  //   displayUpdateDialog: boolean = false;
+  //   selectedUserId!: number;
+  //   // selectedUser:User |undefined 
   
-    users: User[] = [];
-    displayUpdateDialog: boolean = false;
-    selectedUserId!: number;
-    // selectedUser:User |undefined 
-  
-    constructor(private admin: AdminService) {}
+  //   constructor(private admin: AdminService) {}
   
     
-    ngOnInit(): void {
-      this.loadUsers();
-    }
+  //   ngOnInit(): void {
+  //     this.loadUsers();
+  //   }
   
-    loadUsers() {
-      this.admin.getUsers().subscribe((data: any) => {
-        this.users = data;
-      });
-    }
+  //   loadUsers() {
+  //     this.admin.getUsers().subscribe((data: any) => {
+  //       this.users = data;
+  //     });
+  //   }
   
-    openUpdateDialog(userId: number) {
-      this.selectedUserId= userId;
-      this.displayUpdateDialog = true
-    }
+  //   openUpdateDialog(userId: number) {
+  //     this.selectedUserId= userId;
+  //     this.displayUpdateDialog = true
+  //   }
   
-    onUserUpdated() {
-      this.loadUsers(); 
-      this.displayUpdateDialog = false; 
-    }
+  //   onUserUpdated() {
+  //     this.loadUsers(); 
+  //     this.displayUpdateDialog = false; 
+  //   }
   
-    onCancel() {
-      this.displayUpdateDialog = false; 
-    }
+  //   onCancel() {
+  //     this.displayUpdateDialog = false; 
+  //   }
   
-    deleteUser(userId: number) {
-      this.admin.deleteUser(userId).subscribe(
-        () => {
-          Swal.fire({
-            title: 'User Deleted',
-            text: 'The user has been deleted successfully!',
-            icon: 'success',
-          });
-          this.loadUsers(); 
-        },
-        (error: any) => {
-          console.error('Error deleting user:', error);
-          Swal.fire({
-            title: 'Error',
-            text: 'An error occurred while deleting the user.',
-            icon: 'error',
-          });
-        }
-      );
-    }
-  }
+  //   deleteUser(userId: number) {
+  //     this.admin.deleteUser(userId).subscribe(
+  //       () => {
+  //         Swal.fire({
+  //           title: 'User Deleted',
+  //           text: 'The user has been deleted successfully!',
+  //           icon: 'success',
+  //         });
+  //         this.loadUsers(); 
+  //       },
+  //       (error: any) => {
+  //         console.error('Error deleting user:', error);
+  //         Swal.fire({
+  //           title: 'Error',
+  //           text: 'An error occurred while deleting the user.',
+  //           icon: 'error',
+  //         });
+  //       }
+  //     );
+  //   }
+  // }
   
   
