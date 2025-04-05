@@ -41,9 +41,11 @@ export class CourseService {
 
 
   //Lessons
-  getLessonById(id:number){
-    return this.http.get(`${this.api}/lesson/${id}`)
-  }
+// In CourseService
+getLessonById(id: number) {
+  console.log('Getting lesson with ID:', id);
+  return this.http.get(`${this.api}/lessons/${id}`);
+}
 
   getLessons(){
     return this.http.get(`${this.api}/lesson/`)

@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class UpdatelessonComponent implements OnInit{
 
-  @Input() lessonId!: number;
+  @Input() lessonId!: number ;
   @Output() lessonUpdated= new EventEmitter<void>();
   @Output() cancel= new EventEmitter<void>();
 
@@ -34,11 +34,11 @@ export class UpdatelessonComponent implements OnInit{
 
   }
 
-  // ngOnChanges(): void {
-  //   if (this.lessonId) {
-  //     this.loadlessonData();
-  //   } 
-  // }
+  ngOnChanges(): void {
+    if (this.lessonId) {
+      this.loadlessonData();
+    } 
+  }
 
   loadlessonData(){
     this._course.getLessonById(this.lessonId).subscribe((data:any)=>{
@@ -55,7 +55,7 @@ export class UpdatelessonComponent implements OnInit{
       if (this.updateLessonForm.invalid) return;
     
       const updatedLesson= this.getUpdatedValues(this.updateLessonForm.value);
-      console.log(updatedLesson);
+
       
       this._course.updateLesson(this.lessonId, updatedLesson).subscribe(
         () => {

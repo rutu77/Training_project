@@ -14,6 +14,7 @@ import { HomeModule } from './home/home.module';
 import { CourseModule } from './course/course.module';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { GenericListComponent } from './shared/generic-list/generic-list.component';
 
 
 

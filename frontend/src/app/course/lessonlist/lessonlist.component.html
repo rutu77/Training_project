@@ -1,3 +1,25 @@
+<!-- <app-generic-list 
+  [items]="lessons"
+  [displayUpdateDialog]="displayUpdateDialog"
+  [selectedItemId]="selectedLessonId"
+  [itemFields]="['id','title','videoUrl','duration','courseId']"
+  [itemLabels]="['Id','Title','Video URL','Duration','Course Id']"
+  (itemUpdated)="onLessonUpdated()"
+  (itemAdded)="onLessonAdded()"
+  (itemDeleted)="deleteLesson($event)"
+  (cancel)="onCancel()"
+>
+
+  <ng-container update-form>
+    <app-updatelesson [lessonId]="selectedLessonId" (lessonUpdated)="onLessonUpdated()" (cancel)="onCancel()"></app-updatelesson>
+  </ng-container>
+
+  <ng-container add-form>
+    <app-addlessons (lessonAdded)="onLessonAdded()" (cancel)="onCancel()"></app-addlessons>
+  </ng-container>
+
+</app-generic-list> -->
+
 
 
 <button pButton type="button" label="Add" (click)="openAddDialog()"></button>
@@ -27,10 +49,10 @@
     </ng-template>
   </p-table>
 
-  <p-dialog header="Update Lesson" [(visible)]="disaplayUpdateDialog" [modal]="true"   [style]="{ width: '25rem' }">
+  <p-dialog header="Update Lesson" [(visible)]="displayUpdateDialog" [modal]="true"   [style]="{ width: '25rem' }">
     <app-updatelesson [lessonId]="selectedLessonId" (lessonUpdated)="onLessonUpdated()" (cancel)="onCancel()"></app-updatelesson>
   </p-dialog>
 
 <p-dialog header="Add Lesson" [(visible)]="displayAddDialog" [modal]="true" [closable]="false">
     <app-addlessons (lessonAdded)="onLessonAdded()" (cancel)="onCancel()"></app-addlessons>
-</p-dialog>
+</p-dialog> 

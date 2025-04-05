@@ -1,0 +1,30 @@
+<div>
+    <button pButton type="button" label="Add" (click)="openAddDialog()"></button>
+    <p-table [value]="items" [tableStyle]="{'min-width':'50rem'}" aria-label="Items Table">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th *ngFor="let label of itemLabels">{{label}}</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-item>
+            <tr>
+                <td *ngFor="let field of itemFields">{{item[field]}}</td>
+                <td>
+                    <button pButton type="button" label="Update" (click)="openUpdateDialog(item.id)"></button>
+                    <button pButton type="button" label="Delete" (click)="deleteItem(item.id)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-dialog header="Add Item" [(visible)]="displayAddDialog" [modal]="true" aria-labelledby="addDialogTitle">
+        <ng-content select="[add-form]"></ng-content>
+    </p-dialog>
+
+    <p-dialog header="Update Item" [(visible)]="displayUpdateDialog" [modal]="true" aria-labelledby="updateDialogTitle">
+        <ng-content select="[update-form]"></ng-content>
+    </p-dialog>
+</div>

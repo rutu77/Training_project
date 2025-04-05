@@ -18,8 +18,9 @@ export class LessonlistComponent implements OnInit{
   lessons: Lesson[]=[]
   enrollments:Enrollment[]=[]
 
-  disaplayUpdateDialog: boolean = false;
+  displayUpdateDialog: boolean = false;
   selectedLessonId!: number;
+  // selectedLesson: Lesson | undefined
 
   displayAddDialog: boolean = false;
   
@@ -79,12 +80,12 @@ export class LessonlistComponent implements OnInit{
   //Update Communication
   openUpdateDialog(lessonId:number){
     this.selectedLessonId= lessonId;
-    this.disaplayUpdateDialog= true;
+    this.displayUpdateDialog= true;
   }
 
   onLessonUpdated(){
     this.loadLessons();
-    this.disaplayUpdateDialog=false;
+    this.displayUpdateDialog=false;
   }
 
   //Add Communication
@@ -98,12 +99,12 @@ export class LessonlistComponent implements OnInit{
   }
 
   onCancel(){
-    this.disaplayUpdateDialog=false
+    this.displayUpdateDialog=false
     this.displayAddDialog= false
   }
 
 
-  deleteLesson(lessonId:number){
+  deleteLesson(lessonId:any){
     this.courseService.deleteLesson(lessonId).subscribe(
       ()=>{
         Swal.fire({

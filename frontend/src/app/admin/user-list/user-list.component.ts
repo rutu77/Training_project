@@ -16,6 +16,7 @@ export class UserListComponent implements OnInit {
     users: User[] = [];
     displayUpdateDialog: boolean = false;
     selectedUserId!: number;
+    // selectedUser:User |undefined 
   
     constructor(private admin: AdminService) {}
   
@@ -31,8 +32,8 @@ export class UserListComponent implements OnInit {
     }
   
     openUpdateDialog(userId: number) {
-      this.selectedUserId = userId;
-      this.displayUpdateDialog = true;
+      this.selectedUserId= userId;
+      this.displayUpdateDialog = true
     }
   
     onUserUpdated() {

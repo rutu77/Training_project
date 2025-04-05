@@ -17,6 +17,7 @@ import { MenuItem } from 'primeng/api';
 import { FooterComponent } from './footer/footer.component';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
+import { GenericListComponent } from './generic-list/generic-list.component';
 
 
 const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModule,ScrollTopModule,TableModule, DropdownModule,MenubarModule, MenuModule, MultiSelectModule, RippleModule, DialogModule]
@@ -25,7 +26,8 @@ const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModul
 @NgModule({
   declarations: [
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    GenericListComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +38,8 @@ const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModul
   exports:[
     NavbarComponent,
     FooterComponent,
-    ngPrimeModule
+    ngPrimeModule,
+    GenericListComponent
   ]
 })
 export class SharedModule { }

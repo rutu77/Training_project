@@ -1,3 +1,21 @@
+<!-- <app-generic-list 
+  [items]="users"
+  [displayUpdateDialog]="displayUpdateDialog"
+  [selectedItemId]="selectedUserId"
+  [itemFields]="['id','name','email','role']"
+  [itemLabels]="['Id','Name','Email','Role']"
+  (itemUpdated)="onUserUpdated()"
+  (itemDeleted)="deleteUser($event)"
+  (cancel)="onCancel()"
+>
+
+  <ng-container update-form>
+    <app-update-user [userId]="selectedUserId" (userUpdated)="onUserUpdated()" (cancel)="onCancel()"></app-update-user>
+  </ng-container>
+
+</app-generic-list> -->
+
+
 <p-table [value]="users" [tableStyle]="{ 'min-width': '50rem' }">
   <ng-template pTemplate="header">
       <tr>
@@ -25,5 +43,4 @@
 <p-dialog header="Update User" [(visible)]="displayUpdateDialog" [modal]="true" [closable]="false">
   <app-update-user [userId]="selectedUserId" (userUpdated)="onUserUpdated()" (cancel)="onCancel()"></app-update-user>
 </p-dialog>
-
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -13,13 +13,18 @@ import { error } from 'console';
   styleUrl: './update-course.component.css'
 })
 export class UpdateCourseComponent implements OnInit{
+
+  @Input() courseId!:number;
+  @Output() courseUpdated= new EventEmitter()
+  @Output() cancel= new EventEmitter()
+
   updateCourseForm!: FormGroup;
-  courseId!: number;
+  // courseId!: number;
 
   constructor(private _course:CourseService, private route:ActivatedRoute, private router:Router, private fb:FormBuilder){}
 
   ngOnInit(): void {
-    this.courseId = Number(this.route.snapshot.paramMap.get('id'));
+    // this.courseId = Number(this.route.snapshot.paramMap.get('id'));
 
     this.updateCourseForm= new FormGroup({
       title: new FormControl(''),
@@ -33,6 +38,12 @@ export class UpdateCourseComponent implements OnInit{
     })
 
     this.loadCourseData()
+  }
+
+  ngOnChanges(): void {
+    if (this.courseId) {
+      this.loadCourseData();
+    } 
   }
 
   loadCourseData(){
@@ -53,9 +64,7 @@ export class UpdateCourseComponent implements OnInit{
 
       if (this.updateCourseForm.invalid) return;
     
-      const updatedCourse = {
-        ...this.updateCourseForm.value,
-      };
+      const updatedCourse = this.getUpdatedValues(this.updateCourseForm.value)
     
       this._course.updateCourse(this.courseId, updatedCourse).subscribe(
         () => {
@@ -75,6 +84,20 @@ export class UpdateCourseComponent implements OnInit{
           });
         }
       );
+    }
+
+    onCancel(){
+      this.cancel.emit()
+    }
+
+    private getUpdatedValues(formValues:any):any{
+      const updatedValues:any={};
+      for(const key in formValues){
+        if(formValues[key]!==''){
+          updatedValues[key]= formValues[key]
+        }
+      }
+      return updatedValues;
     }
 }
 

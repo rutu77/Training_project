@@ -35,9 +35,7 @@ export class LessonService{
         if (!course) throw new Error("Course not found!");
     
         const updateddata = { ...data, course };
-        console.log('Updating lesson with data:', updateddata);
-
-
+ 
         await lessonRepository.update({ id: +id }, { ...updateddata });
     
         const updatedLesson = await lessonRepository.findOne({ where: { id }, relations: ['course'] });

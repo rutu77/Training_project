@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { title } from 'process';
 import { CourseService } from '../../services/course.service';
@@ -13,6 +13,9 @@ import Swal from 'sweetalert2';
 export class AddCourseComponent implements OnInit{
 
   userId= Number(localStorage.getItem('userId'));
+
+  @Output() courseAdded= new EventEmitter<void>()
+  @Output() cancel= new EventEmitter<void>()
   
   constructor(private _course:CourseService){}
 
@@ -60,6 +63,10 @@ export class AddCourseComponent implements OnInit{
         }
       )
       }
+    }
+
+    onCancel(){
+      this.cancel.emit();
     }
   }
 

@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UpdateUserComponent } from './update-user/update-user.component';
 import { UserListComponent } from './user-list/user-list.component';
 
+
 @NgModule({
   declarations: [
     UpdateUserComponent,

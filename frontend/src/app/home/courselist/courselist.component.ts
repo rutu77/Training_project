@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Course, Enrollment, Lesson, Review } from '../../models/model';
 import { HomeService } from '../../services/home.service';
 import { CourseService } from '../../services/course.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-courselist',
@@ -20,10 +21,15 @@ export class CourseListComponent implements OnInit {
   reviews: Review[]=[];
   ratings: { [key: number]: any } = {}; 
   @Input()  filteredCourses: Course[] = [];
+  courses:Course[]=[]
+
+  displayUpdateDialog: boolean = false;
+  displayAddDialog: boolean = false;
+
+  selectedCourseId!: number;
 
 
-
-  constructor(private homeService: HomeService, private router: Router) {}
+  constructor(private homeService: HomeService, private router: Router, private courseService:CourseService) {}
 
   ngOnInit(): void {    
     // this.courseService.getCourses().subscribe((data: any) => {
@@ -32,21 +38,34 @@ export class CourseListComponent implements OnInit {
     //   //   console.log('Course ID:', course.id);
     //   // });
     // });
- 
-    
+    this.loadCourse()
+    this.loadReviews()
+    this.loadEnrollments()
+
+
+  }
+
+  loadCourse(){
+    this.courseService.getCourses().subscribe((data:any)=>{
+      this.courses=data;
+    })
+  }
+
+  loadReviews(){
     this.homeService.getReviews().subscribe((data:any)=>{
       this.reviews= data;
       this.calculateMeanRatings();
 
     })
+  }
 
+  loadEnrollments(){
+    
     this.homeService.getEnrollments().subscribe((data:any) => {
       this.enrollments = data;
       // console.log(this.enrollments);
     });
   }
-
-  
 
   getReview(courseId: number){
     const review= this.reviews.find(review=>review.course.id===courseId)
@@ -83,6 +102,54 @@ export class CourseListComponent implements OnInit {
     return enroll;
   }
 
+
+    //Update Communication
+    openUpdateDialog(lessonId:number){
+      this.selectedCourseId= lessonId;
+      this.displayUpdateDialog= true;
+    }
   
+    onLessonUpdated(){
+      this.loadCourse();
+      this.displayUpdateDialog=false;
+    }
+  
+    //Add Communication
+    openAddDialog(){
+      this.displayAddDialog= true;
+    }
+  
+    onLessonAdded(){
+      this.loadCourse();
+      this.displayAddDialog= false;
+    }
+  
+    onCancel(){
+      this.displayUpdateDialog=false
+      this.displayAddDialog= false
+    }
+  
+    
+      deleteCourse(courseId:any){
+        this.courseService.deleteLesson(courseId).subscribe(
+          ()=>{
+            Swal.fire({
+              title: 'Lesson Deleted',
+              text: 'The lesson has been deleted successfully!',
+              icon: 'success',
+            });
+            this.loadCourse(); 
+          },
+          (error:any)=>{
+            console.error('Error deleting lesson:', error);
+            Swal.fire({
+              title: 'Error',
+              text: 'An error occurred while deleting the lesson.',
+              icon: 'error',
+            });
+          }
+        )
+      }
+    
 }
 
