@@ -12,8 +12,6 @@
         <div *ngIf="isTeacher || isAdmin" class="course-dropdown">
             <button pButton type="button" label="Course Settings" class="dropbtn" (click)="toggleCourseDropdown()"></button>
             <div class="dropdown-content" *ngIf="courseDropdownOpen">
-                <a routerLink="/home/addCourse" class="nav-link">Add Course</a>
-                <a routerLink="/home/deleteCourse" class="nav-link">Delete Course</a>
                 <a routerLink="/course/courselist" class="nav-link">Manage Course</a>
                 <a routerLink="/course/lessonlist" class="nav-link">Manage Lessons</a>
             </div>

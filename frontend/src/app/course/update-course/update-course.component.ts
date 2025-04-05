@@ -40,11 +40,6 @@ export class UpdateCourseComponent implements OnInit{
     this.loadCourseData()
   }
 
-  ngOnChanges(): void {
-    if (this.courseId) {
-      this.loadCourseData();
-    } 
-  }
 
   loadCourseData(){
     this._course.getCourseById(this.courseId).subscribe((data:any)=>{

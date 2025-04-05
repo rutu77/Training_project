@@ -15,21 +15,21 @@ export class UpdateUserComponent implements OnInit{
   @Output() userUpdated = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 
-  roles: any[] = [];
+
   updateUserForm!: FormGroup;
 
   constructor(private admin: AdminService) {}
+
+  roles = [
+    { label: 'User', value: 'user' },
+    { label: 'Teacher', value: 'teacher' },
+    { label: 'Admin', value: 'admin' }
+  ];
 
   ngOnInit(): void {
     this.updateUserForm = new FormGroup({
       role: new FormControl(''),
     });
-
-    this.roles = [
-      { label: 'User', value: 'user' },
-      { label: 'Teacher', value: 'teacher' },
-      { label: 'Admin', value: 'admin' }
-    ];
 
     this.loadUserData();
   }

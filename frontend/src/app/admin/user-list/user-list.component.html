@@ -1,26 +1,16 @@
 <app-generic-list 
   [items]="users"
-  [displayUpdateDialog]="displayUpdateDialog"
-  [displayAddDialog]="displayAddDialog"
-  [selectedItemId]="selectedUserId"
   [itemFields]="['id', 'name', 'email', 'role']"
   [itemLabels]="['Id', 'Name', 'Email', 'Role']"
-  (itemUpdated)="onUserUpdated()"
-  (itemDeleted)="deleteUser($event)"
-  (cancel)="onCancel()"
-  (openUpdate)="openUpdateDialog($event)"
-  (openAdd)="openAddDialog()"
+  (updateItem)="onOpenUpdate($event)"
+  (deleteItem)="deleteUser($event)"
 >
-
-  <ng-container update-form>
-    <app-update-user 
-      [userId]="selectedUserId" 
-      (userUpdated)="onUserUpdated()" 
-      (cancel)="onCancel()">
-    </app-update-user>
-  </ng-container>
-
+  
 </app-generic-list>
+
+<p-dialog header="Update Item" [(visible)]="displayUpdateDialog" [modal]="true">
+  <app-update-user [userId]="selectedUserId" (userUpdated)="refresh()"></app-update-user>
+</p-dialog>
 
 
 <!-- 

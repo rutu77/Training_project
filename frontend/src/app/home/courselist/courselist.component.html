@@ -1,39 +1,4 @@
-<button pButton type="button" label="Add" (click)="openAddDialog()"></button>
-<p-table [value]="courses" [tableStyle]="{ 'min-width': '50rem' }">
-    <ng-template pTemplate="header">
-        <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Video URL</th>
-          <th>Duration</th>
-          <th>Course Id</th>
-          <th>Actions</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-course>
-        <tr>
-        <td>{{course.id}}</td>
-          <td>{{ course.title }}</td>
-          <td>{{ course.videoUrl }}</td>
-          <td>{{ course.duration }}</td>
-          <td>{{ course.course.id }}</td>
-          <td>
-            <button pButton type="button" label="Update" (click)="openUpdateDialog(course.id)"></button>
-            <button pButton type="button" label="Delete" (click)="deleteCourse(course.id)"></button>
-          </td>
-        </tr>
-    </ng-template>
-  </p-table>
-
-  <p-dialog header="Update course" [(visible)]="displayUpdateDialog" [modal]="true"   [style]="{ width: '25rem' }">
-    <app-updatecourse [courseId]="selectedCourseId" (courseUpdated)="onCourseUpdated()" (cancel)="onCancel()"></app-updatecourse>
-  </p-dialog>
-
-<p-dialog header="Add course" [(visible)]="displayAddDialog" [modal]="true" [closable]="false">
-    <app-addcourses (courseAdded)="onCourseAdded()" (cancel)="onCancel()"></app-addcourses>
-</p-dialog> 
-
-<!-- <div class="course-list" id="courseList">
+<div class="course-list" id="courseList">
 
   <div *ngIf="filteredCourses.length === 0" class="no-courses">No courses found!</div>
 
@@ -61,6 +26,3 @@
       </div>
     </div>
   </div>
-
-
-   -->

@@ -10,46 +10,28 @@ import Swal from 'sweetalert2';
 export class GenericListComponent<T> implements OnInit{
 
   @Input() items: T[] = [];
-  @Input() displayUpdateDialog: boolean = false;
-  @Input() displayAddDialog: boolean = false;
-  @Input() selectedItemId: number | undefined;
   @Input() itemFields: string[] = [];
   @Input() itemLabels: string[] = [];
 
-  @Output() itemUpdated = new EventEmitter<void>();
-  @Output() itemAdded = new EventEmitter<void>();
-  @Output() itemDeleted = new EventEmitter<number>();
-  @Output() cancel = new EventEmitter<void>();
-
-  // New outputs to communicate to parent
-  @Output() openUpdate = new EventEmitter<number>();
-  @Output() openAdd = new EventEmitter<void>();
+  @Output() addItem = new EventEmitter<void>();
+  @Output() updateItem = new EventEmitter<number>();
+  @Output() deleteItem = new EventEmitter<number>();
 
   constructor() {}
 
   ngOnInit(): void {}
 
   openUpdateDialog(itemId: number) {
-    this.openUpdate.emit(itemId);
+    this.updateItem.emit(itemId);
   }
 
-  onItemUpdated() {
-    this.itemUpdated.emit();
-  }
 
   openAddDialog() {
-    this.openAdd.emit();
+    this.addItem.emit();
   }
 
-  onItemAdded() {
-    this.itemAdded.emit();
-  }
 
-  onCancel() {
-    this.cancel.emit();
-  }
-
-  deleteItem(itemId: number) {
+  confirmDelete(id: number) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -58,7 +40,7 @@ export class GenericListComponent<T> implements OnInit{
       confirmButtonText: "Yes, delete!",
     }).then((result) => {
       if (result.isConfirmed) {
-        this.itemDeleted.emit(itemId);
+        this.deleteItem.emit(id);
         Swal.fire({
           title: 'Deleted',
           text: "Your item has been deleted",
@@ -68,6 +50,67 @@ export class GenericListComponent<T> implements OnInit{
     });
   }
 }
+
+
+
+// @Input() items: T[] = [];
+// @Input() displayUpdateDialog: boolean = false;
+// @Input() displayAddDialog: boolean = false;
+// @Input() selectedItemId: number | undefined;
+// @Input() itemFields: string[] = [];
+// @Input() itemLabels: string[] = [];
+
+// @Output() itemUpdated = new EventEmitter<void>();
+// @Output() itemAdded = new EventEmitter<void>();
+// @Output() itemDeleted = new EventEmitter<number>();
+// @Output() cancel = new EventEmitter<void>();
+
+// @Output() openUpdate = new EventEmitter<number>();
+// @Output() openAdd = new EventEmitter<void>();
+
+// constructor() {}
+
+// ngOnInit(): void {}
+
+// openUpdateDialog(itemId: number) {
+//   this.openUpdate.emit(itemId);
+// }
+
+// onItemUpdated() {
+//   this.itemUpdated.emit();
+// }
+
+// openAddDialog() {
+//   this.openAdd.emit();
+// }
+
+// onItemAdded() {
+//   this.itemAdded.emit();
+// }
+
+// onCancel() {
+//   this.cancel.emit();
+// }
+
+// deleteItem(itemId: number) {
+//   Swal.fire({
+//     title: 'Are you sure?',
+//     text: "You won't be able to revert this!",
+//     icon: 'warning',
+//     showCancelButton: true,
+//     confirmButtonText: "Yes, delete!",
+//   }).then((result) => {
+//     if (result.isConfirmed) {
+//       this.itemDeleted.emit(itemId);
+//       Swal.fire({
+//         title: 'Deleted',
+//         text: "Your item has been deleted",
+//         icon: 'success',
+//       });
+//     }
+//   });
+// }
+// }
 
 //   @Input() items:T[]=[];
 //   @Input() displayUpdateDialog:boolean= false;

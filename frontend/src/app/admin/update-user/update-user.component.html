@@ -23,22 +23,21 @@
   </form> -->
 
   <form [formGroup]="updateUserForm" (ngSubmit)="onSubmit()">
+
     <div class="p-fluid">
+
       <div class="p-field">
         <label for="role">Role</label>
-        <p-dropdown 
-          id="role" 
-          [options]="roles" 
-          formControlName="role" 
-          placeholder="Select a Role">
-        </p-dropdown>
+        <p-dropdown id="role" [options]="roles" formControlName="role" placeholder="Select a Role"></p-dropdown>
       </div>
   
       <div class="p-dialog-footer">
         <button pButton type="button" label="Cancel" (click)="onCancel()"></button>
         <button pButton type="submit" label="Update"></button>
       </div>
+
     </div>
+
   </form>
   
   

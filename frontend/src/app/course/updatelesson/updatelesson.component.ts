@@ -34,12 +34,6 @@ export class UpdatelessonComponent implements OnInit{
 
   }
 
-  ngOnChanges(): void {
-    if (this.lessonId) {
-      this.loadlessonData();
-    } 
-  }
-
   loadlessonData(){
     this._course.getLessonById(this.lessonId).subscribe((data:any)=>{
       this.updateLessonForm.patchValue({

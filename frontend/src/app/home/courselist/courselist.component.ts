@@ -102,34 +102,7 @@ export class CourseListComponent implements OnInit {
     return enroll;
   }
 
-
-    //Update Communication
-    openUpdateDialog(lessonId:number){
-      this.selectedCourseId= lessonId;
-      this.displayUpdateDialog= true;
-    }
   
-    onLessonUpdated(){
-      this.loadCourse();
-      this.displayUpdateDialog=false;
-    }
-  
-    //Add Communication
-    openAddDialog(){
-      this.displayAddDialog= true;
-    }
-  
-    onLessonAdded(){
-      this.loadCourse();
-      this.displayAddDialog= false;
-    }
-  
-    onCancel(){
-      this.displayUpdateDialog=false
-      this.displayAddDialog= false
-    }
-  
-    
       deleteCourse(courseId:any){
         this.courseService.deleteLesson(courseId).subscribe(
           ()=>{
