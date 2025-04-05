@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Course, Enrollment, Lesson } from '../../models/model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HomeService } from '../../services/home.service';
 import { CourseService } from '../../services/course.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-lessonlist',
@@ -10,12 +11,17 @@ import { CourseService } from '../../services/course.service';
   templateUrl: './lessonlist.component.html',
   styleUrl: './lessonlist.component.css'
 })
-export class LessonlistComponent {
+export class LessonlistComponent implements OnInit{
 
   course: Course | undefined;
   userId= Number(localStorage.getItem('userId'))
   lessons: Lesson[]=[]
   enrollments:Enrollment[]=[]
+
+  disaplayUpdateDialog: boolean = false;
+  selectedLessonId!: number;
+
+  displayAddDialog: boolean = false;
   
   constructor(
     private route: ActivatedRoute,
@@ -24,26 +30,38 @@ export class LessonlistComponent {
     private router: Router
   ) {}
   
-  ngOnInit(): void {
+  
+  ngOnInit():void{
+    this.loadCourse()
+    this.loadEnrollments()
+    this.loadLessons()
+  }
+
+  loadCourse(){
     const courseId = this.route.snapshot.paramMap.get('id');
-    
+
     if (courseId) {
-      this.courseService.getCourseById(+courseId).subscribe((res:any) => {
-        this.course = res.data;   
+      this.courseService.getCourseById(+courseId).subscribe((data:any) => {
+        this.course = data;   
       });
     }
+  }
 
+  loadEnrollments(){
     this.homeService.getEnrollments().subscribe((data:any) => {
       this.enrollments = data;
     });
+  }
 
-    this.courseService.getLessons().subscribe((res:any)=>{
-      this.lessons= res.data
+  loadLessons(){
+    this.courseService.getLessons().subscribe((data:any)=>{
+      this.lessons= data
     })
   }
 
+
   updateCourse(courseId: number): void {
-    this.router.navigate([`home/updateCourse/${courseId}`]);
+    this.router.navigate([`home/updateCourse/${courseId}`]);  
   }
 
   getLessonByCourseId(courseId:number){
@@ -56,6 +74,56 @@ export class LessonlistComponent {
     return enroll;
   }
 
-  enroll(){}
+
+
+  //Update Communication
+  openUpdateDialog(lessonId:number){
+    this.selectedLessonId= lessonId;
+    this.disaplayUpdateDialog= true;
+  }
+
+  onLessonUpdated(){
+    this.loadLessons();
+    this.disaplayUpdateDialog=false;
+  }
+
+  //Add Communication
+  openAddDialog(){
+    this.displayAddDialog= true;
+  }
+
+  onLessonAdded(){
+    this.loadLessons();
+    this.displayAddDialog= false;
+  }
+
+  onCancel(){
+    this.disaplayUpdateDialog=false
+    this.displayAddDialog= false
+  }
+
+
+  deleteLesson(lessonId:number){
+    this.courseService.deleteLesson(lessonId).subscribe(
+      ()=>{
+        Swal.fire({
+          title: 'Lesson Deleted',
+          text: 'The lesson has been deleted successfully!',
+          icon: 'success',
+        });
+        this.loadLessons(); 
+      },
+      (error:any)=>{
+        console.error('Error deleting lesson:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'An error occurred while deleting the lesson.',
+          icon: 'error',
+        });
+      }
+    )
+  }
+
+  
 }
   

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -15,6 +15,9 @@ export class AddlessonsComponent {
   
   constructor(private _course:CourseService){}
 
+  @Output() lessonAdded= new EventEmitter<void>();
+  @Output() cancel= new EventEmitter<void>();
+
   lessonForm!: FormGroup;
 
 
@@ -26,13 +29,11 @@ export class AddlessonsComponent {
       courseId: new FormControl(),
     })
 
-
   }
 
   onSubmit(){
     if(this.lessonForm.valid){
 
-      
       this._course.addLesson(this.lessonForm.value).subscribe(
         ()=>{
           Swal.fire({
@@ -40,6 +41,7 @@ export class AddlessonsComponent {
             text: 'The lesson has been added successfully!',
             icon: 'success',
           });
+          this.lessonAdded.emit();
         },
         (error:any)=>{
           console.error("Error adding lesson", error);
@@ -51,6 +53,10 @@ export class AddlessonsComponent {
         }
       )
       }
+    }
+
+    onCancel(){
+      this.cancel.emit();
     }
   }
 

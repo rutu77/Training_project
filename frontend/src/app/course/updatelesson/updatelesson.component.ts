@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CourseService } from '../../services/course.service';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,14 +12,18 @@ import Swal from 'sweetalert2';
 })
 export class UpdatelessonComponent implements OnInit{
 
-  updateLessonForm!: FormGroup;
-  lessonId!: number;
+  @Input() lessonId!: number;
+  @Output() lessonUpdated= new EventEmitter<void>();
+  @Output() cancel= new EventEmitter<void>();
 
-  constructor(private _course:CourseService, private route:ActivatedRoute, private router:Router){}
+  
+  updateLessonForm!: FormGroup;
+
+  constructor(private _course:CourseService){}
 
   ngOnInit(): void {
-    this.lessonId = Number(this.route.snapshot.paramMap.get('id'));
-
+    // this.lessonId = Number(this.route.snapshot.paramMap.get('id'));
+    
     this.updateLessonForm= new FormGroup({
       title: new FormControl(''),
       videoUrl: new FormControl(''),
@@ -28,7 +31,14 @@ export class UpdatelessonComponent implements OnInit{
     })
 
     this.loadlessonData()
+
   }
+
+  // ngOnChanges(): void {
+  //   if (this.lessonId) {
+  //     this.loadlessonData();
+  //   } 
+  // }
 
   loadlessonData(){
     this._course.getLessonById(this.lessonId).subscribe((data:any)=>{
@@ -44,10 +54,9 @@ export class UpdatelessonComponent implements OnInit{
 
       if (this.updateLessonForm.invalid) return;
     
-      const updatedLesson= {
-        ...this.updateLessonForm.value,
-      };
-    
+      const updatedLesson= this.getUpdatedValues(this.updateLessonForm.value);
+      console.log(updatedLesson);
+      
       this._course.updateLesson(this.lessonId, updatedLesson).subscribe(
         () => {
           Swal.fire({
@@ -55,6 +64,7 @@ export class UpdatelessonComponent implements OnInit{
             text: 'The lesson has been updated successfully!',
             icon: 'success',
           });
+          this.lessonUpdated.emit();
         },
         (error: any) => {
           console.error('Error updating lesson:', error);
@@ -66,6 +76,21 @@ export class UpdatelessonComponent implements OnInit{
         }
       );
     }
+
+    onCancel(){
+      this.cancel.emit();
+    }
+
+    private getUpdatedValues(formValues:any):any{
+      const updatedValues:any={};
+      for(const key in formValues){
+        if(formValues[key]!==''){
+          updatedValues[key]= formValues[key]
+        }
+      }
+      return updatedValues;
+    }
+
 }
 
 

@@ -13,7 +13,7 @@ import { UpdateUserComponent } from '../update-user/update-user.component';
 export class UserListComponent implements OnInit {
   
   
-    users: any[] = [];
+    users: User[] = [];
     displayUpdateDialog: boolean = false;
     selectedUserId!: number;
   

@@ -18,6 +18,8 @@ export class LessonService{
     }
 
     async getLessonsByCourseId(courseId: number) {
+
+
         const lessons = await lessonRepository.find({
           where: { course: { id: courseId } },
           relations: ['course'],
@@ -27,12 +29,23 @@ export class LessonService{
       }
       
 
-    async updateLesson(id:number,data:Partial<Lesson>){
-        await lessonRepository.update(id,data)
-        const updatedLesson= await lessonRepository.findOne({where:{id:+id}})
-        if(!updatedLesson) throw new Error("Lesson not found!")
-        return updatedLesson
+      async updateLesson(id: number, data:Partial<Lesson>) {
+
+        const course = await courseRepository.findOne({ where: { id: data.course?.id } }) as Course;
+        if (!course) throw new Error("Course not found!");
+    
+        const updateddata = { ...data, course };
+        console.log('Updating lesson with data:', updateddata);
+
+
+        await lessonRepository.update({ id: +id }, { ...updateddata });
+    
+        const updatedLesson = await lessonRepository.findOne({ where: { id }, relations: ['course'] });
+        if (!updatedLesson) throw new Error("Lesson not found!");
+    
+        return updatedLesson;
     }
+    
 
     async deleteLesson(id:number){
         const result= await lessonRepository.delete(id)

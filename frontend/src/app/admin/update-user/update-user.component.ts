@@ -2,8 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AdminService } from '../admin.service';
 import Swal from 'sweetalert2';
-import { profile } from 'console';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-update-user',

@@ -1,3 +1,4 @@
+<div class="p-fluid">
 <form class="addLesson" [formGroup]="lessonForm" (ngSubmit)="onSubmit()">
 
     <h2>Add Lesson</h2>
@@ -16,5 +17,9 @@
     <input type="number" id="courseId" placeholder="Enter Course Id..." formControlName="courseId">
 
 
-    <button type="submit">Submit</button>
+    <div class="p-dialog-footer">
+        <button pButton type="button" label="Cancel" (click)="onCancel()"></button>
+        <button pButton type="submit" label="Add"></button>
+    </div>
 </form>
+</div>

@@ -6,12 +6,12 @@ import { LessonlistComponent } from './lessonlist/lessonlist.component';
 import { LessondetailsComponent } from './lessondetails/lessondetails.component';
 import { AddlessonsComponent } from './addlessons/addlessons.component';
 import { UpdatelessonComponent } from './updatelesson/updatelesson.component';
-import { DeletelessonComponent } from './deletelesson/deletelesson.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AddCourseComponent } from './add-course/add-course.component';
 import { UpdateCourseComponent } from './update-course/update-course.component';
 import { DeleteCourseComponent } from './delete-course/delete-course.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -21,7 +21,6 @@ import { DeleteCourseComponent } from './delete-course/delete-course.component';
     LessondetailsComponent,
     AddlessonsComponent,
     UpdatelessonComponent,
-    DeletelessonComponent,
     AddCourseComponent,
     UpdateCourseComponent,
     DeleteCourseComponent,
@@ -31,6 +30,7 @@ import { DeleteCourseComponent } from './delete-course/delete-course.component';
     CourseRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    SharedModule,
     RouterModule
   ],
   exports:[

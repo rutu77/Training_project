@@ -1,17 +1,20 @@
-<div class="update-lesson-container">
-    <h2>Update Lesson</h2>
+<div class="update-lesson-container" class="p-fluid">
+  <h2>Update Lesson</h2>
   
     <form [formGroup]="updateLessonForm" (ngSubmit)="onSubmit()">
       <label for="title">Title:</label>
-      <input id="title" formControlName="title" type="text">
+      <input id="title" pInputText formControlName="title" type="text">
   
       <label for="videourl">Video URL:</label>
-      <input id="videourl" formControlName="videoUrl" type="text">
+      <input id="videourl" pInputText formControlName="videoUrl" type="text">
 
       <label for="duration">Duration:</label>
-      <input id="duration" formControlName="duration" type="text">
+      <input id="duration" pInputText formControlName="duration" type="text">
   
-
-      <button type="submit" [disabled]="updateLessonForm.invalid">Update lesson</button>
+      <div class="p-dialog-footer">
+        <button pButton type="button" label="Cancel" (click)="onCancel()"></button>
+        <button pButton type="submit" label="Update"></button>
+      </div>
+      <!-- <button type="submit" [disabled]="updateLessonForm.invalid">Update lesson</button> -->
     </form>
   </div>

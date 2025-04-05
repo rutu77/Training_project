@@ -14,7 +14,6 @@ export class UserService{
     }
 
     async updateUserById(id:number,data:Partial<User>){
-        data={...data,id:undefined}
         await userRepository.update({id:+id},{...data})
         const updatedUser= await userRepository.findOne({where:{id}});
         if(!updatedUser) throw new Error("User not found!")
