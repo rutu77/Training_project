@@ -11,7 +11,7 @@
 
     <ng-template pTemplate="body" let-item>
       <tr>
-        <td *ngFor="let field of itemFields">{{ item[field] }}</td>
+        <td *ngFor="let field of itemFields">{{ getFieldValue(item,field) }}</td>
         <td>
           <button pButton type="button" label="Update" (click)="openUpdateDialog(item.id)"></button>
           <button pButton type="button" label="Delete" (click)="confirmDelete(item.id)"></button>

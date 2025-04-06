@@ -12,7 +12,6 @@ import { AdminModule } from './admin/admin.module';
 import {SharedModule } from "./shared/shared.module";
 import { HomeModule } from './home/home.module';
 import { CourseModule } from './course/course.module';
-import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GenericListComponent } from './shared/generic-list/generic-list.component';
 
@@ -22,7 +21,6 @@ import { GenericListComponent } from './shared/generic-list/generic-list.compone
   declarations: [
     AppComponent,
     NotfoundComponent,
-    UpdateProfileComponent,
   ],
   imports: [
     BrowserModule,

@@ -31,10 +31,10 @@ export class UpdateCourseComponent implements OnInit{
       description: new FormControl(''),
       price: new FormControl(''),
       isPublished: new FormControl(false),
-      thumbnail: new FormControl(''),
+      // thumbnail: new FormControl(''),
       level: new FormControl(''),
       duration: new FormControl(''),
-      tags: new FormControl('')
+      // tags: new FormControl('')
     })
 
     this.loadCourseData()
@@ -48,7 +48,7 @@ export class UpdateCourseComponent implements OnInit{
         description: data.description,
         price: data.price,
         isPublished: data.isPublished,
-        thumbnail: data.thumbnail,
+        // thumbnail: data.thumbnail,
         level: data.level,
         duration: data.duration,
       });

@@ -34,18 +34,9 @@ export class HomeService {
     return this.http.get(`${this.api}/user/${id}`);
   }
 
-  updateUser(id:number,user:User){
+  updateUser(id:number,user:FormData){
     return this.http.put(`${this.api}/user/${id}`, user)
   }
 
-  uploadProfilePicture(userId: number, file: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    return this.http.post(`${this.api}/users/${userId}/profile-picture`, formData);
-  }
-
-
- 
 }
 

@@ -24,23 +24,24 @@ export class NavbarComponent {
   isAdmin:boolean=false;
 
 
+  searchValue:string=''
   @Output() search= new EventEmitter<string>();
   private searchSubject= new Subject<string>();
 
-  constructor(private _auth:AuthService, private route:Router, private homeService:HomeService, private course:CourseService){
+  constructor(private _auth:AuthService, private route:Router, private homeService:HomeService, private courseService:CourseService){
     this._auth.$authState.subscribe(status=>this.isLoggedIn=status)
     this._auth.$role.subscribe(role=>this.isTeacher=role==='teacher')
     this._auth.$role.subscribe(role=>this.isAdmin=role==='admin')
 
-    this.searchSubject.pipe(debounceTime(300)).subscribe((query=>{this.course.emitSearch(query);}))
+    this.searchSubject.pipe(debounceTime(2000)).subscribe((query=>{this.courseService.emitSearch(query);}))
   }
 
 
-  searchCourses(event: any) {
-   const searchQuery= event.target.value
+  searchCourses(value: string) {
+  //  const searchQuery= event.target.value
     // console.log(searchQuery);
     // this.search.emit(searchQuery)
-    this.searchSubject.next(searchQuery)
+    this.searchSubject.next(value)
   }
 
   

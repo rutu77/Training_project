@@ -8,10 +8,11 @@ const courseService= new CourseService()
 export class CourseController{
 
     async createCourse(req: Request, res: Response){
-      console.log(req.body);
-      const { title, description, isPublished, thumbnail, price, creatorId, level, duration }  = req.body;
+      // console.log(req.body);
+      const { title, description, isPublished, price, creatorId, level, duration }  = req.body;
+      const thumbnailUrl= `http://localhost:3000/uploads/${req.file?.filename}`;
       try {
-        const course = await courseService.createCourse({ title, description, isPublished, thumbnail, price, creatorId, level, duration } );
+        const course = await courseService.createCourse({ title, description, isPublished, thumbnail:thumbnailUrl, price, creatorId, level, duration } );
         res.status(201).json({ message: "Course created successfully!", data: course });
       } catch (error) {
         res.status(500).json({ error: "Error creating enrollment" });

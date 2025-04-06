@@ -16,6 +16,7 @@ export class AddCourseComponent implements OnInit{
 
   @Output() courseAdded= new EventEmitter<void>()
   @Output() cancel= new EventEmitter<void>()
+  selectedFile:File|null=null;
   
   constructor(private _course:CourseService){}
 
@@ -34,15 +35,28 @@ export class AddCourseComponent implements OnInit{
       level: new FormControl(''),
       duration: new FormControl(0)
     })
+  }
 
-
+  onFileSelected(event:any){
+    this.selectedFile= event.target.files[0]
   }
 
   onSubmit(){
     if(this.courseForm.valid){
+      const form= new FormData();
+      form.append('title', this.courseForm.value.title);
+      form.append('description', this.courseForm.value.description);
+      form.append('isPublished', this.courseForm.value.isPublished);
+      form.append('price', this.courseForm.value.price);
+      form.append('creatorId', this.courseForm.value.creatorId);
+      form.append('level', this.courseForm.value.level);
+      form.append('duration', this.courseForm.value.duration);
 
+      if(this.selectedFile){
+        form.append('thumbnail', this.selectedFile);
+      }
       
-      this._course.addCourse(this.courseForm.value).subscribe(
+      this._course.addCourse(form).subscribe(
         ()=>{
           Swal.fire({
             title: 'Course Added',

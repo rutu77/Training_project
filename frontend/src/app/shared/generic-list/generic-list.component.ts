@@ -19,7 +19,13 @@ export class GenericListComponent<T> implements OnInit{
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  console.log(this.itemFields);
+  }
+
+  getFieldValue(item:any, fieldPath:string){
+    return fieldPath.split('.').reduce((obj,key)=>obj?.[key],item);
+  }
 
   openUpdateDialog(itemId: number) {
     this.updateItem.emit(itemId);
@@ -29,6 +35,7 @@ export class GenericListComponent<T> implements OnInit{
   openAddDialog() {
     this.addItem.emit();
   }
+  
 
 
   confirmDelete(id: number) {

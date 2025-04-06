@@ -2,7 +2,7 @@
     <div class="left-section">
         <a routerLink="/home" class="nav-link">Home</a>
 
-        <input type="text" pInputText placeholder="Search courses..." class="search-bar" (input)="searchCourses($event)" />
+        <input type="text" pInputText placeholder="Search courses..." class="search-bar" [(ngModel)]="searchValue"  (ngModelChange)="searchCourses($event)" />
       
         <div *ngIf="isLoggedIn">
             <a routerLink="/progress" class="nav-link">Progress</a>

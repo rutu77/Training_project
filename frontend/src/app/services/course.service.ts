@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AddCourse, Course, Lesson, UpdateCourse } from '../models/model';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +25,11 @@ export class CourseService {
   }
 
   //Course managment by teacher/admin
-  addCourse(course:AddCourse){
+  addCourse(course:FormData){
     return this.http.post(`${this.api}/course/`, course)
   }
 
-  updateCourse(id:number,course:UpdateCourse){
+  updateCourse(id:number,course:FormData){
     // console.log('Course ID:', course.id); 
     // console.log('Course Data:', course); 
     return this.http.put(`${this.api}/course/${id}`, course)
@@ -69,7 +69,7 @@ export class CourseService {
 
 
   //Search
-  private searchQuery=new Subject<string>();
+  private searchQuery=new BehaviorSubject<string>('');
   query$ = this.searchQuery.asObservable();
 
   emitSearch(query:string){

@@ -71,10 +71,6 @@ export class UpdatelessonComponent implements OnInit{
       );
     }
 
-    onCancel(){
-      this.cancel.emit();
-    }
-
     private getUpdatedValues(formValues:any):any{
       const updatedValues:any={};
       for(const key in formValues){

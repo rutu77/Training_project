@@ -14,7 +14,7 @@
             <input id="name" formControlName="name" type="text">
 
             <label for="profilePicture">Profile Picture URL:</label>
-            <input id="profilePicture" formControlName="profilePicture" type="text">
+            <input id="profilePicture" type="file" (change)="onFileSelected($event)">
 
             <label for="bio">Bio:</label>
             <input id="bio" formControlName="bio" type="text">

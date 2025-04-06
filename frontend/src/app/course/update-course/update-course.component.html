@@ -11,8 +11,8 @@
     <label for="price">Price:</label>
     <input id="price" pInputText formControlName="price" type="number">
 
-    <label for="thumbnail">Thumbnail URL:</label>
-    <input id="thumbnail" pInputText formControlName="thumbnail" type="text">
+    <!-- <label for="thumbnail">Thumbnail URL:</label>
+    <input id="thumbnail" pInputText formControlName="thumbnail" type="text"> -->
 
     <label for="level">Level:</label>
     <select id="level" pInputText formControlName="level">
@@ -28,7 +28,6 @@
     <input id="duration" pInputText formControlName="duration" type="text">
 
     <div class="p-dialog-footer">
-      <button pButton type="button" label="Cancel" (click)="onCancel()"></button>
       <button pButton type="submit" label="Update"></button>
     </div>
     <!-- <button type="submit" [disabled]="updateCourseForm.invalid">Update Course</button> -->

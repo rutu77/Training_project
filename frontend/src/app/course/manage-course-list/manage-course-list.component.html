@@ -1,8 +1,8 @@
  
 <app-generic-list 
 [items]="courses"
-[itemFields]="['id','title','description','isPublished','thumbnail','price','creatorId','level','duration']"
-[itemLabels]="['Id','Title','Description','Is Published','Thumbnail','Price','Creator Id','Level','Duration']"
+[itemFields]="['id','title','description','isPublished','price','level','duration']"
+[itemLabels]="['Id','Title','Description','Is Published','Price','Level','Duration']"
 (addItem)="refresh()"
 (updateItem)="onOpenUpdate($event)"
 (deleteItem)="deleteCourse($event)"

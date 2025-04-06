@@ -11,7 +11,9 @@
 
 
     <label for="thumbnail">Thumbnail URL:</label>
-    <input type="text" pInputText id="thumbnail" placeholder="Enter Thumbnail URL..." formControlName="thumbnail">
+    <!-- <input type="text" pInputText id="thumbnail" placeholder="Enter Thumbnail URL..." formControlName="thumbnail">-->
+    <input type="file" pInputText id="thumbnail"(change)="onFileSelected($event)" formControlName="thumbnail">
+
 
     <label for="price">Price:</label>
     <input type="number" pInputText id="price" placeholder="Enter Course Price..." formControlName="price">

@@ -1,6 +1,7 @@
 import { Router } from "express"
 import { UserController } from "../controllers/userController"
-const upload = require("../middleware/multer")
+import { upload } from "../middleware/multer"
+
 
 
 
@@ -10,9 +11,9 @@ const router= Router()
 
 router.get('/:id',userController.getUserById)
 router.get('/',userController.getAllUsers)
-router.put('/:id',userController.updateUser)
+router.put('/:id',upload.single('profilePicture'),userController.updateUser)
 router.delete('/:id',userController.deleteUser)
-router.post('/:id/upload-profile-picture', upload.single('file'), userController.uploadProfilePicture);
+// router.post('/:id/upload-profile-picture', upload.single('file'), userController.uploadProfilePicture);
 
 
 export {router as userRoutes}

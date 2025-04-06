@@ -36,6 +36,7 @@ export class LessonlistComponent implements OnInit{
     this.loadLessons()
   }
 
+
   loadCourse(){
     const courseId = this.route.snapshot.paramMap.get('id');
 
@@ -56,7 +57,6 @@ export class LessonlistComponent implements OnInit{
     this.courseService.getLessons().subscribe((data:any)=>{
       this.lessons= data
     })
-
   }
 
 

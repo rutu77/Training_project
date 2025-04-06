@@ -21,6 +21,7 @@ export class CourseListComponent implements OnInit {
   reviews: Review[]=[];
   ratings: { [key: number]: any } = {}; 
   courses: Course[] = [];
+  filteredCourses:Course[]=[]
 
   displayUpdateDialog: boolean = false;
   displayAddDialog: boolean = false;
@@ -43,6 +44,7 @@ export class CourseListComponent implements OnInit {
   loadCourses(){
     this.courseService.getCourses().subscribe((data:any)=>{
       this.courses=data;
+      this.filteredCourses=data
     })
   }
 
@@ -98,7 +100,11 @@ export class CourseListComponent implements OnInit {
   }
 
   filterCourses(query:string){
-    this.courses = this.courses.filter(course =>
+    if(!query){
+      this.filteredCourses= this.courses
+      return;
+    }
+    this.filteredCourses = this.courses.filter(course =>
       course.title.toLowerCase().includes(query.toLowerCase()) 
       ||course.description.toLowerCase().includes(query.toLowerCase())
     );

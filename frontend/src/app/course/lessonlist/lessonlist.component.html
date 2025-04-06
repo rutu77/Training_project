@@ -1,6 +1,6 @@
 <app-generic-list 
   [items]="lessons"
-  [itemFields]="['id','title','videoUrl','duration','course?.id']"
+  [itemFields]="['id','title','videoUrl','duration', 'course.id' ]"
   [itemLabels]="['Id','Title','Video URL','Duration','Course Id']"
   (addItem)="refresh()"
   (updateItem)="onOpenUpdate($event)"

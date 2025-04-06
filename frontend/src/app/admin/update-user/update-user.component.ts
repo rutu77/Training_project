@@ -13,7 +13,7 @@ export class UpdateUserComponent implements OnInit{
 
   @Input() userId!: number;
   @Output() userUpdated = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
+  // @Output() cancel = new EventEmitter<void>();
 
 
   updateUserForm!: FormGroup;
@@ -69,9 +69,9 @@ export class UpdateUserComponent implements OnInit{
     );
   }
 
-  onCancel() {
-    this.cancel.emit();
-  }
+  // onCancel() {
+  //   this.cancel.emit();
+  // }
 
   private getUpdatedValues(formValues: any): any {
     const updatedValues: any = {};
