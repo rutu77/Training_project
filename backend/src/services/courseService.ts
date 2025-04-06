@@ -39,4 +39,10 @@ export class CourseService{
         return await courseRepository.find()
     }
 
+    async searchCourses(search:string){
+        return await courseRepository.createQueryBuilder('course')
+        .where('course.title LIKE :search OR course.description LIKE :search',{search:`%${search}`})
+        .getMany()
+    }
+
 }

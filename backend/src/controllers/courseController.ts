@@ -1,6 +1,7 @@
 import { Request ,Response} from "express";
 import { CourseService } from "../services/courseService";
 import { Course } from "../models/Course";
+import { error } from "console";
 
 const courseService= new CourseService()
 
@@ -57,5 +58,20 @@ export class CourseController{
         }catch(error){
           res.status(500).json({error:"Error fetching courses" });
         }
+    }
+
+    async getSearchCourses(req:Request,res:Response){
+      try{
+        const search= req.query.search as string ;
+        if(!search){
+          res.status(400).json({error:"search query required"})
+          return;
+        }
+        const courses = await courseService.searchCourses(search);
+        res.status(200).json(courses)
+      }catch(error){
+        res.status(500).json({error:"Error searching courses" });
+      }
+
     }
 }

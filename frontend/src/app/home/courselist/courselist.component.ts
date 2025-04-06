@@ -20,8 +20,7 @@ export class CourseListComponent implements OnInit {
   backendUrl: string="http://localhost:3000/";
   reviews: Review[]=[];
   ratings: { [key: number]: any } = {}; 
-  @Input()  filteredCourses: Course[] = [];
-  courses:Course[]=[]
+  courses: Course[] = [];
 
   displayUpdateDialog: boolean = false;
   displayAddDialog: boolean = false;
@@ -31,19 +30,17 @@ export class CourseListComponent implements OnInit {
 
   constructor(private homeService: HomeService, private router: Router, private courseService:CourseService) {}
 
-  ngOnInit(): void {    
-    // this.courseService.getCourses().subscribe((data: any) => {
-    //   this.courses = data;
-    //   // this.courses.forEach(course => {
-    //   //   console.log('Course ID:', course.id);
-    //   // });
-    // });
-    this.loadCourse()
+  ngOnInit(): void {   
+    this.loadCourses()
     this.loadReviews()
     this.loadEnrollments()
+
+    this.courseService.query$.subscribe(query=>{
+      this.filterCourses(query);
+    })
   }
 
-  loadCourse(){
+  loadCourses(){
     this.courseService.getCourses().subscribe((data:any)=>{
       this.courses=data;
     })
@@ -72,8 +69,8 @@ export class CourseListComponent implements OnInit {
 
   
   calculateMeanRatings(): void {
-    // console.log(this.filteredCourses);
-    this.filteredCourses.forEach(course => {
+    // console.log(this.courses);
+    this.courses.forEach(course => {
       const courseReviews = this.reviews.filter(review => review.course.id === course.id);
       if (courseReviews.length > 0) {
         const totalRating = courseReviews.reduce((sum, review) => sum + review.rating, 0);
@@ -100,27 +97,11 @@ export class CourseListComponent implements OnInit {
     return enroll;
   }
 
-  
-      deleteCourse(courseId:any){
-        this.courseService.deleteLesson(courseId).subscribe(
-          ()=>{
-            Swal.fire({
-              title: 'Lesson Deleted',
-              text: 'The lesson has been deleted successfully!',
-              icon: 'success',
-            });
-            this.loadCourse(); 
-          },
-          (error:any)=>{
-            console.error('Error deleting lesson:', error);
-            Swal.fire({
-              title: 'Error',
-              text: 'An error occurred while deleting the lesson.',
-              icon: 'error',
-            });
-          }
-        )
-      }
-    
-}
+  filterCourses(query:string){
+    this.courses = this.courses.filter(course =>
+      course.title.toLowerCase().includes(query.toLowerCase()) 
+      ||course.description.toLowerCase().includes(query.toLowerCase())
+    );
+  }
 
+}

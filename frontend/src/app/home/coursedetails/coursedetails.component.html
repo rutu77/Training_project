@@ -7,8 +7,6 @@
       <!-- <span>Rating: {{ course.rating }}</span> -->
     </div>
     <!-- <button (click)="enroll(course.course_id)" class="enroll-button">Enroll</button> -->
-  
-    <button *ngIf="isAdmin || isTeacher" (click)="updateCourse(course.id)" class="update-button">Update</button>
     
     <div *ngIf="isEnrolled(course.id)">
           <h2>Lessons</h2>

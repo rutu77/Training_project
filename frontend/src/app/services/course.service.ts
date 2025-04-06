@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AddCourse, Course, Lesson, UpdateCourse } from '../models/model';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,9 @@ export class CourseService {
   }
   
   
-  getCourses(){
-    return this.http.get(`${this.api}/course/`);
+  getCourses(query:string=''){
+    const url= query? `${this.api}/search?search=${encodeURIComponent(query)}`: `${this.api}/course/`
+    return this.http.get(url);
   }
 
   //Course managment by teacher/admin
@@ -64,6 +65,15 @@ export class CourseService {
 
   getLessonByCourseId(courseId:number){
     return this.http.get(`${this.api}/lesson/course/${courseId}`)
+  }
+
+
+  //Search
+  private searchQuery=new Subject<string>();
+  query$ = this.searchQuery.asObservable();
+
+  emitSearch(query:string){
+    this.searchQuery.next(query)
   }
   
 }

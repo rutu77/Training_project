@@ -62,11 +62,6 @@ export class CoursedetailsComponent implements OnInit{
   }
 
     
-    
-  updateCourse(courseId: number): void {
-    this.router.navigate([`home/updateCourse/${courseId}`]);
-  }
-
 
   isEnrolled(courseId: number): boolean {
     const enroll = this.enrollments.some(enrollment => enrollment.user.id === this.userId && enrollment.course.id === courseId);
