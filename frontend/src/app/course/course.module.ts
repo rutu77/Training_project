@@ -12,6 +12,7 @@ import { AddCourseComponent } from './add-course/add-course.component';
 import { UpdateCourseComponent } from './update-course/update-course.component';
 import { SharedModule } from '../shared/shared.module';
 import { GenericListComponent } from '../shared/generic-list/generic-list.component';
+import { ManageCourseListComponent } from './manage-course-list/manage-course-list.component';
 
 
 
@@ -23,6 +24,7 @@ import { GenericListComponent } from '../shared/generic-list/generic-list.compon
     UpdatelessonComponent,
     AddCourseComponent,
     UpdateCourseComponent,
+    ManageCourseListComponent,
 
   ],
   imports: [

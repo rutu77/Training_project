@@ -18,11 +18,9 @@ export class LessonlistComponent implements OnInit{
   userId= Number(localStorage.getItem('userId'))
   lessons: Lesson[]=[]
   enrollments:Enrollment[]=[]
-  showAdd=false;
 
   displayUpdateDialog= false;
   selectedLessonId!: number;
-  displayAddDialog = false;
   
   constructor(
     private route: ActivatedRoute,

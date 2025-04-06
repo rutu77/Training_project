@@ -50,8 +50,7 @@ export class AddCourseComponent implements OnInit{
             icon: 'success',
           });
 
-          console.log(this.courseForm.value.creatorId);
-          console.log(this.userId);
+          this.courseAdded.emit()
         },
         (error:any)=>{
           console.error("Error adding course", error);

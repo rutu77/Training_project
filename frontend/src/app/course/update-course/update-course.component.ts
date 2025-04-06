@@ -19,9 +19,9 @@ export class UpdateCourseComponent implements OnInit{
   @Output() cancel= new EventEmitter()
 
   updateCourseForm!: FormGroup;
-  // courseId!: number;
 
-  constructor(private _course:CourseService, private route:ActivatedRoute, private router:Router, private fb:FormBuilder){}
+
+  constructor(private _course:CourseService){}
 
   ngOnInit(): void {
     // this.courseId = Number(this.route.snapshot.paramMap.get('id'));
@@ -68,7 +68,8 @@ export class UpdateCourseComponent implements OnInit{
             text: 'The course has been updated successfully!',
             icon: 'success',
           });
-          this.router.navigate(['/home']);
+        this.courseUpdated.emit();
+
         },
         (error: any) => {
           console.error('Error updating course:', error);

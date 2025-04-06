@@ -6,6 +6,7 @@ import { AddlessonsComponent } from './addlessons/addlessons.component';
 import { UpdatelessonComponent } from './updatelesson/updatelesson.component';
 import { LessondetailsComponent } from './lessondetails/lessondetails.component';
 import { LessonlistComponent } from './lessonlist/lessonlist.component';
+import { ManageCourseListComponent } from './manage-course-list/manage-course-list.component';
 
 
 const routes: Routes = [
@@ -16,7 +17,7 @@ const routes: Routes = [
     {path:'updateLesson/:id',component:UpdatelessonComponent},
     {path:'lesson/:id',component:LessondetailsComponent},
     {path:'lessonlist',component:LessonlistComponent},
-
+    {path:'courselist',component:ManageCourseListComponent}
 
 ];
 

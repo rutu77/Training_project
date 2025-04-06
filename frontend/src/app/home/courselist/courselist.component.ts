@@ -41,8 +41,6 @@ export class CourseListComponent implements OnInit {
     this.loadCourse()
     this.loadReviews()
     this.loadEnrollments()
-
-
   }
 
   loadCourse(){
