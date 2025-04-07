@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AddCourse, Course, Lesson, UpdateCourse } from '../models/model';
+import { AddCourse, AddReview, Course, Lesson, Review, UpdateCourse } from '../models/model';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -67,6 +67,14 @@ export class CourseService {
     return this.http.get(`${this.api}/lesson/course/${courseId}`)
   }
 
+  getReviewsByCourseId(courseId:number){
+    return this.http.get(`${this.api}/review/course/${courseId}`)
+  }
+
+  getDiscussionByCourseId(courseId:number){
+    return this.http.get(`${this.api}/comment/course/${courseId}`)
+  }
+
 
   //Search
   private searchQuery=new BehaviorSubject<string>('');
@@ -75,6 +83,7 @@ export class CourseService {
   emitSearch(query:string){
     this.searchQuery.next(query)
   }
+
   
 }
 

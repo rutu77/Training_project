@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
 import { HomeService } from '../../services/home.service';
 import { User } from '../../models/model';
+import { captureRejectionSymbol } from 'events';
 
 @Component({
   selector: 'app-profile',
@@ -35,6 +36,8 @@ export class ProfileComponent {
         profilePicture: [this.user?.profilePicture],
         bio: [this.user?.bio],
         email: [this.user?.email, [Validators.email]],
+        password: [this.user?.password, [Validators.minLength(6)]],
+        cpassword: [this.user?.password, [Validators.minLength(6)]],
       });
     }
 
@@ -45,18 +48,25 @@ export class ProfileComponent {
     onSubmit() {
       if (this.updateUserForm.invalid) return;
 
+      if (this.updateUserForm.value.password != this.updateUserForm.value.cpassword) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Password Mismatch',
+          text: 'Please make sure your passwords match!',
+        });
+        return;
+      }
+   
       const formData = new FormData();
       formData.append('name', this.updateUserForm.value.name);
       formData.append('bio', this.updateUserForm.value.bio);
       formData.append('email', this.updateUserForm.value.email);
+      formData.append('password', this.updateUserForm.value.password);
 
       if(this.selectedFile) {
         formData.append('profilePicture', this.selectedFile, this.selectedFile.name);
       }
   
-      // const updatedProfile = {
-      //   ...this.updateUserForm.value,
-      // };
   
       this.home.updateUser(this.userId, formData).subscribe(
         (data:any) => {

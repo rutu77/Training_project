@@ -15,6 +15,15 @@ export class CommentService{
     return comment;
     }
 
+    async getCommentByCourseId(courseId: number) {
+        const comments= await commentRepository.find({
+            where: { course: { id: courseId } },
+            relations: ['course','user'],
+        })
+        if (comments.length === 0) throw new Error("No comments found for this course!");
+        return comments;
+    }
+
     async updateCommentById(id: number, data: Partial<Comment>){
     commentRepository.update(id, data);
     const updatedComment = await commentRepository.findOne({ where: {id } });

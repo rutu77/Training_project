@@ -76,15 +76,26 @@ export interface Category{
 }
 
 export interface Review{
-    review_id:number,
+    id:number,
     user:User,
     course:Course
     rating:number,
-    comment?:string
-
+    comment:string
 }
 
-export interface Comment{
+export interface AddReview{
+    userId:number,
+    courseId:number,
+    rating:number,
+    comment:string
+}
+
+export interface UpdateReview{
+    rating?:number,
+    comment?:string
+}
+
+export interface Discussion{
     comment_id:number,
     message:string,
 }
@@ -99,3 +110,4 @@ export interface Attempt{
     selectedAnswer:string,
     isCorrect:boolean
 }
+

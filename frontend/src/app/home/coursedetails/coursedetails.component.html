@@ -8,6 +8,15 @@
     </div>
     <!-- <button (click)="enroll(course.course_id)" class="enroll-button">Enroll</button> -->
     
+    <div *ngIf="!isEnrolled(course.id) && isLoggedIn">
+        <button (click)="openEnrollmentDialog(course)" pButton class="enroll-button">Enroll to this course</button>
+        <div *ngIf="showEnrollDialog" class="enrollment-dialog-overlay">
+          <app-enroll [course]="selectedCourse" (enrollmentCompleted)="refreshEnrollments()" (cancel)="closeEnrollmentDialog()" (closeDialog)="closeEnrollmentDialog()"></app-enroll>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoggedIn">Please login to enroll to this course</div>
+
     <div *ngIf="isEnrolled(course.id)">
           <h2>Lessons</h2>
           <div *ngIf="lessons.length === 0" class="no-lessons">No lessons found!</div>
@@ -17,8 +26,52 @@
               <span class="lesson-duration">{{ lesson.duration }}</span>
             </div>
           </div>
-      </div>
+    </div>
+
+
+    <div>
+      <h2>Course Reviews</h2>
+      <div *ngIf="reviews.length === 0" class="no-reviews">No reviews found!</div>
+      <div *ngFor="let review of reviews" class="review-card">
+        <p>{{ review.comment }}</p>
+        <span class="review-author">By: {{ review.user.name }}</span>
+        <span class="review-rating">Rating: {{ review.rating }}</span>
+        <div *ngIf="isReviewUserSame(review.user.id)">
+          <button (click)="deleteReview(review.id)" pInputText class="delete-review-button">Delete</button>
+          <button (click)="showUpdateReview = !showUpdateReview" (click)="editReview(review)" pInputText class="edit-review-button">Edit</button>
+          <div *ngIf="editingReviewId === review.id" class="update-review-form">
+              <app-update-review [review]="selectedReview" (reviewUpdated)="loadReviewsByCourseId(selectedCourseId.toString())" (cancel)="CancelUpdateReview()"></app-update-review>
+          </div>
+        </div>
+    </div>
+
+    <!-- <div *ngIf="!isEnrolled(course.id)">
+      <button (click)="enroll()" pInputText class="enroll-button">Enroll</button>
+    </div> -->
+
+
+
+    <div *ngIf="isEnrolled(course.id)">
+      <ng-container add-form>
+        <app-add-review [courseId]="selectedCourseId" (reviewAdded)="refresh()"></app-add-review>
+      </ng-container>   
+    </div>
+
+    
+
 </div>
+
+
+    
+<!--         
+    <div>
+      <h2>Discussions</h2>
+      <div *ngIf="discussions.length === 0" class="no-discussions">No discussions found!</div>
+      <div *ngFor="let discussion of discussions">
+        <p>{{discussion.message}}</p>
+      </div>
+    </div> -->
+
 
     
   

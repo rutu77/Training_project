@@ -7,9 +7,12 @@ const reviewService = new ReviewService();
 export class ReviewController {
   
   async createReview(req: Request, res: Response){
-    const reviewData = req.body;
+    const {comment,courseId,userId,rating}= req.body;
+    // const reviewData = req.body;
+    console.log({comment,courseId,userId,rating});
+    
     try {
-      const review = await reviewService.createreview(reviewData);
+      const review = await reviewService.createreview({comment,courseId,userId,rating}) as Review;
       res.status(201).json({ message: "review created successfully!", data: review });
     } catch (error) {
       res.status(500).json({ error: "Error creating review" });
@@ -24,6 +27,17 @@ export class ReviewController {
     } catch (error) {
       res.status(404).json({ message: (error as Error).message });
     }
+  }
+
+    async getReviewByCourseId(req:Request, res:Response){
+      const courseId= Number(req.params.id)
+      try{
+          const review= await reviewService.getReviewByCourseId(courseId)
+          res.status(200).json({data:review})
+      }
+      catch(error){
+          res.status(404).json({message:(error as Error).message})
+      }
   }
 
   async updateReview(req: Request, res: Response): Promise<void> {

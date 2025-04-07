@@ -1,0 +1,12 @@
+<form class="addReview" [formGroup]="reviewForm" (ngSubmit)="onSubmitReview()">
+
+    <h2>Write a Review</h2>
+
+    <label for="comment">Review:</label>
+    <input type="text" pInputText placeholder="Enter review" formControlName="comment" >
+
+    <label for="rating">Rating:</label>
+    <input type="number" pInputText placeholder="Enter rating" formControlName="rating" min="1" max="5">
+
+    <button pButton type="submit" label="Add"></button>
+</form>

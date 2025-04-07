@@ -16,9 +16,24 @@ import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { CourseModule } from '../course/course.module';
 import { ProfileComponent } from './profile/profile.component';
+import { AddReviewComponent } from './add-review/add-review.component';
+import { UpdateReviewComponent } from './update-review/update-review.component';
 
 @NgModule({
-  declarations: [HomeComponent, HeaderComponent, CourseListComponent, ProfileComponent, CoursedetailsComponent, EnrollComponent,MyLearningsComponent, AboutComponent, ContactComponent, ProfileComponent],
+  declarations: [
+    HomeComponent, 
+    HeaderComponent, 
+    CourseListComponent, 
+    ProfileComponent, 
+    CoursedetailsComponent, 
+    EnrollComponent,
+    MyLearningsComponent, 
+    AboutComponent, 
+    ContactComponent, 
+    ProfileComponent,
+    AddReviewComponent,
+    UpdateReviewComponent
+  ],
   imports: [
     CommonModule,
     HomeRoutingModule,

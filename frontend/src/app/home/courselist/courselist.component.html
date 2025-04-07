@@ -18,9 +18,9 @@
 
           <span class="course-rating">Ratings: {{ratings[course.id]| number:'1.1-1' }}</span>
 
-          <div *ngIf="!isEnrolled(course.id)">
+          <!-- <div *ngIf="!isEnrolled(course.id)">
             <button (click)="enroll(); $event.stopPropagation()" class="enroll-button">Enroll</button>
-          </div>
+          </div> -->
 
         </div>
       </div>

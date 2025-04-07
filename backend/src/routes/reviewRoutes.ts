@@ -10,6 +10,7 @@ router.post('/',reviewController.createReview)
 router.get('/:id',reviewController.getReviewById)
 router.get('/',reviewController.getAllReviews)
 router.put('/:id',reviewController.updateReview)
+router.get('/course/:id',reviewController.getReviewByCourseId)
 router.delete('/:id',reviewController.deleteReview)
 // router.get('/rating/:id',reviewController.getMeanRatings)
 

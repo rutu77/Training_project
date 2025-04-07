@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '../../models/model';
-import { AdminService } from '../admin.service';
+import { AdminService } from '../../services/admin.service';
 import Swal from 'sweetalert2';
 import { UpdateUserComponent } from '../update-user/update-user.component';
 

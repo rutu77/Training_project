@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2'
-import { AdminService } from '../../admin/admin.service';
+import { AdminService } from '../../services/admin.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

@@ -10,6 +10,7 @@ router.post('/',commentController.createComment)
 router.get('/:id',commentController.getCommentById)
 router.get('/',commentController.getAllComments)
 router.put('/:id',commentController.updateComment)
+router.get('/course/:id',commentController.getCommentyCourseId)
 router.delete('/:id',commentController.deleteComment)
 
 export {router as commentRoutes}

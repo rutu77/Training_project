@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AddCourse, Course, UpdateCourse, User } from '../models/model';
+import { AddCourse, AddReview, Course, UpdateCourse, UpdateReview, User } from '../models/model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -36,6 +36,20 @@ export class HomeService {
 
   updateUser(id:number,user:FormData){
     return this.http.put(`${this.api}/user/${id}`, user)
+  }
+
+  //Reviews
+
+  addReview(review:AddReview){
+    return this.http.post(`${this.api}/review/`, review)
+  }
+
+  deleteReview(id:number){
+    return this.http.delete(`${this.api}/review/${id}`)
+  }
+
+  updateReview(id:number, review:UpdateReview){
+    return this.http.put(`${this.api}/review/${id}`, review)
   }
 
 }

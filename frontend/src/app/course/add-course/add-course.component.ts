@@ -15,7 +15,6 @@ export class AddCourseComponent implements OnInit{
   userId= Number(localStorage.getItem('userId'));
 
   @Output() courseAdded= new EventEmitter<void>()
-  @Output() cancel= new EventEmitter<void>()
   selectedFile:File|null=null;
   
   constructor(private _course:CourseService){}
@@ -30,7 +29,6 @@ export class AddCourseComponent implements OnInit{
       isPublished: new FormControl(false),
       thumbnail: new FormControl(''),
       price: new FormControl(0),
-      // tags: new FormControl(''),
       creatorId: new FormControl(this.userId),
       level: new FormControl(''),
       duration: new FormControl(0)
@@ -79,7 +77,7 @@ export class AddCourseComponent implements OnInit{
     }
 
     onCancel(){
-      this.cancel.emit();
+      this.courseForm.reset();
     }
   }
 

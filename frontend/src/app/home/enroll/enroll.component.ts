@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HomeService } from '../../services/home.service';
 import Swal from 'sweetalert2';
+import { Course, Enrollment } from '../../models/model';
 
 @Component({
   selector: 'app-enroll',
@@ -11,24 +12,43 @@ import Swal from 'sweetalert2';
 })
 export class EnrollComponent{
 
-    courseId!: number ;
-    userName: string = '';
+    @Input() course!: Course ;
     userId= Number(localStorage.getItem('userId'));
+    enrollments:Enrollment[]=[]
+
+    @Output() enrollSuccess= new EventEmitter<void>();
+    @Output() cancel= new EventEmitter<void>();
   
     constructor(private route: ActivatedRoute,private router: Router,private homeService: HomeService){}
 
     
     // ngOnInit(): void {
-    //   const id = this.route.snapshot.paramMap.get('id');
-    //   this.courseId = id ? +id : 0; 
+    //   this.homeService.getEnrollments().subscribe((data:any)=>{
+    //     this.enrollments= data;
+    //   })
     // }
+
   
     enroll(){
-      this.homeService.enrollCourse(this.userId, this.courseId).subscribe(() => {
-        this.router.navigate(['/home/courses']);
-        console.log("enrolled successfully")
-        this.showEnrollSuccess();
-      });
+      
+    this.homeService.enrollCourse(this.userId, this.course.id).subscribe(
+      () => {
+        Swal.fire({
+          title: 'Enrollment Successful',
+          text: 'You have been successfully enrolled in the course!',
+          icon: 'success',
+        });
+        this.enrollSuccess.emit();
+      },
+      (error) => {
+        console.error('Error during enrollment', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'An error occurred while enrolling in the course.',
+          icon: 'error',
+        });
+      }
+    )
     }
 
     showEnrollSuccess() {
@@ -49,6 +69,10 @@ export class EnrollComponent{
         title: "Thanks!!",
         text: "You are successfully enrolled in the course"
       });
+    }
+
+    onCancel(){
+      this.cancel.emit()
     }
   }
  

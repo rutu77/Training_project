@@ -12,7 +12,7 @@ export class CommentController {
       res.status(201).json({ message: "comment created successfully!", data: comment });
     } catch (error) {
       // res.status(500).json({ error: "Error creating comment" });
-      res.status(500).json({ error: error });
+      res.status(500).json({ error: (error as Error).message  });
 
     }
   }  
@@ -26,6 +26,18 @@ export class CommentController {
         res.status(404).json({ message: (error as Error).message });
       }
     }
+
+    async getCommentyCourseId(req:Request, res:Response){
+      const courseId= Number(req.params.id)
+      try{
+          const comment= await commentService.getCommentByCourseId(courseId)
+          res.status(200).json({data:comment})
+      }
+      catch(error){
+          res.status(404).json({message:(error as Error).message})
+      }
+  }
+    
   
     async updateComment(req: Request, res: Response): Promise<void> {
       const commentId = Number(req.params.id);

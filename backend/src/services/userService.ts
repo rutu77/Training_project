@@ -1,6 +1,6 @@
 import { User } from "../models/User";
 import { userRepository } from "../repositories/userRepository";
-
+import bcrypt from "bcrypt"
 export class UserService{
 
     async getUserByEmail(email:string){
@@ -14,8 +14,14 @@ export class UserService{
     }
 
     async updateUserById(id:number,data:Partial<User>){
-        await userRepository.update({id:+id},{...data})
-        const updatedUser= await userRepository.findOne({where:{id}});
+
+        if (data.password) {
+            const hashedPassword = await bcrypt.hash(data.password, 10);
+            data.password = hashedPassword;
+        }        
+       
+        await userRepository.update({ id: +id }, data);
+        const updatedUser = await userRepository.findOne({ where: { id } });
         if(!updatedUser) throw new Error("User not found!")
         return updatedUser;
     }

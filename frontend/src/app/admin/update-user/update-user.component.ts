@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { AdminService } from '../admin.service';
+import { AdminService } from '../../services/admin.service';
 import Swal from 'sweetalert2';
 
 @Component({

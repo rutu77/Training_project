@@ -16,7 +16,6 @@ export class AddlessonsComponent {
   constructor(private _course:CourseService){}
 
   @Output() lessonAdded= new EventEmitter<void>();
-  @Output() cancel= new EventEmitter<void>();
 
   lessonForm!: FormGroup;
 
@@ -56,7 +55,7 @@ export class AddlessonsComponent {
     }
 
     onCancel(){
-      this.cancel.emit();
+      this.lessonForm.reset();
     }
   }
 

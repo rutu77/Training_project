@@ -20,8 +20,8 @@ import { GenericListComponent } from './shared/generic-list/generic-list.compone
 @NgModule({
   declarations: [
     AppComponent,
-    NotfoundComponent,
-  ],
+    NotfoundComponent
+   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
