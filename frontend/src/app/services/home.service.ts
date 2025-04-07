@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AddCourse, AddReview, Course, UpdateCourse, UpdateReview, User } from '../models/model';
+import { AddCourse, AddReview, Course, Quiz, UpdateCourse, UpdateReview, User } from '../models/model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,11 +13,6 @@ export class HomeService {
 
   api= `http://localhost:3000`
 
-  //Reviewa
-  getReviews(){
-    return this.http.get(`${this.api}/review/`)
-  }
-  
   
   //Enrollment
   getEnrollments(){
@@ -39,6 +34,10 @@ export class HomeService {
   }
 
   //Reviews
+  getReviews(){
+    return this.http.get(`${this.api}/review/`)
+  }
+  
 
   addReview(review:AddReview){
     return this.http.post(`${this.api}/review/`, review)
@@ -52,5 +51,22 @@ export class HomeService {
     return this.http.put(`${this.api}/review/${id}`, review)
   }
 
+
+  //Quizzes
+  createQuiz(courseId:number){
+    return this.http.post(`${this.api}/quiz/`,courseId)
+  }
+
+  getQuizByCourse(courseId:number){
+    return this.http.get(`${this.api}/quiz/course/${courseId}`)
+  }
+
+  addQuestion(data:any){
+    return this.http.post(`${this.api}/question/`,data)
+  }
+
+  getQuestionsByQuiz(quizId:number){
+    return this.http.get(`${this.api}/question/quiz/${quizId}`)
+  }
 }
 

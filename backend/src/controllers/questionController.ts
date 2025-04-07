@@ -57,4 +57,14 @@ export class QuestionController{
           res.status(500).json({error:"Error fetching Questions" });
         }
     }
+
+    async getQuestionsByQuiz(req:Request,res:Response){
+      try{
+        const quizId= Number(req.params.id);
+        const questions= await questionService.getQuestionsByQuiz(quizId);
+        res.status(200).json(questions);
+      } catch (error) {
+        res.status(500).json({ error: "Error fetching questions" });
+      }
+    }
 }

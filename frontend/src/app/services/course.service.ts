@@ -18,7 +18,6 @@ export class CourseService {
     return this.http.get(`${this.api}/course/${id}`);
   }
   
-  
   getCourses(query:string=''){
     const url= query? `${this.api}/search?search=${encodeURIComponent(query)}`: `${this.api}/course/`
     return this.http.get(url);
@@ -41,8 +40,8 @@ export class CourseService {
   }
 
 
-  //Lessons
 
+  //Lessons
   getLessonById(id: number) {
     return this.http.get(`${this.api}/lesson/${id}`);
   }
@@ -76,6 +75,7 @@ export class CourseService {
   }
 
 
+
   //Search
   private searchQuery=new BehaviorSubject<string>('');
   query$ = this.searchQuery.asObservable();
@@ -83,6 +83,8 @@ export class CourseService {
   emitSearch(query:string){
     this.searchQuery.next(query)
   }
+
+  
 
   
 }

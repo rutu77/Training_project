@@ -74,6 +74,13 @@ export class CoursedetailsComponent implements OnInit{
     });
   }
 
+  // onOpenUpdate(id:number){
+  //   this.selectedCourseId=id;
+  //   this.displayUpdateDialog= true
+  // }
+
+
+  //lessons
   loadLessonsByCourseId(courseId: string){
     this.courseService.getLessonByCourseId(+courseId).subscribe((res: any) => {
       this.lessons = res.data;
@@ -81,12 +88,40 @@ export class CoursedetailsComponent implements OnInit{
   })
   }
 
+  viewLesson(lessonId:number){
+    this.router.navigate([`course/lesson/${lessonId}`]);
+  }
+
+  //Enrollments
   loadEnrollments(){
     this.homeService.getEnrollments().subscribe((data:any) => {
       this.enrollments = data;
     });
   }
 
+  isEnrolled(courseId: number): boolean {
+    const enroll = this.enrollments.some(enrollment => enrollment.user.id === this.userId && enrollment.course.id === courseId);
+    return enroll;
+  }
+
+  openEnrollmentDialog(course:Course){
+    this.selectedCourse=course
+    this.showEnrollDialog=true
+
+  }
+
+  closeEnrollmentDialog(){
+    this.showEnrollDialog=false
+  }
+
+  refreshEnrollments(){
+    this.loadEnrollments()
+    this.displayUpdateEnrollDialog=false
+  }
+
+
+
+  //reviews
   loadReviewsByCourseId(courseId:string){
     this.courseService.getReviewsByCourseId(+courseId).subscribe((data:any) => {
       this.reviews=data.data;
@@ -106,54 +141,6 @@ export class CoursedetailsComponent implements OnInit{
     this.editingReviewId = null;
   }
 
-
-  // loadDiscussipnsByCourseId(courseId:string){
-  //   this.courseService.getDiscussionByCourseId(+courseId).subscribe((data:any) => {
-  //     this.discussions=data.data;
-  //     console.log(this.discussions);
-  //   });
-  // }
-
-   
-    // enroll(){
-    //   this.homeService.enrollCourse(this.userId, this.courseId).subscribe(() => {
-    //     this.router.navigate(['/home/courses']);
-    //     console.log("enrolled successfully")
-    //     this.showEnrollSuccess();
-    //   });
-    // }
-
-    // showEnrollSuccess() {
-    //   const Toast = Swal.mixin({
-    //     toast: true,
-    //     position: "bottom",
-    //     showConfirmButton: false,
-    //     timer: 3000,
-    //     timerProgressBar: true,
-    //     didOpen: (toast) => {
-    //       toast.onmouseenter = Swal.stopTimer;
-    //       toast.onmouseleave = Swal.resumeTimer;
-    //     }
-    //   });
-
-    //   Toast.fire({
-    //     icon: "success",
-    //     title: "Thanks!!",
-    //     text: "You are successfully enrolled in the course"
-    //   });
-    // }
-    
-
-  isEnrolled(courseId: number): boolean {
-    const enroll = this.enrollments.some(enrollment => enrollment.user.id === this.userId && enrollment.course.id === courseId);
-    return enroll;
-  }
-
-  
-  viewLesson(lessonId:number){
-    this.router.navigate([`course/lesson/${lessonId}`]);
-  }
-
   //user logged in can delete and edit his own reviews
   isReviewUserSame(reviewId:number):boolean{
     return this.userId === reviewId;
@@ -168,7 +155,7 @@ export class CoursedetailsComponent implements OnInit{
 
   deleteReview(reviewId:number){
     this.homeService.deleteReview(reviewId).subscribe(
-      (res:any) => {
+      () => {
         Swal.fire({
           icon: 'success',
           title: 'Deleted',
@@ -185,26 +172,5 @@ export class CoursedetailsComponent implements OnInit{
         })
       }
     )}
-
-    openEnrollmentDialog(course:Course){
-      this.selectedCourse=course
-      this.showEnrollDialog=true
-
-    }
-
-    closeEnrollmentDialog(){
-      this.showEnrollDialog=false
-    }
-
-    refreshEnrollments(){
-      this.loadEnrollments()
-      this.displayUpdateEnrollDialog=false
-    }
-
-  
-    onOpenUpdate(id:number){
-      this.selectedCourseId=id;
-      this.displayUpdateDialog= true
-    }
 }
   

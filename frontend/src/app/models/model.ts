@@ -62,18 +62,23 @@ export interface Lesson{
 }
 
 export interface Quiz{
-    quiz_id:number,
+    id?:number,
+    courseId:number,
+    questions:Question[]
+}
+
+export interface Question{
     question:string,
     options:string[],
     correctAnswer:string,
     explanation?:string
 }
 
-export interface Category{
-    category_id:number,
-    name:string,
-    description?:true,
-}
+// export interface Category{
+//     category_id:number,
+//     name:string,
+//     description?:true,
+// }
 
 export interface Review{
     id:number,

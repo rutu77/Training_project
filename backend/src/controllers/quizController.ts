@@ -56,4 +56,14 @@ export class QuizController{
         res.status(500).json({ error: "Error fetching quizzes" });
       }
     }
+
+    async getQuizzesByCourse(req:Request,res:Response){
+      try{
+        const courseId= Number(req.params.id);
+        const quizzes= await quizService.getQuizzesByCourse(courseId);
+        res.status(200).json(quizzes);
+      } catch (error) {
+        res.status(500).json({ error: "Error fetching quizzes" });
+      }
+    }
   }

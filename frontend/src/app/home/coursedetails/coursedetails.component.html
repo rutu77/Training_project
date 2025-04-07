@@ -8,6 +8,8 @@
     </div>
     <!-- <button (click)="enroll(course.course_id)" class="enroll-button">Enroll</button> -->
     
+
+    <!-- enroll button-->
     <div *ngIf="!isEnrolled(course.id) && isLoggedIn">
         <button (click)="openEnrollmentDialog(course)" pButton class="enroll-button">Enroll to this course</button>
         <div *ngIf="showEnrollDialog" class="enrollment-dialog-overlay">
@@ -17,6 +19,8 @@
 
     <div *ngIf="!isLoggedIn">Please login to enroll to this course</div>
 
+
+    <!-- lesson -->
     <div *ngIf="isEnrolled(course.id)">
           <h2>Lessons</h2>
           <div *ngIf="lessons.length === 0" class="no-lessons">No lessons found!</div>
@@ -29,6 +33,7 @@
     </div>
 
 
+    <!-- reviews -->
     <div>
       <h2>Course Reviews</h2>
       <div *ngIf="reviews.length === 0" class="no-reviews">No reviews found!</div>
@@ -36,6 +41,7 @@
         <p>{{ review.comment }}</p>
         <span class="review-author">By: {{ review.user.name }}</span>
         <span class="review-rating">Rating: {{ review.rating }}</span>
+
         <div *ngIf="isReviewUserSame(review.user.id)">
           <button (click)="deleteReview(review.id)" pInputText class="delete-review-button">Delete</button>
           <button (click)="showUpdateReview = !showUpdateReview" (click)="editReview(review)" pInputText class="edit-review-button">Edit</button>
@@ -43,21 +49,17 @@
               <app-update-review [review]="selectedReview" (reviewUpdated)="loadReviewsByCourseId(selectedCourseId.toString())" (cancel)="CancelUpdateReview()"></app-update-review>
           </div>
         </div>
+
     </div>
 
-    <!-- <div *ngIf="!isEnrolled(course.id)">
-      <button (click)="enroll()" pInputText class="enroll-button">Enroll</button>
-    </div> -->
 
 
-
+    <!-- add a review -->
     <div *ngIf="isEnrolled(course.id)">
       <ng-container add-form>
         <app-add-review [courseId]="selectedCourseId" (reviewAdded)="refresh()"></app-add-review>
       </ng-container>   
     </div>
-
-    
 
 </div>
 

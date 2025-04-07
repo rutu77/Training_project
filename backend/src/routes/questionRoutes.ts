@@ -11,5 +11,6 @@ router.get('/:id',questionController.getQuestionById)
 router.get('/',questionController.getAllQuestions)
 router.put('/:id',questionController.updateQuestion)
 router.delete('/:id',questionController.deleteQuestion)
+router.get('/quiz/:id',questionController.getQuestionsByQuiz)
 
 export {router as questionRoutes}

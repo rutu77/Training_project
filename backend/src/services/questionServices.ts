@@ -1,9 +1,12 @@
 import { Question } from "../models/Question";
 import { QuestionRepository } from "../repositories/attemptRepository"; 
+import { quizRepository } from "../repositories/quizRepository";
 
 export class QuestionService{
 
     async createQuestion(QuestionData: Partial<Question>){
+        const quiz= await quizRepository.findOneBy({id:QuestionData.quiz?.id})
+        if(!quiz) throw new Error("Quiz not found!")
         const Question = QuestionRepository.create(QuestionData);
         return await QuestionRepository.save(Question);
     }
@@ -29,5 +32,9 @@ export class QuestionService{
 
     async getAllQuestions(){
         return await QuestionRepository.find();
+    }
+
+    async getQuestionsByQuiz(quizId:number){
+        return await QuestionRepository.find({where:{quiz:{id:quizId}}})
     }
 }
