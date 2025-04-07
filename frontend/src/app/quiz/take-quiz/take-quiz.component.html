@@ -1,0 +1,17 @@
+<h3>Take Quiz</h3>
+<div *ngFor="let question of questions; let i = index">
+  <p>{{ question.question }}</p>
+  <div *ngFor="let option of question.options">
+    <input type="radio" 
+           [name]="'q' + i" 
+           [value]="option"
+           [(ngModel)]="userAnswers[i]">
+    {{ option }}
+  </div>
+</div>
+
+<button (click)="submitQuiz()">Submit</button>
+
+<div *ngIf="resultShown">
+  <h4>Your Score: {{ score }} / {{ questions.length }}</h4>
+</div>

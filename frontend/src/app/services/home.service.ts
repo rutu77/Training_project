@@ -68,5 +68,23 @@ export class HomeService {
   getQuestionsByQuiz(quizId:number){
     return this.http.get(`${this.api}/question/quiz/${quizId}`)
   }
+
+  getAllQuizzes(){
+    return this.http.get(`${this.api}/quiz/`);
+  }
+
+  deleteQuestion(id: number){
+    return this.http.delete(`${this.api}/question/${id}`);
+  }
+
+  deleteQuiz(id: number){
+    return this.http.delete(`${this.api}/quiz/${id}`);
+  }
+
+
+  //progress
+  getUserProgress(id:number){
+    return this.http.get(`${this.api}/progress/${id}`)
+  }
 }
 

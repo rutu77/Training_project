@@ -1,18 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Quiz } from '../../models/model';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { HomeService } from '../../services/home.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-add-quiz',
+  selector: 'app-create-quiz',
   standalone: false,
-  templateUrl: './add-quiz.component.html',
-  styleUrl: './add-quiz.component.css'
+  templateUrl: './create-quiz.component.html',
+  styleUrl: './create-quiz.component.css'
 })
-export class AddQuizComponent{
+export class CreateQuizComponent {
   courseId!:number;
-  quiz!:Quiz;
-  answers:string[]=[]
+  @Output() quizCreated= new EventEmitter<void>()
 
   constructor(private homeService:HomeService){}
 

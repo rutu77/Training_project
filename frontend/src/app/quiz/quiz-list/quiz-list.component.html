@@ -1,1 +1,6 @@
-<p>quiz-list works!</p>
+<h2>All Quizzes</h2>
+<ul>
+  <li *ngFor="let quiz of quizzes">
+    Quiz ID: {{ quiz.id }} | Course ID: {{ quiz.courseId }}
+  </li>
+</ul>

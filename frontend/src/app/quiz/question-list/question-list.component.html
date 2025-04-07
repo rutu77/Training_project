@@ -1,0 +1,9 @@
+<h3>Questions</h3>
+<div *ngFor="let question of questions">
+  <p><strong>Q:</strong> {{ question.question }}</p>
+  <ul>
+    <li *ngFor="let option of question.options">{{ option }}</li>
+  </ul>
+  <p><strong>Answer:</strong> {{ question.correctAnswer }}</p>
+  <button (click)="delete.emit(question.id!)">Delete</button>
+</div>

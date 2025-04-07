@@ -1,0 +1,8 @@
+<h3>Create Question</h3>
+<input [(ngModel)]="questionText" placeholder="Question">
+<div *ngFor="let opt of options; let i = index">
+  <input [(ngModel)]="options[i]" placeholder="Option {{ i + 1 }}">
+</div>
+<input [(ngModel)]="correctAnswer" placeholder="Correct Answer">
+<input [(ngModel)]="explanation" placeholder="Explanation (optional)">
+<button (click)="createQuestion()">Add Question</button>

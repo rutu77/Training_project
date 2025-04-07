@@ -68,6 +68,7 @@ export interface Quiz{
 }
 
 export interface Question{
+    id?:number
     question:string,
     options:string[],
     correctAnswer:string,
