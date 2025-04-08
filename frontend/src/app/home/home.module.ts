@@ -18,6 +18,7 @@ import { CourseModule } from '../course/course.module';
 import { ProfileComponent } from './profile/profile.component';
 import { AddReviewComponent } from './add-review/add-review.component';
 import { UpdateReviewComponent } from './update-review/update-review.component';
+import { QuizModule } from '../quiz/quiz.module';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { UpdateReviewComponent } from './update-review/update-review.component';
     RouterModule,
     ReactiveFormsModule,
     FormsModule,
-    CourseModule
+    CourseModule,
+    QuizModule
   ]
 })
 

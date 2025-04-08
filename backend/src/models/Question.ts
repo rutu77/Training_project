@@ -19,7 +19,7 @@ export class Question {
   @Column({nullable:true})
   explanation:string;
 
-  @ManyToOne(() => Quiz,(quiz)=>quiz.questions)
+  @ManyToOne(() => Quiz,(quiz)=>quiz.questions, {onDelete: 'CASCADE' })
   @JoinColumn({name:'quiz_id'})
   quiz:Quiz;
 }

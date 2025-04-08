@@ -12,5 +12,8 @@ router.get('/',quizController.getAllQuizzes)
 router.put('/:id',quizController.updateQuiz)
 router.delete('/:id',quizController.deleteQuiz)
 router.get('/course/:id',quizController.getQuizzesByCourse)
+router.post('/addQ/:id',quizController.addQuestionToQuiz)
+router.post('/submit/:id',quizController.submitQuiz)
+
 
 export {router as quizRoutes}

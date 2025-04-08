@@ -20,7 +20,7 @@
     <div *ngIf="!isLoggedIn">Please login to enroll to this course</div>
 
 
-    <!-- lesson -->
+    <!-- lesson and quizzes -->
     <div *ngIf="isEnrolled(course.id)">
           <h2>Lessons</h2>
           <div *ngIf="lessons.length === 0" class="no-lessons">No lessons found!</div>
@@ -30,8 +30,17 @@
               <span class="lesson-duration">{{ lesson.duration }}</span>
             </div>
           </div>
+
+          <h2>Quizzes</h2>
+         <div *ngIf="quizzes.length===0" class="no-quizzes">No Quiz Found</div>
+          <div *ngFor="let quiz of quizzes" class="quiz-card" (click)="TakeQuiz(quiz.id)">
+            <div class="quiz-details">
+              <h2 class="quiz-title">{{ quiz.title }}</h2>
+            </div>
+          </div> 
     </div>
 
+  
 
     <!-- reviews -->
     <div>

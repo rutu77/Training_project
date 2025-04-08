@@ -20,6 +20,6 @@ export class Lesson {
     @JoinColumn({ name: "course_id" }) 
     course: Course;
 
-    @OneToMany(()=>Progress,(progress)=>progress.lesson,{ cascade: true })
-    progress:Progress[];
+    // @OneToMany(()=>Progress,(progress)=>progress.lesson,{ cascade: true })
+    // progress:Progress[];
 }

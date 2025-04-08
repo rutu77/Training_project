@@ -1,0 +1,22 @@
+<div *ngIf="report" class="report-container">
+  <h2>Progress Report</h2>
+  <p>Score: {{ report.score }}%</p>
+  <p>Correct Answers: {{ report.correctAnswers }}</p>
+  <p>Total Questions: {{ report.totalQuestions }}</p>
+</div>
+
+<!-- <h3>Your Quiz Progress</h3>
+<table>
+  <tr>
+    <th>Quiz ID</th>
+    <th>Score</th>
+    <th>Total</th>
+    <th>Date</th>
+  </tr>
+  <tr *ngFor="let progress of progressList">
+    <td>{{ progress.quiz.id }}</td>
+    <td>{{ progress.score }}</td>
+    <td>{{ progress.total }}</td>
+    <td>{{ progress.takenAt | date }}</td>
+  </tr>
+</table> -->

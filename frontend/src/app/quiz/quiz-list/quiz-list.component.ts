@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { HomeService } from '../../services/home.service';
+import { Course, Quiz } from '../../models/model';
+import Swal from 'sweetalert2';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-quiz-list',
@@ -6,6 +10,72 @@ import { Component } from '@angular/core';
   templateUrl: './quiz-list.component.html',
   styleUrl: './quiz-list.component.css'
 })
-export class QuizListComponent {
+export class QuizListComponent implements OnInit {
+  quizzes: any[] = [];
+  quizForm: FormGroup;
 
-}
+  constructor(private homeService: HomeService) {
+    this.quizForm = new FormGroup({
+      title: new FormControl('',[Validators.required]),
+      courseId:new FormControl(0,[Validators.required]) 
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadQuizzes();
+  }
+
+  loadQuizzes(): void {
+    this.homeService.getAllQuizzes().subscribe((data:any) => {
+      this.quizzes = data;
+      console.log("list",data);
+      
+    });
+  }
+
+
+  createQuiz(){
+  if(this.quizForm.valid){
+    this.homeService.createQuiz(this.quizForm.value).subscribe(
+      () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Created',
+          text: 'Quiz created successfully!',
+        })
+        this.loadQuizzes()
+        this.quizForm.reset()
+      },
+      (error:any) => {
+        console.error('Error creating quiz:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to create quiz!',
+        })
+      }
+    )}
+  }
+
+
+  deleteQuiz(quizId:number){
+  this.homeService.deleteQuiz(quizId).subscribe(
+    () => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Deleted',
+        text: 'Quiz deleted successfully!',
+      })
+      this.loadQuizzes()
+    },
+    (error:any) => {
+      console.error('Error deleting quiz:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to delete quiz!',
+      })
+    }
+  )}
+  }
+  

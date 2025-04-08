@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Discussion, Course, Enrollment, Lesson, Review } from '../../models/model';
+import { Discussion, Course, Enrollment, Lesson, Review, Quiz } from '../../models/model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
 import { HomeService } from '../../services/home.service';
@@ -23,6 +23,7 @@ export class CoursedetailsComponent implements OnInit{
     lessons:Lesson[]=[]
     reviews:Review[]=[]
     discussions:Discussion[]=[]
+    quizzes:any[]=[]
     isAdmin: boolean= false;;
     isTeacher: boolean=false ;
     displayUpdateDialog=false
@@ -60,6 +61,7 @@ export class CoursedetailsComponent implements OnInit{
         this.loadCourseById(courseId);
         this.loadLessonsByCourseId(courseId);
         this.loadReviewsByCourseId(courseId);
+        this.loadQuizzes(+courseId);
         // this.loadDiscussipnsByCourseId(courseId)
         this.selectedCourseId= +courseId;
 
@@ -84,13 +86,28 @@ export class CoursedetailsComponent implements OnInit{
   loadLessonsByCourseId(courseId: string){
     this.courseService.getLessonByCourseId(+courseId).subscribe((res: any) => {
       this.lessons = res.data;
-      console.log(this.lessons); 
+      // console.log(this.lessons); 
   })
   }
 
   viewLesson(lessonId:number){
     this.router.navigate([`course/lesson/${lessonId}`]);
   }
+
+  //Quiz
+  TakeQuiz(quizId:number){
+    this.router.navigate([`quiz/takeQuiz/${quizId}`])
+  }
+
+  loadQuizzes(courseId:number){
+    this.homeService.getQuizByCourse(courseId).subscribe((data:any)=>{
+      this.quizzes= data;
+      console.log("Quiz",data);
+      
+    })
+  }
+
+
 
   //Enrollments
   loadEnrollments(){
@@ -119,13 +136,11 @@ export class CoursedetailsComponent implements OnInit{
     this.displayUpdateEnrollDialog=false
   }
 
-
-
   //reviews
   loadReviewsByCourseId(courseId:string){
     this.courseService.getReviewsByCourseId(+courseId).subscribe((data:any) => {
       this.reviews=data.data;
-      console.log(this.reviews);
+      // console.log(this.reviews);
     });
     this.showUpdateReview=false
   }

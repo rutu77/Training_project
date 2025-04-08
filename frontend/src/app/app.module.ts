@@ -14,6 +14,7 @@ import { HomeModule } from './home/home.module';
 import { CourseModule } from './course/course.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GenericListComponent } from './shared/generic-list/generic-list.component';
+import { QuizModule } from './quiz/quiz.module';
 
 
 
@@ -32,7 +33,8 @@ import { GenericListComponent } from './shared/generic-list/generic-list.compone
     AdminModule,
     BrowserAnimationsModule,
     HomeModule,
-    CourseModule
+    CourseModule,
+    QuizModule
 ],
   providers: [{
     provide:HTTP_INTERCEPTORS,

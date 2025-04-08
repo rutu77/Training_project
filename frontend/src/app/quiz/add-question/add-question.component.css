@@ -1,6 +1,6 @@
-/* Container for the quiz list and form */
+/* Container for the quiz details */
 .quiz-container {
-    max-width: 800px;
+    max-width: 600px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ddd;
@@ -60,7 +60,6 @@
   .quiz-container form {
     display: flex;
     flex-direction: column;
-    margin-bottom: 20px;
   }
   
   .quiz-container input {
@@ -79,16 +78,5 @@
   
   .quiz-container input[type="submit"]:hover {
     background-color: #218838;
-  }
-  
-  /* Link styles */
-  .quiz-container a {
-    color: #007bff;
-    text-decoration: none;
-    padding: 8px;
-  }
-  
-  .quiz-container a:hover {
-    text-decoration: underline;
   }
   

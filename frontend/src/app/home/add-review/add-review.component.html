@@ -5,8 +5,13 @@
     <label for="comment">Review:</label>
     <input type="text" pInputText placeholder="Enter review" formControlName="comment" >
 
-    <label for="rating">Rating:</label>
-    <input type="number" pInputText placeholder="Enter rating" formControlName="rating" min="1" max="5">
 
+    <label for="rating">Rating:</label>
+    <div class="rating-options">
+      <label *ngFor="let rating of [1, 2, 3, 4, 5]">
+        <input type="radio" formControlName="rating" [value]="rating"> {{ rating }}
+      </label>
+    </div>
+    
     <button pButton type="submit" label="Add"></button>
 </form>

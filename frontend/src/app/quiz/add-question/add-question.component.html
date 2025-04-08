@@ -1,0 +1,21 @@
+<div *ngIf="quiz" class="quiz-container">
+    <h2>{{ quiz.title }}</h2>
+    <p *ngIf="quiz.course">Course: {{ quiz.course.title }}</p>
+    <p *ngIf="!quiz.course">Course: Not assigned</p>
+    <p>Questions:</p>
+    <ul>
+      <li *ngFor="let question of quiz.questions">
+        {{ question.question }}
+        <button (click)="deleteQuestion(question.id)">Delete</button>
+      </li>
+    </ul>
+    <h3>Add New Question</h3>
+    <form [formGroup]="questionForm" (ngSubmit)="addQuestion()">
+      <input type="text" formControlName="question" placeholder="Question" required>
+      <input type="text" formControlName="options" placeholder="Options (comma separated)" required>
+      <input type="text" formControlName="correctAnswer" placeholder="Correct Answer" required>
+      <input type="text" formControlName="explanation" placeholder="Explanation">
+      <button type="submit" [disabled]="questionForm.invalid">Add Question</button>
+    </form>
+  </div>
+  

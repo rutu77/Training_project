@@ -1,22 +1,25 @@
+import { Course } from "../models/Course";
+import { Progress } from "../models/Progress";
 import { Quiz } from "../models/Quiz";
+import { QuestionRepository } from "../repositories/attemptRepository";
 import { courseRepository } from "../repositories/courseRepository";
+import { progressRepository } from "../repositories/progressRepository";
 import { quizRepository } from "../repositories/quizRepository";
 
 
 export class QuizService {
-  async createQuiz(quizData: Partial<Quiz>){
-    const course= await courseRepository.findOneBy({id:quizData.course?.id});
+
+  async createQuiz(quizData: {courseId:number,title:string}){
+    const course= await courseRepository.findOne({where:{id:quizData.courseId}}) as Course;
     if(!course) throw new Error("Course not found!")
 
-    const quiz = quizRepository.create(quizData);
-    // const quiz= new Quiz()
-    // quiz.course=course
-    // quiz.questions=[];
+    const quiz = quizRepository.create({...quizData,course:course});
     return await quizRepository.save(quiz);
   }
 
   async getQuizById(id: number){
-    const quiz = await quizRepository.findOne({where:{id}});
+    const quiz = await quizRepository.findOne({ where: { id: id }, relations: ['course','questions'] });
+    // const quiz = await quizRepository.findOne({where:{id:id},});
     if (!quiz) throw new Error("Quiz not found!");
     return quiz;
   }
@@ -34,10 +37,43 @@ export class QuizService {
   }
 
   async getAllQuizzes(): Promise<Quiz[]> {
-    return await quizRepository.find();
+    return await quizRepository.find({relations:['course', 'questions']});
   }
 
   async getQuizzesByCourse(courseId:number){
     return await quizRepository.find({where:{course:{id:courseId}}, relations:['questions']});
+  }
+
+  async addQuestionToQuiz(id: number, questionData: { question: string; options: string[]; correctAnswer: string; explanation?: string }) {
+    const quiz = await quizRepository.findOne({ where: { id: id }, relations: ['course','questions'] });
+    if (!quiz) throw new Error("Quiz not found!");
+
+    const question = QuestionRepository.create({ ...questionData, quiz });
+    return await QuestionRepository.save(question);
+  }
+
+
+  
+  async submitQuiz(quizId: number, userId: number, answers: any): Promise<Progress> {
+    const quiz = await quizRepository.findOne({ where: { id: quizId }, relations: ['questions'] });
+    if (!quiz) throw new Error("Quiz not found!");
+  
+    let correctAnswers = 0;
+    quiz.questions.forEach(question => {
+      if (answers[question.id] === question.correctAnswer) {
+        correctAnswers++;
+      }
+    });
+  
+    const score = (correctAnswers / quiz.questions.length) * 100;
+    const progress = progressRepository.create({
+      user: { id: userId },
+      quiz,
+      score,
+      total: quiz.questions.length,
+      completion: new Date()
+    });
+  
+    return await progressRepository.save(progress);
   }
 }

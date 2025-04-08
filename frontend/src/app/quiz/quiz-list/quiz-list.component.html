@@ -1,1 +1,40 @@
-<p>quiz-list works!</p>
+<!-- <app-generic-list 
+  [items]="quizzes"
+  [itemFields]="['id','course.id','title','questions']"
+  [itemLabels]="['Id','Course Id','Title','Questions']"
+  (addItem)="refresh()"
+  (updateItem)="onOpenUpdate($event)"
+  (deleteItem)="deleteQuiz($event)"
+>
+
+  <ng-container add-form>
+    <app-create-quiz (quizCreated)="refresh()"></app-create-quiz>
+  </ng-container>
+  
+</app-generic-list> -->
+
+
+<div class="quiz-container">
+  <h3>Create New Quiz</h3>
+  <form [formGroup]="quizForm" (ngSubmit)="createQuiz()">
+    <input type="text" formControlName="title" placeholder="Quiz Title" required>
+    <input type="number" formControlName="courseId" placeholder="Course ID" required>
+    <button type="submit" [disabled]="quizForm.invalid">Create Quiz</button>
+  </form>
+
+  <div *ngFor="let quiz of quizzes">
+    <h2>{{ quiz.title }}</h2>
+    <p *ngIf="quiz.course">Course: {{ quiz.course.title }}</p>
+    <p *ngIf="!quiz.course">Course: Not assigned</p>
+    <p>Questions:</p>
+    <ul>
+      <li *ngFor="let question of quiz.questions">
+        {{ question.question }}
+      </li>
+    </ul>
+    <button (click)="deleteQuiz(quiz.id)">Delete Quiz</button>
+    <a [routerLink]="['/quiz/addQuestion', quiz.id]">Add Question</a>
+  </div>
+</div>
+
+

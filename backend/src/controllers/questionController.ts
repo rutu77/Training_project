@@ -1,8 +1,10 @@
 import { Request ,Response} from "express";
 import { QuestionService } from "../services/questionServices";
 import { Question } from "../models/Question";
+import { QuizService } from "../services/quizService";
 
 const questionService= new QuestionService()
+
 
 export class QuestionController{
 
@@ -66,5 +68,6 @@ export class QuestionController{
       } catch (error) {
         res.status(500).json({ error: "Error fetching questions" });
       }
-    }
+    } 
+
 }

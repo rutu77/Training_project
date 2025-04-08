@@ -7,6 +7,9 @@ export class Quiz {
   @PrimaryGeneratedColumn()
   id:number;
 
+  @Column()
+  title:string
+
   @ManyToOne(()=>Course,(course)=>course.quizzes, { onDelete: 'CASCADE' })
   @JoinColumn({name:'course_id'})
   course:Course;

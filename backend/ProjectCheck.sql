@@ -14,7 +14,7 @@ select * from Review_tbl47
 
 select * from Comment_tbl47
 
-select * from Progress_tbl47
+select * from Progress_tbl74
 
 select * from Lesson_tbl47
 

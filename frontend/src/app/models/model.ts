@@ -64,10 +64,12 @@ export interface Lesson{
 export interface Quiz{
     id?:number,
     courseId:number,
+    
     questions:Question[]
 }
 
 export interface Question{
+    id?:number
     question:string,
     options:string[],
     correctAnswer:string,

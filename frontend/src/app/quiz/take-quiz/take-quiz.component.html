@@ -1,0 +1,15 @@
+<div *ngIf="quiz" class="quiz-container">
+  <h2>{{ quiz.title }}</h2>
+  <form [formGroup]="quizForm" (ngSubmit)="submitQuiz()">
+    <div *ngFor="let question of quiz.questions">
+      <p>{{ question.question }}</p>
+      <div *ngFor="let option of question.options">
+        <input type="radio" [formControlName]="question.id" [value]="option"> {{ option }}
+      </div>
+      <div>
+        <input type="radio" [formControlName]="question.id" [value]="null"> None
+      </div>
+    </div>
+    <button type="submit" [disabled]="quizForm.invalid">Submit Quiz</button>
+  </form>
+</div>

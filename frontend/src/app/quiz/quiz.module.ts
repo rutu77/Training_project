@@ -2,25 +2,27 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { QuizRoutingModule } from './quiz-routing.module';
-import { AddQuizComponent } from './add-quiz/add-quiz.component';
-import { UpdateQuizComponent } from './update-quiz/update-quiz.component';
 import { QuizListComponent } from './quiz-list/quiz-list.component';
-import { QuizDetailsComponent } from './quiz-details/quiz-details.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TakeQuizComponent } from './take-quiz/take-quiz.component';
+import { ProgressComponent } from './progress/progress.component';
+import { SharedModule } from '../shared/shared.module';
+import { AddQuestionComponent } from './add-question/add-question.component';
 
 
 @NgModule({
   declarations: [
-    AddQuizComponent,
-    UpdateQuizComponent,
     QuizListComponent,
-    QuizDetailsComponent
+    TakeQuizComponent,
+    ProgressComponent,
+    AddQuestionComponent
   ],
   imports: [
     CommonModule,
     QuizRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ]
 })
 export class QuizModule { }

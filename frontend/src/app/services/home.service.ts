@@ -53,20 +53,58 @@ export class HomeService {
 
 
   //Quizzes
-  createQuiz(courseId:number){
-    return this.http.post(`${this.api}/quiz/`,courseId)
+  getAllQuizzes(){
+    return this.http.get(`${this.api}/quiz/`);
+  }
+
+  createQuiz(quizData:any){
+    return this.http.post(`${this.api}/quiz/`,quizData)
+  }
+
+  updateQuiz(courseId:number,data:Quiz){
+    return this.http.put(`${this.api}/quiz/${courseId}`,data)
+  }
+
+  deleteQuiz(id: number){
+    return this.http.delete(`${this.api}/quiz/${id}`);
   }
 
   getQuizByCourse(courseId:number){
     return this.http.get(`${this.api}/quiz/course/${courseId}`)
   }
 
-  addQuestion(data:any){
-    return this.http.post(`${this.api}/question/`,data)
+  addQuestiontoQuiz(quizId:number,questions:any){
+    return this.http.post(`${this.api}/quiz/addQ/${quizId}`,questions)
+  }
+
+  updateQuestion(id:number,question:any){
+    return this.http.put(`${this.api}/question/${id}`,question)
+  }
+
+  deleteQuestion(id: number){
+    return this.http.delete(`${this.api}/question/${id}`);
   }
 
   getQuestionsByQuiz(quizId:number){
     return this.http.get(`${this.api}/question/quiz/${quizId}`)
+  }
+
+  getQuizById(id:number){
+    return this.http.get(`${this.api}/quiz/${id}`)
+  }
+
+  submitQuiz(id: number, data: { userId: number; answers: any }) {
+    return this.http.post(`${this.api}/quiz/submit/${id}`, data);
+  }
+  
+
+  //progress
+  getProgressById(id:number){
+    return this.http.get(`${this.api}/progress/${id}`)
+  }
+
+  getProgressByUser(userId:number){
+    return this.http.get(`${this.api}/progress/user/za${userId}`)
   }
 }
 
