@@ -9,7 +9,7 @@ const routes: Routes = [
   {path:'auth',loadChildren:()=>import('./auth/auth.module').then(m=>m.AuthModule)},
   {path:'admin',loadChildren:()=>import('./admin/admin.module').then(m=>m.AdminModule)},
   {path:'course',loadChildren:()=>import('./course/course.module').then(m=>m.CourseModule)},
-  {path:'quizes',loadChildren:()=>import('./quiz/quiz.module').then(m=>m.QuizModule)},
+  {path:'quiz',loadChildren:()=>import('./quiz/quiz.module').then(m=>m.QuizModule)},
   {path:'**',component:NotfoundComponent },
 ];
 
