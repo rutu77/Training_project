@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { request } from 'express';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -34,4 +35,18 @@ export class AdminService {
     return this.http.get(`${this.api}/user/`)
   }
 
+
+  //admin-dash
+  sidebarVisiblee:boolean = false
+
+  private sidebarVisible = new BehaviorSubject<boolean>(false);
+  sidebarVisible$ = this.sidebarVisible.asObservable();
+
+  showSidebar() {
+    this.sidebarVisible.next(true);
+  }
+
+  hideSidebar() {
+    this.sidebarVisible.next(false);
+  }
 }

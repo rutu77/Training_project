@@ -8,6 +8,7 @@ import { TakeQuizComponent } from './take-quiz/take-quiz.component';
 import { ProgressComponent } from './progress/progress.component';
 import { SharedModule } from '../shared/shared.module';
 import { AddQuestionComponent } from './add-question/add-question.component';
+import { ProgressChartComponent } from './progress-chart/progress-chart.component';
 
 
 @NgModule({
@@ -15,14 +16,15 @@ import { AddQuestionComponent } from './add-question/add-question.component';
     QuizListComponent,
     TakeQuizComponent,
     ProgressComponent,
-    AddQuestionComponent
+    AddQuestionComponent,
+    ProgressChartComponent
   ],
   imports: [
     CommonModule,
     QuizRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    SharedModule
+    SharedModule,
   ]
 })
 export class QuizModule { }

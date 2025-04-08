@@ -12,4 +12,5 @@ router.get('/',enrollController.getAllEnrollments)
 router.put('/:id',enrollController.updateEnrollment)
 router.delete('/:id',enrollController.deleteEnrollment)
 
+
 export {router as enrollRoutes}

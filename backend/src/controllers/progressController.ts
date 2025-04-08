@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ProgressService } from "../services/progressService";
+import { error } from "console";
 
 const progressService = new ProgressService();
 
@@ -36,6 +37,25 @@ export class ProgressController {
         res.status(404).json({ message: (error as Error).message });
       }
     }
+
+
+    async downloadProgressReport(req: Request, res: Response): Promise<void> {
+      try {
+        const userId = Number(req.params.id);
+        console.log(userId);
+        
+        const filePath:string = await progressService.generateProgressReport(userId);
+  
+        res.download(filePath, `quiz_progress_report_${userId}.pdf`, (err: Error) => {
+          if (err) {
+            res.status(500).json({ error: "Failed to download the report" });
+          }
+        });
+      } catch (error) {
+        res.status(404).json({ message: (error as Error).message });
+      }
+    }
+  
   
     // async updateprogress(req: Request, res: Response): Promise<void> {
     //   const progressId = Number(req.params.id);
@@ -68,3 +88,8 @@ export class ProgressController {
     // }
 
 }
+
+
+
+
+

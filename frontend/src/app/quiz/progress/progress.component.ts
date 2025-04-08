@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HomeService } from '../../services/home.service';
 import { ActivatedRoute } from '@angular/router';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-progress',
@@ -10,17 +11,32 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProgressComponent implements OnInit{
     userId = Number(localStorage.getItem('userId'));
-    report: any;
+    progressList:any[]=[]
 
   constructor(private route: ActivatedRoute, private homeService: HomeService) {}
 
   ngOnInit(): void {
-    // const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadProgress()
+  }
+
+  loadProgress(){
     this.homeService.getProgressByUser(this.userId).subscribe((data: any) => {
-      this.report = data;
-      console.log(this.report);
+      this.progressList = data.data;
+      console.log(data.data);
       
     });
+  }
+
+  downloadReport() {
+    this.homeService.downloadQuizReport(+this.userId).subscribe(
+      (response: Blob) => {
+        const fileName = `quiz_progress_report_${this.userId}.pdf`;
+        saveAs(response, fileName);
+      },
+      (error) => {
+        console.error('Error downloading the report', error);
+      }
+    );
   }
 }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Discussion, Course, Enrollment, Lesson, Review, Quiz } from '../../models/model';
+import { Discussion, Course, Enrollment, Lesson, Review, Quiz, User } from '../../models/model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
 import { HomeService } from '../../services/home.service';
@@ -32,6 +32,7 @@ export class CoursedetailsComponent implements OnInit{
     showUpdateReview=false
     displayUpdateEnrollDialog=false
     showEnrollDialog=false
+    // showQuiz=false
     courseId!:number
 
     editingReviewId:number |null= null
@@ -135,6 +136,19 @@ export class CoursedetailsComponent implements OnInit{
     this.loadEnrollments()
     this.displayUpdateEnrollDialog=false
   }
+
+  
+  // markCompleted(){
+  //   this.homeService.markAsCompleted(this.userId).subscribe(
+  //     () => {
+  //       Swal.fire({
+  //         icon: 'success',
+  //         title: 'Deleted',
+  //         text: 'Review deleted successfully!',
+  //       })
+  //       this.loadEnrollments()
+  //     })
+  // }
 
   //reviews
   loadReviewsByCourseId(courseId:string){

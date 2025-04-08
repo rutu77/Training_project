@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { HomeService } from '../../services/home.service';
 import { Course } from '../../models/model';
-import { debounceTime, Subject } from 'rxjs';
+import { BehaviorSubject, debounceTime, Subject } from 'rxjs';
 import { CourseService } from '../../services/course.service';
+import { AdminService } from '../../services/admin.service';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class NavbarComponent {
   private searchSubject= new Subject<string>();
 
 
-  constructor(private _auth:AuthService, private route:Router, private homeService:HomeService, private courseService:CourseService){
+  constructor(private _auth:AuthService, private route:Router, private adminService:AdminService, private courseService:CourseService){
     this._auth.$authState.subscribe(status=>this.isLoggedIn=status)
     this._auth.$role.subscribe(role=>this.isTeacher=role==='teacher')
     this._auth.$role.subscribe(role=>this.isAdmin=role==='admin')
@@ -54,6 +55,15 @@ export class NavbarComponent {
   toggleCourseDropdown() {
     this.courseDropdownOpen = !this.courseDropdownOpen;
   }
+
+
+  //admin-dash
+  
+  showSidebar() {
+    this.adminService.showSidebar();
+  }
+
+
 
 
   //logout

@@ -23,6 +23,13 @@ export class HomeService {
     return this.http.post(`${this.api}/enrollment/`, { userId, courseId });
   }
 
+  // getEnrollmentById(id:number){
+  //   return this.http.get(`${this.api}/enroll/${id}`)
+  // }
+
+  // markAsCompleted(id:number){
+  //   return this.http.get(`${this.api}/enroll/status/${id}`)
+  // }
 
   //User
   getUserById(id: number){
@@ -104,7 +111,12 @@ export class HomeService {
   }
 
   getProgressByUser(userId:number){
-    return this.http.get(`${this.api}/progress/user/za${userId}`)
+    return this.http.get(`${this.api}/progress/user/${userId}`)
   }
+
+  downloadQuizReport(id:number){
+    return this.http.get(`${this.api}/progress/report/${id}`,{ responseType: 'blob' })
+  }
+
 }
 
