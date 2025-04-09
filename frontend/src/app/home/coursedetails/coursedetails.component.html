@@ -60,7 +60,7 @@
           <button (click)="deleteReview(review.id)" pInputText class="delete-review-button">Delete</button>
           <button (click)="showUpdateReview = !showUpdateReview" (click)="editReview(review)" pInputText class="edit-review-button">Edit</button>
           <div *ngIf="editingReviewId === review.id" class="update-review-form">
-              <app-update-review [review]="selectedReview" (reviewUpdated)="loadReviewsByCourseId(selectedCourseId.toString())" (cancel)="CancelUpdateReview()"></app-update-review>
+              <app-update-review [review]="selectedReview" (reviewUpdated)="loadReviewsByCourseId(selectedCourseId)" (cancel)="CancelUpdateReview()"></app-update-review>
           </div>
         </div>
 
@@ -78,15 +78,6 @@
 </div>
 
 
-    
-<!--         
-    <div>
-      <h2>Discussions</h2>
-      <div *ngIf="discussions.length === 0" class="no-discussions">No discussions found!</div>
-      <div *ngFor="let discussion of discussions">
-        <p>{{discussion.message}}</p>
-      </div>
-    </div> -->
 
 
     

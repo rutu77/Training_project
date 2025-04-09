@@ -15,6 +15,7 @@ export class CommentService{
     return comment;
     }
 
+
     async getCommentByCourseId(courseId: number) {
         const comments= await commentRepository.find({
             where: { course: { id: courseId } },
@@ -24,6 +25,7 @@ export class CommentService{
         return comments;
     }
 
+
     async updateCommentById(id: number, data: Partial<Comment>){
     commentRepository.update(id, data);
     const updatedComment = await commentRepository.findOne({ where: {id } });
@@ -31,10 +33,13 @@ export class CommentService{
     return updatedComment;
     }
 
+
     async deleteComment(id: number){
-    const result = await commentRepository.delete(id);
-    if (result.affected === 0) throw new Error("Comment not found!");
+    // const result = await commentRepository.delete(id);
+    // if (result.affected === 0) throw new Error("Comment not found!");
+        await commentRepository.update(id,{deleted:true})
     }
+
 
     async getAllComments(){
     return await commentRepository.find();

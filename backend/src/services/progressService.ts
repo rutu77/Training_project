@@ -44,6 +44,7 @@ export class ProgressService{
     }
 
 
+    
     async generateProgressReport(userId:number){
       const progressList: Progress[] = await this.getProgressByUser(userId);
       // console.log('generate',progressList);
@@ -62,17 +63,14 @@ export class ProgressService{
       doc.fontSize(20).text('Quiz Progress Report', { align: 'center' }).moveDown(2);
     
       progressList.forEach((progress, index) => {
-        const percentage = ((progress.score / progress.total* 100)/100 ).toFixed(2);
+        // const percentage = ((progress.score / progress.total* 100)/100 ).toFixed(2);
         doc.fontSize(12)
           .text(`${index + 1}. Quiz: ${progress.quiz.title}`, { underline: true })
-          .text(`   Score: ${progress.score} / ${progress.total*100} (${percentage}%)`)
+          .text(`   Score: ${progress.score}`)
           .text(`   Completed on: ${new Date(progress.completion).toLocaleString()}`)
           .moveDown();
       });
 
-   
-      
-    
       doc.end();
     
       return new Promise<string>((resolve, reject) => {

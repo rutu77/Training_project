@@ -17,7 +17,7 @@ export class QuizListComponent implements OnInit {
   constructor(private homeService: HomeService) {
     this.quizForm = new FormGroup({
       title: new FormControl('',[Validators.required]),
-      courseId:new FormControl(0,[Validators.required]) 
+      courseId:new FormControl('',[Validators.required]) 
     });
   }
 
@@ -28,8 +28,7 @@ export class QuizListComponent implements OnInit {
   loadQuizzes(): void {
     this.homeService.getAllQuizzes().subscribe((data:any) => {
       this.quizzes = data;
-      console.log("list",data);
-      
+      this.quizzes= this.quizzes.filter(quiz=>!quiz.deleted)
     });
   }
 

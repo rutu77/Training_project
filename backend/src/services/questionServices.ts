@@ -28,6 +28,7 @@ export class QuestionService{
     async deleteQuestion(id: number){
         const result = await QuestionRepository.delete(id);
         if (result.affected === 0) throw new Error("Question not found!");
+        // await QuestionRepository.update(id,{deleted:true})
     }
 
     async getAllQuestions(){

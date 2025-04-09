@@ -64,27 +64,27 @@ export class AddQuestionComponent implements OnInit{
       }
     }
   
-    updateQuestion(question: any): void {
-      this.homeService.updateQuestion(question.id, question).subscribe(
-        data => {
-          const index = this.quiz.questions.findIndex((q: any) => q.id === question.id);
-          this.quiz.questions[index] = data;
-          Swal.fire({
-            icon: 'success',
-            title: 'Updated',
-            text: 'Question updated successfully!',
-          });
-        },
-        error => {
-          console.error('Error updating question:', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to update question!',
-          });
-        }
-      );
-    }
+    // updateQuestion(question: any): void {
+    //   this.homeService.updateQuestion(question.id, question).subscribe(
+    //     data => {
+    //       const index = this.quiz.questions.findIndex((q: any) => q.id === question.id);
+    //       this.quiz.questions[index] = data;
+    //       Swal.fire({
+    //         icon: 'success',
+    //         title: 'Updated',
+    //         text: 'Question updated successfully!',
+    //       });
+    //     },
+    //     error => {
+    //       console.error('Error updating question:', error);
+    //       Swal.fire({
+    //         icon: 'error',
+    //         title: 'Error',
+    //         text: 'Failed to update question!',
+    //       });
+    //     }
+    //   );
+    // }
   
     deleteQuestion(questionId: number): void {
       this.homeService.deleteQuestion(questionId).subscribe(

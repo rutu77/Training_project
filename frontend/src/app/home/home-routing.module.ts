@@ -16,10 +16,10 @@ const routes: Routes = [
   {path:'courses',component:CourseListComponent},
   {path:'course/:id',component:CoursedetailsComponent},
   {path: 'enrollment', component: EnrollComponent, canActivate:[AuthGuard] },
-  {path:'mylearnings',component:MyLearningsComponent},
+  {path:'mylearnings',component:MyLearningsComponent, canActivate:[AuthGuard]},
   {path:'about',component:AboutComponent},
   {path:'contact',component:ContactComponent},
-  {path:'profile',component:ProfileComponent}
+  {path:'profile',component:ProfileComponent, canActivate:[AuthGuard]}
 ];
 
 @NgModule({

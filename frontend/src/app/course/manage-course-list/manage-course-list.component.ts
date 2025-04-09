@@ -8,47 +8,53 @@ import { error } from 'console';
   selector: 'app-manage-course-list',
   standalone: false,
   templateUrl: './manage-course-list.component.html',
-  styleUrl: './manage-course-list.component.css'
+  styleUrl: './manage-course-list.component.css',
 })
-export class ManageCourseListComponent implements OnInit{
+export class ManageCourseListComponent implements OnInit {
+  courses: Course[] = [];
+  displayUpdateDialog = false;
+  selectCourseId!: number;
+  userId = Number(localStorage.getItem('userId'));
 
-  courses:Course[]=[]
-  displayUpdateDialog=false
-  selectCourseId!:number
+  constructor(private course: CourseService) {}
 
-  constructor(private course:CourseService){}
-
-  ngOnInit():void{
-    this.loadCourses()
+  ngOnInit(): void {
+    this.loadCourses();
   }
 
-  loadCourses(){
-    this.course.getCourses().subscribe((data:any)=>{
-      this.courses=data;
-    })
+  loadCourses() {
+    this.course.getCourses().subscribe((data: any) => {
+      this.courses = data;
+
+      this.courses = this.courses
+        .filter((course) => !course.deleted)
+        .filter((course) => course.creator.id === this.userId);
+
+      // console.log([this.courses].flat());
+    });
   }
 
-  refresh(){
-    this.loadCourses()
-    this.displayUpdateDialog=false
+  refresh() {
+    this.loadCourses();
+    this.displayUpdateDialog = false;
   }
 
-  onOpenUpdate(id:number){
-    this.selectCourseId=id;
-    this.displayUpdateDialog=true
+  onOpenUpdate(id: number) {
+    this.selectCourseId = id;
+    this.displayUpdateDialog = true;
   }
 
-  deleteCourse(courseId:number){
+  deleteCourse(courseId: number) {
     this.course.deleteCourse(courseId).subscribe(
-      ()=>{
-        Swal.fire({
-          title: 'Course Deleted',
-          text: 'The course has been deleted successfully!',
-          icon: 'success',
-        });
-        this.loadCourses()
+      () => {
+        // Swal.fire({
+        //   title: 'Course Deleted',
+        //   text: 'The course has been deleted successfully!',
+        //   icon: 'success',
+        // });
+        this.loadCourses();
       },
-      (error:any)=>{
+      (error: any) => {
         console.error('Error deleting Course:', error);
         Swal.fire({
           title: 'Error',
@@ -56,7 +62,6 @@ export class ManageCourseListComponent implements OnInit{
           icon: 'error',
         });
       }
-    )
+    );
   }
-
 }

@@ -1,4 +1,4 @@
-/* General form styling */
+
 .addLesson {
   display: flex;
   flex-direction: column;
@@ -41,7 +41,8 @@
   margin-top: 2rem;
 }
 
-.p-table th, .p-table td {
+.p-table th,
+.p-table td {
   padding: 0.75rem;
   text-align: left;
   border-bottom: 1px solid #ddd;

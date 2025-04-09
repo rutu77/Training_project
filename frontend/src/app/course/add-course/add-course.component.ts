@@ -61,7 +61,7 @@ export class AddCourseComponent implements OnInit{
             text: 'The course has been added successfully!',
             icon: 'success',
           });
-
+          this.courseForm.reset()
           this.courseAdded.emit()
         },
         (error:any)=>{

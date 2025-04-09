@@ -7,7 +7,7 @@ import { Review } from './Review';
 // import { Category } from './Category';
 import { Enrollment } from './Enrollment';
 
-@Entity({name:"Course_tbl47"})
+@Entity({name:"Course_table147"})
 export class Course {
   @PrimaryGeneratedColumn()
   id:number;
@@ -17,9 +17,6 @@ export class Course {
 
   @Column()
   description:string;
-
-  @Column({default:false})
-  isPublished:boolean;
 
   @Column({nullable:true})
   thumbnail:string;
@@ -33,18 +30,14 @@ export class Course {
   @Column({type: 'decimal',default: 0})
   price: number;
 
-  // @Column('simple-array',{ nullable: true })
-  // tags: string[];
-
   @CreateDateColumn()
   createdAt:Date;
 
-  @ManyToOne(() =>User,(user)=>user.courses,{ cascade: true })
-  creator:User;
+  @Column({default:false})
+  deleted:boolean
 
-  // @ManyToOne(()=> Category,(category)=>category.courses,{ nullable: true })
-  // @JoinColumn({ name: "category_id" }) 
-  // category:Category;
+  @ManyToOne(() =>User,(user)=>user.courses,{ cascade: true ,eager:true})
+  creator:User;
   
   @OneToMany(()=>Lesson,(lesson)=>lesson.course,{ cascade: true , onDelete: 'CASCADE' })
   lessons:Lesson[];

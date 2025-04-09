@@ -36,7 +36,7 @@ export class CourseService {
 
 
   deleteCourse(id:number){
-    return this.http.delete(`${this.api}/course/${id}`)
+    return this.http.put(`${this.api}/course/${id}`,{ deleted: true })
   }
 
 
@@ -59,7 +59,11 @@ export class CourseService {
   }
 
   deleteLesson(id:number){
-    return this.http.delete(`${this.api}/lesson/${id}`)
+    return this.http.put(`${this.api}/lesson/${id}`,{deleted:true})
+  }
+
+  restore(id:number){
+    return this.http.put(`${this.api}/lesson/${id}`,{deleted:false})
   }
 
   getLessonByCourseId(courseId:number){
@@ -84,8 +88,5 @@ export class CourseService {
     this.searchQuery.next(query)
   }
 
-  
-
-  
 }
 

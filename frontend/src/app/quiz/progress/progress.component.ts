@@ -22,6 +22,7 @@ export class ProgressComponent implements OnInit{
   loadProgress(){
     this.homeService.getProgressByUser(this.userId).subscribe((data: any) => {
       this.progressList = data.data;
+      this.progressList= this.progressList.filter(list=>!list.deleted)
       console.log(data.data);
       
     });
@@ -40,14 +41,4 @@ export class ProgressComponent implements OnInit{
   }
 }
 
-  //   progressList: any[] = [];
-  
-  //   constructor(private homeService: HomeService) {}
-  
-  //   ngOnInit() {
-  //     this.homeService.getUserProgress(this.userId).subscribe((data:any) => {
-  //       this.progressList = data;
-  //     });
-  //   }
-  // }
-  
+ 

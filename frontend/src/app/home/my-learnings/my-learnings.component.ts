@@ -19,14 +19,24 @@ export class MyLearningsComponent implements OnInit {
   constructor(private homeservice:HomeService, private courseService:CourseService, private router:Router){}
 
   ngOnInit(): void {
+    this.loadCourses()
+    this.loadEnrollments()
+  }
+
+  loadCourses(){
     this.courseService.getCourses().subscribe((data:any)=>{
       this.courses=data;
-    })
-
-    this.homeservice.getEnrollments().subscribe((data:any)=>{
-      this.enrollments=data;
+      this.courses= this.courses.filter(course=>!course.deleted)
     })
   }
+
+  loadEnrollments(){
+    this.homeservice.getEnrollments().subscribe((data:any)=>{
+      this.enrollments=data;
+      this.enrollments= this.enrollments.filter(enrollment=>!enrollment.deleted)
+    })
+  }
+
 
   isEnrolled(courseId:number):boolean{
     const enroll = this.enrollments.some(enrollment => enrollment.user.id === this.userId && enrollment.course.id === courseId);
@@ -35,7 +45,6 @@ export class MyLearningsComponent implements OnInit {
 
   viewCourse(courseId: number): void {
     this.router.navigate([`home/course/${courseId}`]);
-    // console.log(courseId);
-    
+    // console.log(courseId); 
   }
 }

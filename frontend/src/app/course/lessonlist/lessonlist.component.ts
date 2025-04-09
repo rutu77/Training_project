@@ -9,97 +9,91 @@ import Swal from 'sweetalert2';
   selector: 'app-lessonlist',
   standalone: false,
   templateUrl: './lessonlist.component.html',
-  styleUrl: './lessonlist.component.css'
+  styleUrl: './lessonlist.component.css',
 })
-export class LessonlistComponent implements OnInit{
-
-  
+export class LessonlistComponent implements OnInit {
   course: Course | undefined;
-  userId= Number(localStorage.getItem('userId'))
-  lessons: Lesson[]=[]
-  enrollments:Enrollment[]=[]
+  userId = Number(localStorage.getItem('userId'));
+  lessons: Lesson[] = [];
+  enrollments: Enrollment[] = [];
 
-  displayUpdateDialog= false;
+  displayUpdateDialog = false;
   selectedLessonId!: number;
-  
+
   constructor(
     private route: ActivatedRoute,
-    private courseService:CourseService,
-    private homeService:HomeService,
+    private courseService: CourseService,
+    private homeService: HomeService,
     private router: Router
   ) {}
-  
-  
-  ngOnInit():void{
-    this.loadCourse()
-    this.loadEnrollments()
-    this.loadLessons()
+
+  ngOnInit(): void {
+    this.loadCourse();
+    this.loadEnrollments();
+    this.loadLessons();
   }
 
-
-  loadCourse(){
+  loadCourse() {
     const courseId = this.route.snapshot.paramMap.get('id');
 
     if (courseId) {
-      this.courseService.getCourseById(+courseId).subscribe((data:any) => {
-        this.course = data;   
+      this.courseService.getCourseById(+courseId).subscribe((data: any) => {
+        this.course = data;
       });
     }
   }
 
-  loadEnrollments(){
-    this.homeService.getEnrollments().subscribe((data:any) => {
+  loadEnrollments() {
+    this.homeService.getEnrollments().subscribe((data: any) => {
       this.enrollments = data;
+      this.enrollments = this.enrollments.filter(
+        (enrollment) => !enrollment.deleted
+      );
     });
   }
 
-  loadLessons(){
-    this.courseService.getLessons().subscribe((data:any)=>{
-      this.lessons= data
-    })
+  loadLessons() {
+    this.courseService.getLessons().subscribe((data: any) => {
+      this.lessons = data;
+      this.lessons = this.lessons
+      .filter((lesson) => !lesson.deleted)
+      .filter((lesson)=>lesson.course.creator.id===this.userId);
+
+      console.log(this.lessons);
+    });
   }
 
-
-
-
-  // updateCourse(courseId: number): void {
-  //   this.router.navigate([`home/updateCourse/${courseId}`]);  
-  // }
-
-
-  getLessonByCourseId(courseId:number){
-    const lessonData= this.lessons.filter(lesson=>lesson.courseId===courseId)
-    return lessonData
+  getLessonByCourseId(courseId: number) {
+    const lessonData = this.lessons.filter(
+      (lesson) => lesson.course.id === courseId
+    );
+    return lessonData;
   }
 
   isEnrolled(courseId: number): boolean {
-    const enroll = this.enrollments.some(enrollment => enrollment.user.id === this.userId && enrollment.course.id === courseId);
+    const enroll = this.enrollments.some(
+      (enrollment) =>
+        enrollment.user.id === this.userId && enrollment.course.id === courseId
+    );
     return enroll;
   }
 
-
-  refresh(){
-    this.loadLessons()
-    this.displayUpdateDialog=false
+  refresh() {
+    this.loadLessons();
+    this.displayUpdateDialog = false;
   }
 
-
-  onOpenUpdate(id:number){
-    this.selectedLessonId=id;
-    this.displayUpdateDialog= true
+  onOpenUpdate(id: number) {
+    this.selectedLessonId = id;
+    this.displayUpdateDialog = true;
   }
 
-  deleteLesson(lessonId:any){
+  deleteLesson(lessonId: any) {
     this.courseService.deleteLesson(lessonId).subscribe(
-      ()=>{
-        Swal.fire({
-          title: 'Lesson Deleted',
-          text: 'The lesson has been deleted successfully!',
-          icon: 'success',
-        });
-        this.loadLessons(); 
+      () => {
+        this.loadLessons();
       },
-      (error:any)=>{
+      (error: any) => {
         console.error('Error deleting lesson:', error);
         Swal.fire({
           title: 'Error',
@@ -107,123 +101,6 @@ export class LessonlistComponent implements OnInit{
           icon: 'error',
         });
       }
-    )
+    );
   }
-
-  
 }
-  
-
-//   course: Course | undefined;
-//   userId= Number(localStorage.getItem('userId'))
-//   lessons: Lesson[]=[]
-//   enrollments:Enrollment[]=[]
-
-//   displayUpdateDialog= false;
-//   selectedLessonId!: number;
-//   displayAddDialog = false;
-  
-//   constructor(
-//     private route: ActivatedRoute,
-//     private courseService:CourseService,
-//     private homeService:HomeService,
-//     private router: Router
-//   ) {}
-  
-  
-//   ngOnInit():void{
-//     this.loadCourse()
-//     this.loadEnrollments()
-//     this.loadLessons()
-//   }
-
-//   loadCourse(){
-//     const courseId = this.route.snapshot.paramMap.get('id');
-
-//     if (courseId) {
-//       this.courseService.getCourseById(+courseId).subscribe((data:any) => {
-//         this.course = data;   
-//       });
-//     }
-//   }
-
-//   loadEnrollments(){
-//     this.homeService.getEnrollments().subscribe((data:any) => {
-//       this.enrollments = data;
-//     });
-//   }
-
-//   loadLessons(){
-//     this.courseService.getLessons().subscribe((data:any)=>{
-//       this.lessons= data
-//     })
-//   }
-
-
-//   updateCourse(courseId: number): void {
-//     this.router.navigate([`home/updateCourse/${courseId}`]);  
-//   }
-
-//   getLessonByCourseId(courseId:number){
-//     const lessonData= this.lessons.filter(lesson=>lesson.courseId===courseId)
-//     return lessonData
-//   }
-
-//   isEnrolled(courseId: number): boolean {
-//     const enroll = this.enrollments.some(enrollment => enrollment.user.id === this.userId && enrollment.course.id === courseId);
-//     return enroll;
-//   }
-
-
-
-//   //Update Communication
-//   openUpdateDialog(lessonId:number){
-//     this.selectedLessonId= lessonId;
-//     this.displayUpdateDialog= true;
-//   }
-
-//   onLessonUpdated(){
-//     this.loadLessons();
-//     this.displayUpdateDialog=false;
-//   }
-
-//   //Add Communication
-//   openAddDialog(){
-//     this.displayAddDialog= true;
-//   }
-
-//   onLessonAdded(){
-//     this.loadLessons();
-//     this.displayAddDialog= false;
-//   }
-
-//   onCancel(){
-//     this.displayUpdateDialog=false
-//     this.displayAddDialog= false
-//   }
-
-
-//   deleteLesson(lessonId:any){
-//     this.courseService.deleteLesson(lessonId).subscribe(
-//       ()=>{
-//         Swal.fire({
-//           title: 'Lesson Deleted',
-//           text: 'The lesson has been deleted successfully!',
-//           icon: 'success',
-//         });
-//         this.loadLessons(); 
-//       },
-//       (error:any)=>{
-//         console.error('Error deleting lesson:', error);
-//         Swal.fire({
-//           title: 'Error',
-//           text: 'An error occurred while deleting the lesson.',
-//           icon: 'error',
-//         });
-//       }
-//     )
-//   }
-
-  
-// }
-  

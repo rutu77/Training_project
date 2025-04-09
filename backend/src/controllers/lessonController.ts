@@ -53,7 +53,7 @@ export class LessonController{
          }
      }
      
-     async deleteLesson(req:Request,res:Response){
+    async deleteLesson(req:Request,res:Response){
          const lessonId=Number(req.params.id);
          try{
            await lessonService.deleteLesson(lessonId);
@@ -62,7 +62,8 @@ export class LessonController{
            res.status(404).json({ message:(error as Error).message });
          }
      }
-     
+
+    
      async getAllLesson(req:Request,res:Response){
          try{
            const lessons=await lessonService.getAllLessons();

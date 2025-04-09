@@ -12,66 +12,60 @@ import { Course, Enrollment } from '../../models/model';
 })
 export class EnrollComponent{
 
-    @Input() course!: Course ;
-    userId= Number(localStorage.getItem('userId'));
-    enrollments:Enrollment[]=[]
+  @Input() course!: Course ;
+  userId= Number(localStorage.getItem('userId'));
+  enrollments:Enrollment[]=[]
 
-    @Output() enrollSuccess= new EventEmitter<void>();
-    @Output() cancel= new EventEmitter<void>();
-  
-    constructor(private route: ActivatedRoute,private router: Router,private homeService: HomeService){}
+  @Output() enrollSuccess= new EventEmitter<void>();
+  @Output() cancel= new EventEmitter<void>();
 
-    
-    // ngOnInit(): void {
-    //   this.homeService.getEnrollments().subscribe((data:any)=>{
-    //     this.enrollments= data;
-    //   })
-    // }
+  constructor(private route: ActivatedRoute,private router: Router,private homeService: HomeService){}
 
-  
-    enroll(){
-      this.homeService.enrollCourse(this.userId, this.course.id).subscribe(
-        () => {
-          Swal.fire({
-            title: 'Enrollment Successful',
-            text: 'You have been successfully enrolled in the course!',
-            icon: 'success',
-          });
-          this.enrollSuccess.emit();
-        },
-        (error) => {
-          console.error('Error during enrollment', error);
-          Swal.fire({
-            title: 'Error',
-            text: 'An error occurred while enrolling in the course.',
-            icon: 'error',
-          });
-        }
-      )
-    }
 
-    showEnrollSuccess() {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "bottom",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        }
-      });
 
-      Toast.fire({
-        icon: "success",
-        title: "Thanks!!",
-        text: "You are successfully enrolled in the course"
-      });
-    }
+  enroll(){
+    this.homeService.enrollCourse(this.userId, this.course.id).subscribe(
+      () => {
+        Swal.fire({
+          title: 'Enrollment Successful',
+          text: 'You have been successfully enrolled in the course!',
+          icon: 'success',
+        });
+        this.enrollSuccess.emit();
+      },
+      (error) => {
+        console.error('Error during enrollment', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'An error occurred while enrolling in the course.',
+          icon: 'error',
+        });
+      }
+    )
+  }
 
-    onCancel(){
-      this.cancel.emit()
-    }
+  showEnrollSuccess() {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "bottom",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+
+    Toast.fire({
+      icon: "success",
+      title: "Thanks!!",
+      text: "You are successfully enrolled in the course"
+    });
+  }
+
+  onCancel(){
+    this.cancel.emit()
+  }
   }
  

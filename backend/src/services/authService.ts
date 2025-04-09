@@ -12,8 +12,12 @@ export class AuthService{
 
     async registerUser(name:string, email:string, password:string, role:'user'|'teacher'){
         const existing= await userService.getUserByEmail(email);
-        if(existing) return {error:"User already exist! Please Login."}
-
+        if (existing) {
+            if (!existing.deleted) {
+              return { error: "User already exists! Please login." };
+            }
+          }
+    
         const hashedPassword= await bcrypt.hash(password,10)
         const user= userRepository.create({name,email,password:hashedPassword,role});
         await userRepository.save(user)

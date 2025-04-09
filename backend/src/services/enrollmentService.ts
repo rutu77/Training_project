@@ -42,8 +42,9 @@ export class EnrollmentService {
     }
   
     async deleteEnrollment(id: number){
-      const result = await enrollRepository.delete(id);
-      if (result.affected === 0) throw new Error("Enrollment not found!");
+      // const result = await enrollRepository.delete(id);
+      // if (result.affected === 0) throw new Error("Enrollment not found!");
+      await enrollRepository.update(id,{deleted:true})
     }
   
     async getAllEnrollments(){

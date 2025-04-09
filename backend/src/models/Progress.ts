@@ -3,7 +3,7 @@ import { User } from './User';
 import { Lesson } from './Lesson';
 import { Quiz } from './Quiz';
 
-@Entity({name:'Progress_tbl74'})
+@Entity({name:'Progress_table147'})
 export class Progress {
 
   @PrimaryGeneratedColumn()
@@ -12,6 +12,9 @@ export class Progress {
   @ManyToOne(()=>User,(user)=>user.progress)
   // @JoinColumn({name:'user_id'})
   user: User;
+
+  @Column({default:false})
+  deleted:boolean
 
   @ManyToOne(()=>Quiz)
   @JoinColumn({name:'quiz_id'})

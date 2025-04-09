@@ -31,6 +31,7 @@ export class HomeService {
   //   return this.http.get(`${this.api}/enroll/status/${id}`)
   // }
 
+
   //User
   getUserById(id: number){
     return this.http.get(`${this.api}/user/${id}`);
@@ -51,12 +52,13 @@ export class HomeService {
   }
 
   deleteReview(id:number){
-    return this.http.delete(`${this.api}/review/${id}`)
+    return this.http.put(`${this.api}/review/${id}`,{deleted:true})
   }
 
   updateReview(id:number, review:UpdateReview){
     return this.http.put(`${this.api}/review/${id}`, review)
   }
+
 
 
   //Quizzes
@@ -73,7 +75,7 @@ export class HomeService {
   }
 
   deleteQuiz(id: number){
-    return this.http.delete(`${this.api}/quiz/${id}`);
+    return this.http.put(`${this.api}/quiz/${id}`,{deleted:true});
   }
 
   getQuizByCourse(courseId:number){
@@ -104,6 +106,7 @@ export class HomeService {
     return this.http.post(`${this.api}/quiz/submit/${id}`, data);
   }
   
+
 
   //progress
   getProgressById(id:number){

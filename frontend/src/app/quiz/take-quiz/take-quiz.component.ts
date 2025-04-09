@@ -26,7 +26,7 @@ export class TakeQuizComponent implements OnInit {
       this.homeService.getQuizById(id).subscribe((data: any) => {
         this.quiz = data.data;
         this.initializeForm();
-        console.log(data);
+        // console.log(data);
       });
 
 

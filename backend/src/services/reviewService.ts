@@ -36,8 +36,9 @@ export class ReviewService{
     }
 
     async deleteReview(id: number){
-        const result = await reviewRepository.delete(id);
-        if (result.affected === 0) throw new Error("Review not found!");
+        // const result = await reviewRepository.delete(id);
+        // if (result.affected === 0) throw new Error("Review not found!");
+        await reviewRepository.update(id,{deleted:true})
     }
 
     async getAllReviews(){

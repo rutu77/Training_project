@@ -6,6 +6,7 @@ export interface User{
     role:'user'|'admin'|'teacher'
     profilePicture?:string
     bio?:string
+    deleted:boolean
 }
 
 export interface Course{
@@ -16,9 +17,10 @@ export interface Course{
     thumbnail?:string
     price:number
     // tags?:string[],
-    creatorId:number,
+    creator:User,
     level:string,
     duration:number
+    deleted:boolean
 }
 
 export interface AddCourse{
@@ -31,6 +33,7 @@ export interface AddCourse{
     creatorId:number,
     level:string,
     duration:number
+
 }
 
 export interface UpdateCourse {
@@ -51,6 +54,7 @@ export interface Enrollment{
     user:User,
     course:Course
     status: "in_progress"|"completed"; 
+    deleted:boolean
 }
 
 export interface Lesson{
@@ -58,14 +62,15 @@ export interface Lesson{
     title:string
     videoUrl:string
     duration?:number
-    courseId:number
+    course:Course
+    deleted:boolean
 }
 
 export interface Quiz{
     id?:number,
     courseId:number,
-    
     questions:Question[]
+    deleted:boolean
 }
 
 export interface Question{
@@ -74,6 +79,7 @@ export interface Question{
     options:string[],
     correctAnswer:string,
     explanation?:string
+    deleted:boolean
 }
 
 // export interface Category{
@@ -88,6 +94,7 @@ export interface Review{
     course:Course
     rating:number,
     comment:string
+    deleted:boolean
 }
 
 export interface AddReview{
@@ -102,10 +109,6 @@ export interface UpdateReview{
     comment?:string
 }
 
-export interface Discussion{
-    comment_id:number,
-    message:string,
-}
 
 export interface Progress{
     id:number,
@@ -114,11 +117,7 @@ export interface Progress{
     completion:string
     user:User
     quiz:Quiz
+    deleted:boolean
 }
 
-export interface Attempt{
-    attempt_id:number,
-    selectedAnswer:string,
-    isCorrect:boolean
-}
 

@@ -22,12 +22,11 @@ export class UpdatelessonComponent implements OnInit{
   constructor(private _course:CourseService){}
 
   ngOnInit(): void {
-    // this.lessonId = Number(this.route.snapshot.paramMap.get('id'));
-    
+
     this.updateLessonForm= new FormGroup({
       title: new FormControl(''),
       videoUrl: new FormControl(''),
-      duration: new FormControl(0),
+      duration: new FormControl(''),
     })
 
     this.loadlessonData()

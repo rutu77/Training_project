@@ -45,22 +45,22 @@ export class CourseListComponent implements OnInit {
     this.courseService.getCourses().subscribe((data:any)=>{
       this.courses=data;
       this.filteredCourses=data
+      this.filteredCourses=this.filteredCourses.filter(course=>!course.deleted)
     })
   }
 
   loadReviews(){
     this.homeService.getReviews().subscribe((data:any)=>{
       this.reviews= data;
+      this.reviews= this.reviews.filter(review=>!review.deleted)
       this.calculateMeanRatings();
-
     })
   }
 
   loadEnrollments(){
-    
     this.homeService.getEnrollments().subscribe((data:any) => {
       this.enrollments = data;
-      // console.log(this.enrollments);
+      this.enrollments= this.enrollments.filter(enrollment=>!enrollment.deleted)
     });
   }
 
@@ -71,7 +71,6 @@ export class CourseListComponent implements OnInit {
 
   
   calculateMeanRatings(): void {
-    // console.log(this.courses);
     this.courses.forEach(course => {
       const courseReviews = this.reviews.filter(review => review.course.id === course.id);
       if (courseReviews.length > 0) {

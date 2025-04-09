@@ -8,7 +8,6 @@ import { TakeQuizComponent } from './take-quiz/take-quiz.component';
 import { ProgressComponent } from './progress/progress.component';
 import { SharedModule } from '../shared/shared.module';
 import { AddQuestionComponent } from './add-question/add-question.component';
-import { ProgressChartComponent } from './progress-chart/progress-chart.component';
 import { AllProgressComponent } from './all-progress/all-progress.component';
 
 
@@ -18,7 +17,6 @@ import { AllProgressComponent } from './all-progress/all-progress.component';
     TakeQuizComponent,
     ProgressComponent,
     AddQuestionComponent,
-    ProgressChartComponent,
     AllProgressComponent
   ],
   imports: [

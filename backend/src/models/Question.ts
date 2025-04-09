@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, JoinColumn } from 't
 import { Quiz } from './Quiz';
 import { User } from './User';
 
-@Entity({name:"Question_tbl47"})
+@Entity({name:"Question_table147"})
 export class Question {
   @PrimaryGeneratedColumn()
   id:number;
@@ -18,6 +18,9 @@ export class Question {
 
   @Column({nullable:true})
   explanation:string;
+
+  @Column({default:false})
+  deleted:boolean
 
   @ManyToOne(() => Quiz,(quiz)=>quiz.questions, {onDelete: 'CASCADE' })
   @JoinColumn({name:'quiz_id'})

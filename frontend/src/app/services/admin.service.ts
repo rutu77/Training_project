@@ -20,7 +20,7 @@ export class AdminService {
   }
 
   deleteUser(id:number){
-    return this.http.delete(`${this.api}/user/${id}`)
+    return this.http.put(`${this.api}/user/${id}`,{deleted:true})
   }
 
   getUserById(id:number){
@@ -35,18 +35,4 @@ export class AdminService {
     return this.http.get(`${this.api}/user/`)
   }
 
-
-  //admin-dash
-  sidebarVisiblee:boolean = false
-
-  private sidebarVisible = new BehaviorSubject<boolean>(false);
-  sidebarVisible$ = this.sidebarVisible.asObservable();
-
-  showSidebar() {
-    this.sidebarVisible.next(true);
-  }
-
-  hideSidebar() {
-    this.sidebarVisible.next(false);
-  }
 }

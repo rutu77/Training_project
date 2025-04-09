@@ -33,16 +33,4 @@ export class AdminService{
         return {message:'admin account created successfully',admin}
     }
 
-        // //--------------
-        // adminEmail:any = process.env.ADMIN_EMAIL;
-        // adminPassword:any = process.env.ADMIN_PASSWORD;
-    
-        // async initializeAdmin() {
-        //     const admin = await userRepo.getUserByEmail(this.adminEmail);
-        //     if (!admin) {
-        //         const hashedPassword = await bcrypt.hash(this.adminPassword, 10);
-        //         await userRepository.create({ email: this.adminEmail, password: hashedPassword, role: 'admin' });
-        //         console.log("Admin user created");
-        //     }
-        // }
 }

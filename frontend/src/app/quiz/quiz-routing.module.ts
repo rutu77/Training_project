@@ -5,13 +5,15 @@ import { AddQuestionComponent } from './add-question/add-question.component';
 import { TakeQuizComponent } from './take-quiz/take-quiz.component';
 import { ProgressComponent } from './progress/progress.component';
 import { AllProgressComponent } from './all-progress/all-progress.component';
+import { teacherGuard } from '../guard/teacher.guard';
+import { AuthGuard } from '../guard/auth.guard';
 
 const routes: Routes = [
-  {path:'managequiz',component:QuizListComponent},
-  {path:'addQuestion/:id',component:AddQuestionComponent},
-  {path:'takeQuiz/:id',component:TakeQuizComponent},
-  {path:'progress',component:ProgressComponent},
-  {path:'user-progress',component:AllProgressComponent}
+  {path:'managequiz',component:QuizListComponent, canActivate:[teacherGuard]},
+  {path:'addQuestion/:id',component:AddQuestionComponent, canActivate:[teacherGuard]},
+  {path:'takeQuiz/:id',component:TakeQuizComponent, canActivate:[AuthGuard]},
+  {path:'progress',component:ProgressComponent, canActivate:[AuthGuard]},
+  {path:'user-progress',component:AllProgressComponent, canActivate:[teacherGuard]}
 ];
 
 @NgModule({

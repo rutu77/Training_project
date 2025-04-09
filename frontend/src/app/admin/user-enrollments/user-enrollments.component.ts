@@ -14,12 +14,13 @@ export class UserEnrollmentsComponent {
   constructor(private homeService:HomeService){}
 
   ngOnInit(): void {
-    this.loadProgresses()
+    this.loadEnrollments()
   }
 
-  loadProgresses(){
+  loadEnrollments(){
     this.homeService.getEnrollments().subscribe((data:any)=>{
       this.enrollments= data
+      this.enrollments=this.enrollments.filter(enroll=>!enroll.deleted)
     })
   }
 

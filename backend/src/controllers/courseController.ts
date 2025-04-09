@@ -18,7 +18,7 @@ export class CourseController{
         const course = await courseService.createCourse({ title, description, isPublished, thumbnail:thumbnailUrl, price, creatorId, level, duration } );
         res.status(201).json({ message: "Course created successfully!", data: course });
       } catch (error) {
-        res.status(500).json({ error: "Error creating enrollment" });
+        res.status(404).json({ message: (error as Error).message });
       }
     }
 
@@ -53,6 +53,16 @@ export class CourseController{
         } catch(error){
           res.status(404).json({ message:(error as Error).message });
         }
+    }
+
+    async deleteTheCourse(req:Request,res:Response){
+      const courseId=Number(req.params.id);
+      try{
+        await courseService.deleteTheCourse(courseId);
+        res.status(204).json({ message:"Course deleted successfully!" });
+      } catch(error){
+        res.status(404).json({ message:(error as Error).message });
+      }
     }
     
     async getAllCourses(req:Request,res:Response){

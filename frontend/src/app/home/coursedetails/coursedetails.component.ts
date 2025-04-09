@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Discussion, Course, Enrollment, Lesson, Review, Quiz, User } from '../../models/model';
+import {Course, Enrollment, Lesson, Review, Quiz, User } from '../../models/model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
 import { HomeService } from '../../services/home.service';
@@ -22,7 +22,6 @@ export class CoursedetailsComponent implements OnInit{
     enrollments:Enrollment[]=[]
     lessons:Lesson[]=[]
     reviews:Review[]=[]
-    discussions:Discussion[]=[]
     quizzes:any[]=[]
     isAdmin: boolean= false;;
     isTeacher: boolean=false ;
@@ -47,7 +46,7 @@ export class CoursedetailsComponent implements OnInit{
       private homeService:HomeService,
       private router: Router,
       private _auth:AuthService
-    ) {
+    ){
       this._auth.$role.subscribe(role=>this.isTeacher=role==='teacher')
       this._auth.$role.subscribe(role=>this.isAdmin=role==='admin')
       this._auth.$authState.subscribe(loggedIn=>this.isLoggedIn=loggedIn)
@@ -59,47 +58,36 @@ export class CoursedetailsComponent implements OnInit{
       
       if (courseId) {
         this.courseId= +courseId
-        this.loadCourseById(courseId);
-        this.loadLessonsByCourseId(courseId);
-        this.loadReviewsByCourseId(courseId);
+        this.loadCourseById(+courseId);
+        this.loadLessonsByCourseId(+courseId);
+        this.loadReviewsByCourseId(+courseId);
         this.loadQuizzes(+courseId);
-        // this.loadDiscussipnsByCourseId(courseId)
+       
         this.selectedCourseId= +courseId;
-
       }
 
       this.loadEnrollments();
   }
 
-  loadCourseById(courseId: string) {
+  loadCourseById(courseId: number) {
     this.courseService.getCourseById(+courseId).subscribe((res:any) => {
       this.course = res.data;
     });
   }
 
-  // onOpenUpdate(id:number){
-  //   this.selectedCourseId=id;
-  //   this.displayUpdateDialog= true
-  // }
-
 
   //lessons
-  loadLessonsByCourseId(courseId: string){
+  loadLessonsByCourseId(courseId: number){
     this.courseService.getLessonByCourseId(+courseId).subscribe((res: any) => {
       this.lessons = res.data;
-      // console.log(this.lessons); 
+      this.lessons= this.lessons.filter(lesson=>!lesson.deleted)
   })
   }
-
-  
-  // checkCourseCompletion() {
-  //   this.courseCompleted = this.lessons.every(lesson => lesson.completed);
-  // }
-    
 
   viewLesson(lessonId:number){
     this.router.navigate([`course/lesson/${lessonId}`]);
   }
+
 
   //Quiz
   TakeQuiz(quizId:number){
@@ -109,8 +97,7 @@ export class CoursedetailsComponent implements OnInit{
   loadQuizzes(courseId:number){
     this.homeService.getQuizByCourse(courseId).subscribe((data:any)=>{
       this.quizzes= data;
-      console.log("Quiz",data);
-      
+      this.quizzes= this.quizzes.filter(quiz=>!quiz.deleted)     
     })
   }
 
@@ -120,6 +107,7 @@ export class CoursedetailsComponent implements OnInit{
   loadEnrollments(){
     this.homeService.getEnrollments().subscribe((data:any) => {
       this.enrollments = data;
+      this.enrollments= this.enrollments.filter(enroll=>!enroll.deleted)
     });
   }
 
@@ -131,7 +119,6 @@ export class CoursedetailsComponent implements OnInit{
   openEnrollmentDialog(course:Course){
     this.selectedCourse=course
     this.showEnrollDialog=true
-
   }
 
   closeEnrollmentDialog(){
@@ -144,31 +131,20 @@ export class CoursedetailsComponent implements OnInit{
   }
 
   
-  // markCompleted(){
-  //   this.homeService.markAsCompleted(this.userId).subscribe(
-  //     () => {
-  //       Swal.fire({
-  //         icon: 'success',
-  //         title: 'Deleted',
-  //         text: 'Review deleted successfully!',
-  //       })
-  //       this.loadEnrollments()
-  //     })
-  // }
+
 
   //reviews
-  loadReviewsByCourseId(courseId:string){
+  loadReviewsByCourseId(courseId:number){
     this.courseService.getReviewsByCourseId(+courseId).subscribe((data:any) => {
       this.reviews=data.data;
-      // console.log(this.reviews);
+      this.reviews= this.reviews.filter(review=>!review.deleted)
     });
     this.showUpdateReview=false
   }
 
-
   refresh(){
     this.displayUpdateDialog=false
-    this.loadReviewsByCourseId(this.selectedCourseId.toString())
+    this.loadReviewsByCourseId(this.selectedCourseId)
   }
 
   CancelUpdateReview(){
@@ -196,7 +172,7 @@ export class CoursedetailsComponent implements OnInit{
           title: 'Deleted',
           text: 'Review deleted successfully!',
         })
-        this.loadReviewsByCourseId(this.selectedCourseId.toString())
+        this.loadReviewsByCourseId(this.selectedCourseId)
       },
       (error:any) => {
         console.error('Error deleting review:', error);

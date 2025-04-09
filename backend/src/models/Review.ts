@@ -3,7 +3,7 @@ import { User } from './User';
 import { Course } from './Course';
 
 
-@Entity({name:'Review_tbl47'})
+@Entity({name:'Review_table147'})
 export class Review {
   @PrimaryGeneratedColumn()
   id:number;
@@ -20,5 +20,8 @@ export class Review {
 
   @Column({nullable:true })
   comment:string;
+
+  @Column({default:false})
+  deleted:boolean
 }
 

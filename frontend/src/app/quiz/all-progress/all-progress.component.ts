@@ -10,6 +10,7 @@ import { Progress } from '../../models/model';
 })
 export class AllProgressComponent implements OnInit{
   progresses:Progress[]=[]
+  userId=Number(localStorage.getItem('userId'))
 
   constructor(private homeService:HomeService){}
 
@@ -20,6 +21,7 @@ export class AllProgressComponent implements OnInit{
   loadProgresses(){
     this.homeService.getAllProgress().subscribe((data:any)=>{
       this.progresses= data
+      this.progresses= this.progresses.filter(progress=>!progress.deleted)
     })
   }
 

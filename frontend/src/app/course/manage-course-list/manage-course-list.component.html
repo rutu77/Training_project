@@ -1,8 +1,8 @@
  
 <app-generic-list 
 [items]="courses"
-[itemFields]="['id','title','description','isPublished','price','level','duration']"
-[itemLabels]="['Id','Title','Description','Is Published','Price','Level','Duration']"
+[itemFields]="['id','title','description','price','level','duration']"
+[itemLabels]="['Id','Title','Description','Price','Level','Duration']"
 (addItem)="refresh()"
 (updateItem)="onOpenUpdate($event)"
 (deleteItem)="deleteCourse($event)"
@@ -17,6 +17,6 @@
 
 
 <p-dialog header="Update Item" [(visible)]="displayUpdateDialog" [modal]="true">
-<app-update-course [courseId]="selectCourseId" (courseUpdated)="refresh()"></app-update-course>
+  <app-update-course [courseId]="selectCourseId" (courseUpdated)="refresh()"></app-update-course>
 </p-dialog>
 

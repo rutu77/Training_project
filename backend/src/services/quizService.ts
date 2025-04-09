@@ -31,9 +31,10 @@ export class QuizService {
     return updatedQuiz;
   }
 
-  async deleteQuiz(id: number): Promise<void> {
-    const result = await quizRepository.delete(id);
-    if (result.affected === 0) throw new Error("Quiz not found!");
+  async deleteQuiz(id: number){
+    // const result = await quizRepository.delete(id);
+    // if (result.affected === 0) throw new Error("Quiz not found!");
+    await quizRepository.update(id,{deleted:true})
   }
 
   async getAllQuizzes(){

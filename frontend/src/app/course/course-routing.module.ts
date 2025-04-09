@@ -7,18 +7,18 @@ import { UpdatelessonComponent } from './updatelesson/updatelesson.component';
 import { LessondetailsComponent } from './lessondetails/lessondetails.component';
 import { LessonlistComponent } from './lessonlist/lessonlist.component';
 import { ManageCourseListComponent } from './manage-course-list/manage-course-list.component';
+import { teacherGuard } from '../guard/teacher.guard';
 
 
 const routes: Routes = [
-  {path:'addCourse',component:AddCourseComponent},
-    {path:'updateCourse/:id',component:UpdateCourseComponent},
-    // {path:'updateCourse',component:UpdateCourseComponent},
-    {path:'addLesson', component:AddlessonsComponent},
-    {path:'updateLesson/:id',component:UpdatelessonComponent},
-    {path:'lesson/:id',component:LessondetailsComponent},
-    {path:'lessonlist',component:LessonlistComponent},
-    {path:'courselist',component:ManageCourseListComponent}
-
+  {path:'addCourse',component:AddCourseComponent, canActivate:[teacherGuard]},
+  {path:'updateCourse/:id',component:UpdateCourseComponent, canActivate:[teacherGuard]},
+  // {path:'updateCourse',component:UpdateCourseComponent},
+  {path:'addLesson', component:AddlessonsComponent, canActivate:[teacherGuard]},
+  {path:'updateLesson/:id',component:UpdatelessonComponent, canActivate:[teacherGuard]},
+  {path:'lesson/:id',component:LessondetailsComponent, canActivate:[teacherGuard]},
+  {path:'lessonlist',component:LessonlistComponent},
+  {path:'courselist',component:ManageCourseListComponent, canActivate:[teacherGuard]}
 ];
 
 @NgModule({

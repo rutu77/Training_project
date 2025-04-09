@@ -2,13 +2,16 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColum
 import { Course } from './Course';
 import { Question } from './Question';
 
-@Entity({name:'Quiz_tbl47'})
+@Entity({name:'Quiz_table147'})
 export class Quiz {
   @PrimaryGeneratedColumn()
   id:number;
 
   @Column()
   title:string
+
+  @Column({default:false})
+  deleted:boolean
 
   @ManyToOne(()=>Course,(course)=>course.quizzes, { onDelete: 'CASCADE' })
   @JoinColumn({name:'course_id'})

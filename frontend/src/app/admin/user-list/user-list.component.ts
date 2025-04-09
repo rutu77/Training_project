@@ -25,6 +25,7 @@ export class UserListComponent implements OnInit {
   loadUsers() {
     this.admin.getUsers().subscribe((data: any) => {
       this.users = data;
+      this.users= this.users.filter(user=>!user.deleted)
     });
   }
 
@@ -58,7 +59,6 @@ export class UserListComponent implements OnInit {
   onOpenUpdate(id:number){
     this.selectedUserId=id;
     this.displayUpdateDialog= true
-
   }
 }
 

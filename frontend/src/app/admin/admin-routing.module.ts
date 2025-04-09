@@ -4,12 +4,13 @@ import { AdminGuard } from '../guard/admin.guard';
 import { UpdateUserComponent } from './update-user/update-user.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserEnrollmentsComponent } from './user-enrollments/user-enrollments.component';
+import { teacherGuard } from '../guard/teacher.guard';
 
 
 const routes: Routes = [
   {path:'userList',component:UserListComponent,canActivate:[AdminGuard]},
   {path:'updateUserRole',component:UpdateUserComponent,canActivate:[AdminGuard]},
-  {path:'user-enrollments',component:UserEnrollmentsComponent}
+  {path:'user-enrollments',component:UserEnrollmentsComponent, canActivate:[teacherGuard]}
 ];
 
 @NgModule({

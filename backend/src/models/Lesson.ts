@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColum
 import { Course } from './Course';
 import { Progress } from './Progress';
 
-@Entity({name:"Lesson_tbl47"})
+@Entity({name:"Lesson_table147"})
 export class Lesson {
     @PrimaryGeneratedColumn()
     id:number;
@@ -16,10 +16,10 @@ export class Lesson {
     @Column({nullable:true})
     duration:number;
 
-    // @Column()
-    // completed: false 
+    @Column({default:false})
+    deleted: boolean 
 
-    @ManyToOne(() => Course, (course) => course.lessons, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Course, (course) => course.lessons, { onDelete: 'CASCADE' ,eager:true})
     @JoinColumn({ name: "course_id" }) 
     course: Course;
 

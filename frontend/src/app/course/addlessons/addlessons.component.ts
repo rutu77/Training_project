@@ -41,6 +41,7 @@ export class AddlessonsComponent {
             icon: 'success',
           });
           this.lessonAdded.emit();
+          this.lessonForm.reset();
         },
         (error:any)=>{
           console.error("Error adding lesson", error);

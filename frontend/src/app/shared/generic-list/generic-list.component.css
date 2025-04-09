@@ -1,0 +1,61 @@
+/* Container styling */
+div {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Add form styling */
+[add-form] {
+  margin-bottom: 2rem; /* Adds spacing below the add form */
+}
+
+/* Separator styling */
+.separator {
+  margin: 2rem 0; /* Adds spacing above and below the separator */
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+/* Table styling */
+.p-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+.p-table th,
+.p-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.p-table th {
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+.p-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Button styling */
+.p-table button {
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.p-table button:last-child {
+  margin-right: 0; /* Removes margin from the last button */
+}
+
+.p-table button:hover {
+  background-color: #0056b3;
+}

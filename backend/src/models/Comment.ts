@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMan
 import { User } from './User';
 import { Course } from './Course';
 
-@Entity({name:'Comment_tbl74'})
+@Entity({name:'Comment_table147'})
 export class Comment {
   @PrimaryGeneratedColumn()
   id:number;
@@ -10,21 +10,13 @@ export class Comment {
   @Column()
   message:string;
 
+  @Column({default:false})
+  deleted:boolean
+
   @ManyToOne(()=>User,(user)=>user.comments)
   user:User;
 
   @ManyToOne(()=>Course,(course)=>course.comments)
   @JoinColumn({name:'course_id'})
   course:Course;
-
-  // @ManyToOne(()=>Comment,{ nullable: true, cascade: true  })
-  // @JoinColumn({name:'parentComment_id'})
-  // parentComment:Comment;
-
-  // @ManyToOne(()=>Comment,(comment)=>comment.replies,{ nullable: true, onDelete:"NO ACTION" })
-  // @JoinColumn({name:'parentComment_id'})
-  // parentComment:Comment;
-
-  // @OneToMany(()=>Comment,(comment)=>comment.parentComment)
-  // replies:Comment[]
 }

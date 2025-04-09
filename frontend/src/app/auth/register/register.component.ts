@@ -3,7 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2'
 import { AdminService } from '../../services/admin.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit {
   passMismatch: boolean = false;
   isAdmin: boolean = false;
 
-  constructor(private _admin: AdminService, private _auth: AuthService, private route: ActivatedRoute) {}
+  constructor(private _admin: AdminService, private _auth: AuthService, private route: ActivatedRoute,private router:Router) {}
 
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -30,9 +30,9 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      const expectedSecretKey = 'bandu';
+      const expectedSecretKey = 'iamadmin';
       if (params['key']===expectedSecretKey){
-        localStorage.setItem('admin','true')
+        localStorage.setItem('user_role','admin')
         this.isAdmin=this._auth.getRole()==="admin"
         console.log(this.isAdmin);
         
@@ -70,6 +70,7 @@ export class RegisterComponent implements OnInit {
               text: "Registration Successful!",
               icon: "success"
             });
+            this.router.navigate(['/auth/login'])
           },
           (error: any) => {
             console.error("Error during registration", error);
@@ -90,6 +91,7 @@ export class RegisterComponent implements OnInit {
               text: "Registration Successful!",
               icon: "success"
             });
+            this.router.navigate(['/auth/login'])
           },
           (error: any) => {
             console.error("Error during registration", error);

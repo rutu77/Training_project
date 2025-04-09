@@ -62,14 +62,6 @@ export class NavbarComponent {
   }
 
 
-  //admin-dash
-  
-  showSidebar() {
-    this.adminService.showSidebar();
-  }
-
-
-
 
   //logout
   logout(){

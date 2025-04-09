@@ -16,7 +16,7 @@ export class UpdateCourseComponent implements OnInit{
 
   @Input() courseId!:number;
   @Output() courseUpdated= new EventEmitter()
-  @Output() cancel= new EventEmitter()
+  // @Output() cancel= new EventEmitter()
 
   updateCourseForm!: FormGroup;
 
@@ -24,17 +24,12 @@ export class UpdateCourseComponent implements OnInit{
   constructor(private _course:CourseService){}
 
   ngOnInit(): void {
-    // this.courseId = Number(this.route.snapshot.paramMap.get('id'));
-
     this.updateCourseForm= new FormGroup({
       title: new FormControl(''),
       description: new FormControl(''),
       price: new FormControl(''),
-      isPublished: new FormControl(false),
-      // thumbnail: new FormControl(''),
       level: new FormControl(''),
       duration: new FormControl(''),
-      // tags: new FormControl('')
     })
 
     this.loadCourseData()
@@ -46,9 +41,7 @@ export class UpdateCourseComponent implements OnInit{
       this.updateCourseForm.patchValue({
         title: data.title,
         description: data.description,
-        price: data.price,
-        isPublished: data.isPublished,
-        // thumbnail: data.thumbnail,
+        price: data.price, 
         level: data.level,
         duration: data.duration,
       });
@@ -82,9 +75,9 @@ export class UpdateCourseComponent implements OnInit{
       );
     }
 
-    onCancel(){
-      this.cancel.emit()
-    }
+    // onCancel(){
+    //   this.cancel.emit()
+    // }
 
     private getUpdatedValues(formValues:any):any{
       const updatedValues:any={};

@@ -6,7 +6,7 @@ import { Review } from './Review';
 import { Progress } from './Progress';
 
 
-@Entity({name:"User_tbl47"})
+@Entity({name:"User_table147"})
 export class User {
     @PrimaryGeneratedColumn()
     id:number;
@@ -28,6 +28,9 @@ export class User {
 
     @Column({nullable:true})
     bio: string;
+
+    @Column({default:false})
+    deleted:boolean
 
     @CreateDateColumn()
     createdAt:Date;

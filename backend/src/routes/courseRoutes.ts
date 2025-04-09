@@ -11,7 +11,8 @@ router.post('/',upload.single('thumbnail'),courseController.createCourse)
 router.get('/:id',courseController.getCourseById)
 router.get('/',courseController.getAllCourses)
 router.put('/:id',courseController.updateCourse)
-router.delete('/:id',courseController.deleteCourse)
+router.put('/:id',courseController.deleteCourse)
+// router.delete('/delete/:id',courseController.deleteTheCourse)
 router.get('/search',courseController.getSearchCourses)
 
 
