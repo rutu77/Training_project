@@ -10,7 +10,7 @@ router.post('/',progressController.createProgress)
 router.get('/:id',progressController.getprogressById)
 router.get('/user/:id',progressController.getProgressByUser)
 router.get('/report/:id',progressController.downloadProgressReport)
-// router.get('/',progressController.getAllprogresss)
+router.get('/',progressController.getAllprogresss)
 // router.put('/:id',progressController.updateprogress)
 // router.delete('/:id',progressController.deleteprogress)
 

@@ -16,6 +16,9 @@ export class Lesson {
     @Column({nullable:true})
     duration:number;
 
+    // @Column()
+    // completed: false 
+
     @ManyToOne(() => Course, (course) => course.lessons, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "course_id" }) 
     course: Course;

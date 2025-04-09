@@ -39,6 +39,10 @@ export class ProgressService{
       return progress
     }
 
+    async getAllprogresss(){
+        return await progressRepository.find({relations:['user','quiz']})
+    }
+
 
     async generateProgressReport(userId:number){
       const progressList: Progress[] = await this.getProgressByUser(userId);
@@ -96,9 +100,7 @@ export class ProgressService{
     //     if(result.affected===0) throw new Error("progress not found!")
     // }
 
-    // async getAllprogresss(){
-    //     return await progressRepository.find()
-    // }
+  
 
 
 

@@ -20,6 +20,7 @@ export class NavbarComponent {
   isLoggedIn:boolean=false;
   dropdownOpen = false;
   profileDropdownOpen:boolean = false;
+  userDropdownOpen=false;
   courseDropdownOpen = false;
   isTeacher:boolean=false;
   isAdmin:boolean=false;
@@ -54,6 +55,10 @@ export class NavbarComponent {
 
   toggleCourseDropdown() {
     this.courseDropdownOpen = !this.courseDropdownOpen;
+  }
+
+  toggleUserDropdown(){
+    this.userDropdownOpen= !this.userDropdownOpen;
   }
 
 

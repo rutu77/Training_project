@@ -6,14 +6,14 @@ import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UpdateUserComponent } from './update-user/update-user.component';
 import { UserListComponent } from './user-list/user-list.component';
-import { AdminDashComponent } from './admin-dash/admin-dash.component';
+import { UserEnrollmentsComponent } from './user-enrollments/user-enrollments.component';
 
 
 @NgModule({
   declarations: [
     UpdateUserComponent,
     UserListComponent,
-    AdminDashComponent,
+    UserEnrollmentsComponent,
   ],
   imports: [
     CommonModule,
@@ -21,9 +21,6 @@ import { AdminDashComponent } from './admin-dash/admin-dash.component';
     SharedModule,
     ReactiveFormsModule,
     FormsModule
-  ],
-  exports:[
-    AdminDashComponent
   ]
 })
 export class AdminModule { }

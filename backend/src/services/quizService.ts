@@ -36,7 +36,7 @@ export class QuizService {
     if (result.affected === 0) throw new Error("Quiz not found!");
   }
 
-  async getAllQuizzes(): Promise<Quiz[]> {
+  async getAllQuizzes(){
     return await quizRepository.find({relations:['course', 'questions']});
   }
 

@@ -30,25 +30,24 @@ export class EnrollComponent{
 
   
     enroll(){
-      
-    this.homeService.enrollCourse(this.userId, this.course.id).subscribe(
-      () => {
-        Swal.fire({
-          title: 'Enrollment Successful',
-          text: 'You have been successfully enrolled in the course!',
-          icon: 'success',
-        });
-        this.enrollSuccess.emit();
-      },
-      (error) => {
-        console.error('Error during enrollment', error);
-        Swal.fire({
-          title: 'Error',
-          text: 'An error occurred while enrolling in the course.',
-          icon: 'error',
-        });
-      }
-    )
+      this.homeService.enrollCourse(this.userId, this.course.id).subscribe(
+        () => {
+          Swal.fire({
+            title: 'Enrollment Successful',
+            text: 'You have been successfully enrolled in the course!',
+            icon: 'success',
+          });
+          this.enrollSuccess.emit();
+        },
+        (error) => {
+          console.error('Error during enrollment', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'An error occurred while enrolling in the course.',
+            icon: 'error',
+          });
+        }
+      )
     }
 
     showEnrollSuccess() {

@@ -3,12 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminGuard } from '../guard/admin.guard';
 import { UpdateUserComponent } from './update-user/update-user.component';
 import { UserListComponent } from './user-list/user-list.component';
-import { AdminDashComponent } from './admin-dash/admin-dash.component';
+import { UserEnrollmentsComponent } from './user-enrollments/user-enrollments.component';
+
 
 const routes: Routes = [
   {path:'userList',component:UserListComponent,canActivate:[AdminGuard]},
   {path:'updateUserRole',component:UpdateUserComponent,canActivate:[AdminGuard]},
-  {path:'admin-dash',component:AdminDashComponent}
+  {path:'user-enrollments',component:UserEnrollmentsComponent}
 ];
 
 @NgModule({

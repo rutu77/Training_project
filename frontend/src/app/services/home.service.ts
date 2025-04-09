@@ -110,6 +110,10 @@ export class HomeService {
     return this.http.get(`${this.api}/progress/${id}`)
   }
 
+  getAllProgress(){
+    return this.http.get(`${this.api}/progress/`)
+  }
+
   getProgressByUser(userId:number){
     return this.http.get(`${this.api}/progress/user/${userId}`)
   }

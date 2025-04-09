@@ -28,6 +28,15 @@ export class ProgressController {
       }
     }
 
+    async getAllprogresss(req: Request, res: Response): Promise<void> {
+      try {
+        const progresss = await progressService.getAllprogresss();
+        res.status(200).json(progresss);
+      } catch (error) {
+        res.status(500).json({ error: "Error fetching progresss" });
+      }
+    }
+
     async getProgressByUser(req: Request, res: Response): Promise<void> {
       const userId = Number(req.params.id);
       try {
@@ -78,14 +87,7 @@ export class ProgressController {
     //   }
     // }
   
-    // async getAllprogresss(req: Request, res: Response): Promise<void> {
-    //   try {
-    //     const progresss = await progressService.getAllprogresss();
-    //     res.status(200).json(progresss);
-    //   } catch (error) {
-    //     res.status(500).json({ error: "Error fetching progresss" });
-    //   }
-    // }
+
 
 }
 

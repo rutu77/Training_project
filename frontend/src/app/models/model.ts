@@ -108,8 +108,12 @@ export interface Discussion{
 }
 
 export interface Progress{
-    progress_id:number,
-    isCompleted:boolean
+    id:number,
+    score:number
+    total:number
+    completion:string
+    user:User
+    quiz:Quiz
 }
 
 export interface Attempt{

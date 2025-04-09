@@ -9,6 +9,7 @@ import { ProgressComponent } from './progress/progress.component';
 import { SharedModule } from '../shared/shared.module';
 import { AddQuestionComponent } from './add-question/add-question.component';
 import { ProgressChartComponent } from './progress-chart/progress-chart.component';
+import { AllProgressComponent } from './all-progress/all-progress.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { ProgressChartComponent } from './progress-chart/progress-chart.componen
     TakeQuizComponent,
     ProgressComponent,
     AddQuestionComponent,
-    ProgressChartComponent
+    ProgressChartComponent,
+    AllProgressComponent
   ],
   imports: [
     CommonModule,

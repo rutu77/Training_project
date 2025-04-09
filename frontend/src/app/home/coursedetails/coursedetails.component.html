@@ -29,7 +29,10 @@
               <h2 class="lesson-title">{{ lesson.title }}</h2>
               <span class="lesson-duration">{{ lesson.duration }}</span>
             </div>
-          </div>
+            <!-- <label><input type="checkbox" [(ngModel)]="lesson.completion" (change)="checkCourseCompletion()">Completed></label> -->
+      </div>
+      <!-- <p *ngIf="courseCompleted">Course Completed!</p -->
+  
 
           <h2>Quizzes</h2>
          <div *ngIf="quizzes.length===0" class="no-quizzes">No Quiz Found</div>

@@ -91,6 +91,12 @@ export class CoursedetailsComponent implements OnInit{
   })
   }
 
+  
+  // checkCourseCompletion() {
+  //   this.courseCompleted = this.lessons.every(lesson => lesson.completed);
+  // }
+    
+
   viewLesson(lessonId:number){
     this.router.navigate([`course/lesson/${lessonId}`]);
   }
