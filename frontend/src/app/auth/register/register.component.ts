@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import Swal from 'sweetalert2'
 import { AdminService } from '../../services/admin.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
   constructor(private _admin: AdminService, private _auth: AuthService, private route: ActivatedRoute,private router:Router) {}
 
   registerForm = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    name: new FormControl('', [Validators.required, Validators.minLength(3), this.nameValidator()]),
     email: new FormControl('', [Validators.email, Validators.required]),
     password: new FormControl('', [Validators.minLength(8), Validators.required]),
     confirmPassword: new FormControl('', [Validators.required]),
@@ -41,6 +41,14 @@ export class RegisterComponent implements OnInit {
       }
     });
   }
+
+    nameValidator() {
+        return (control: AbstractControl): ValidationErrors | null => {
+            const name = control.value;
+            const valid = /^[a-zA-Z\s]+$/.test(name);
+            return valid ? null : { invalidName: 'Name must contain only letters and spaces' };
+        };
+    }
 
   onSubmit() {
     const password = this.registerForm.get('password')?.value;

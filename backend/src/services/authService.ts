@@ -2,6 +2,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { userRepository } from "../repositories/userRepository"
 import { UserService } from "./userService"
+import { validateOrReject } from "class-validator"
 
 
 const secretKey= "Rutuja1147"
@@ -11,12 +12,13 @@ const userService= new UserService
 export class AuthService{
 
     async registerUser(userData:any){
+        await validateOrReject(userData);
         const existing= await userService.getUserByEmail(userData.email);
         if (existing) {
             if (!existing.deleted) {
               return { error: "User already exists! Please login." };
             }
-          }
+        }
     
         const hashedPassword= await bcrypt.hash(userData.password,10)
         const user= userRepository.create({name:userData.name,email:userData.email,password:hashedPassword,role:userData.role});

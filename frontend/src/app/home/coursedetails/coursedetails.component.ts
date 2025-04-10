@@ -130,6 +130,10 @@ export class CoursedetailsComponent implements OnInit{
     this.displayUpdateEnrollDialog=false
   }
 
+  enroll(){
+    this.router.navigate(['home/enrollment'])
+  }
+
   
 
 
