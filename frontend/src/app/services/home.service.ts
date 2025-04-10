@@ -75,7 +75,7 @@ export class HomeService {
   }
 
   deleteQuiz(id: number){
-    return this.http.put(`${this.api}/quiz/${id}`,{deleted:true});
+    return this.http.delete(`${this.api}/quiz/${id}`);
   }
 
   getQuizByCourse(courseId:number){

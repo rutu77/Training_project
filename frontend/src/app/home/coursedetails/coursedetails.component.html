@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div *ngIf="!isLoggedIn">Please login to enroll to this course</div>
+    <div *ngIf="!isLoggedIn" [ngStyle]="{'color':'red'}">Please login to enroll to this course</div>
 
 
     <!-- lesson and quizzes -->
@@ -40,9 +40,7 @@
             <div class="quiz-details">
               <h2 class="quiz-title">{{ quiz.title }}</h2>
             </div>
-          </div> 
-
-          
+          </div>  
     </div>
 
   

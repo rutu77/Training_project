@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -15,6 +15,7 @@ import { CourseModule } from './course/course.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GenericListComponent } from './shared/generic-list/generic-list.component';
 import { QuizModule } from './quiz/quiz.module';
+import { GlobalErrorHandler } from './global/error-handler';
 
 
 
@@ -37,10 +38,15 @@ import { QuizModule } from './quiz/quiz.module';
     QuizModule
 ],
   providers: [{
-    provide:HTTP_INTERCEPTORS,
-    useClass:AuthInterceptor,
-    multi:true
-  }],
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  },
+  {
+    provide: ErrorHandler,
+    useClass: GlobalErrorHandler
+  }
+  ],
   bootstrap: [AppComponent]
 })
 

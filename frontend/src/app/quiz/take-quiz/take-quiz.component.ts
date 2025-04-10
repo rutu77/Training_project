@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Question } from '../../models/model';
 import { HomeService } from '../../services/home.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -17,7 +17,7 @@ export class TakeQuizComponent implements OnInit {
     quizForm: FormGroup;
     userId=Number(localStorage.getItem("userId"))
   
-    constructor(private route: ActivatedRoute, private homeService: HomeService) {
+    constructor(private route: ActivatedRoute, private homeService: HomeService, private router:Router) {
       this.quizForm = new FormGroup({});
     }
   
@@ -50,7 +50,7 @@ export class TakeQuizComponent implements OnInit {
               title: 'Submitted',
               text: 'Quiz submitted successfully!',
             });
-            
+            this.router.navigate([`/home/course/${this.quiz.course.id}`])
           },
           (error: any) => {
             console.error('Error submitting quiz:', error);

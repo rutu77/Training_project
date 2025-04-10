@@ -15,9 +15,9 @@
   </tr>
   <tr *ngFor="let progress of progressList">
     <td>{{ progress.quiz.title }}</td>
-    <td>{{ progress.score }}</td>
+    <td>{{ progress.score }} %</td>
     <td>{{ progress.total }}</td>
-    <td>{{ progress.completion | date:'short' }}</td>
+    <td>{{ progress.completion | date : "short" }}</td>
   </tr>
 </table>
 

@@ -79,12 +79,6 @@ export class ProgressService{
       });
     };
  
-    
-
-
-
-
-    
 
     // async updateprogress(id:number,data:Partial<Progress>){
     //     await progressRepository.update(id,data)
@@ -97,9 +91,6 @@ export class ProgressService{
     //     const result= await progressRepository.delete(id)
     //     if(result.affected===0) throw new Error("progress not found!")
     // }
-
-  
-
 
 
 }

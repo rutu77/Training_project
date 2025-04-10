@@ -12,7 +12,7 @@ router.get('/:id',courseController.getCourseById)
 router.get('/',courseController.getAllCourses)
 router.put('/:id',courseController.updateCourse)
 router.put('/:id',courseController.deleteCourse)
-// router.delete('/delete/:id',courseController.deleteTheCourse)
+router.delete('/delete/:id',courseController.deleteTheCourse)
 router.get('/search',courseController.getSearchCourses)
 
 

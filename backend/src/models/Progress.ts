@@ -30,19 +30,3 @@ export class Progress {
   completion: Date;
   
 }
-//   @PrimaryGeneratedColumn()
-//   id:number;
-
-//   @ManyToOne(()=>User,(user)=>user.progress)
-//   user: User;
-
-//   @ManyToOne(()=>Lesson,(lesson)=>lesson.progress)
-//   @JoinColumn({name:'lesson_id'})
-//   lesson:Lesson;
-
-//   @Column({default:false })
-//   isCompleted: boolean;
-
-//   @Column({nullable:true})
-//   completion:Date
-// }

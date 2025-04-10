@@ -32,6 +32,7 @@ export class CourseService{
 
     async deleteCourse(id:number){
         await courseRepository.update(id,{deleted:true})
+        // const result = await courseRepository.delete(id);
         // if(result.affected===0) throw new Error("Course not found!")
     }
 

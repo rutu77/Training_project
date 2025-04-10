@@ -36,7 +36,7 @@ export class CourseService {
 
 
   deleteCourse(id:number){
-    return this.http.put(`${this.api}/course/${id}`,{ deleted: true })
+    return this.http.delete(`${this.api}/course/delete/${id}`)
   }
 
 
