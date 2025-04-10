@@ -10,7 +10,6 @@ export class Progress {
   id:number;
 
   @ManyToOne(()=>User,(user)=>user.progress)
-  // @JoinColumn({name:'user_id'})
   user: User;
 
   @Column({default:false})

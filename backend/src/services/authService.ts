@@ -10,16 +10,16 @@ const userService= new UserService
 
 export class AuthService{
 
-    async registerUser(name:string, email:string, password:string, role:'user'|'teacher'){
-        const existing= await userService.getUserByEmail(email);
+    async registerUser(userData:any){
+        const existing= await userService.getUserByEmail(userData.email);
         if (existing) {
             if (!existing.deleted) {
               return { error: "User already exists! Please login." };
             }
           }
     
-        const hashedPassword= await bcrypt.hash(password,10)
-        const user= userRepository.create({name,email,password:hashedPassword,role});
+        const hashedPassword= await bcrypt.hash(userData.password,10)
+        const user= userRepository.create({name:userData.name,email:userData.email,password:hashedPassword,role:userData.role});
         await userRepository.save(user)
         return {message:"user registered!",user}
     }
@@ -27,6 +27,8 @@ export class AuthService{
     async loginUser(email: string, password: string) {
         const user = await userService.getUserByEmail(email);
         if (!user) return { error: "User not found!" };
+
+        if(user.deleted) return {error:"User Deactivated"}
     
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) return { error: "Invalid Credentials!" };
