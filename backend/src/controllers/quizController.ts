@@ -9,10 +9,11 @@ export class QuizController{
 
     async createQuiz(req: Request, res: Response){
       const {courseId,title} = req.body;
+      const userId= Number(req.params.id)
       console.log(courseId);
       
       try {
-        const quiz = await quizService.createQuiz({courseId,title});
+        const quiz = await quizService.createQuiz({courseId,title,userId});
         res.status(201).json({ message: "Quiz created successfully!", data: quiz });
       } catch (error) {
         res.status(500).json({ error: (error as Error).message });

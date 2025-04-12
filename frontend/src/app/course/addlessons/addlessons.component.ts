@@ -33,7 +33,6 @@ export class AddlessonsComponent {
   onSubmit(){
     if(this.lessonForm.valid){
   
-      console.log(this.lessonForm.value.courseId);
       
       this._course.addLesson(this.lessonForm.value,this.userId).subscribe(
         ()=>{

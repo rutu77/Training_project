@@ -7,14 +7,18 @@ import { progressRepository } from "../repositories/progressRepository";
 import { quizRepository } from "../repositories/quizRepository";
 
 export class QuizService {
-  async createQuiz(quizData: { courseId: number; title: string }) {
+  async createQuiz(quizData: { courseId: number; title: string , userId:number}) {
     const course = (await courseRepository.findOne({
       where: { id: quizData.courseId },
     })) as Course;
     if (!course) throw new Error("Course not found!");
-
-    const quiz = quizRepository.create({ ...quizData, course: course });
-    return await quizRepository.save(quiz);
+    if(course.creator.id==quizData.userId){
+      const quiz = quizRepository.create({ ...quizData, course: course });
+      return await quizRepository.save(quiz);
+    }
+    else{
+      throw new Error("You can only create quiz on courses you have created")
+    }
   }
 
   async getQuizById(id: number) {

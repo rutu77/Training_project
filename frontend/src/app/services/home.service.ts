@@ -66,8 +66,8 @@ export class HomeService {
     return this.http.get(`${this.api}/quiz/`);
   }
 
-  createQuiz(quizData:any){
-    return this.http.post(`${this.api}/quiz/`,quizData)
+  createQuiz(quizData:any,userId:number){
+    return this.http.post(`${this.api}/quiz/${userId}`,quizData)
   }
 
   updateQuiz(courseId:number,data:Quiz){
