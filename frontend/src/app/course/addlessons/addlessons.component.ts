@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
   templateUrl: './addlessons.component.html',
   styleUrl: './addlessons.component.css'
 })
+
 export class AddlessonsComponent {
 
   userId= Number(localStorage.getItem('userId'));
@@ -27,13 +28,11 @@ export class AddlessonsComponent {
       duration: new FormControl(0),
       courseId: new FormControl(''),
     })
-
   }
 
   onSubmit(){
     if(this.lessonForm.valid){
   
-      
       this._course.addLesson(this.lessonForm.value,this.userId).subscribe(
         ()=>{
           Swal.fire({

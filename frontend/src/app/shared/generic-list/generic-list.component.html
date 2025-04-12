@@ -6,8 +6,12 @@
   <br>
   <br>
   <br>
-  
-  <p-table [value]="items" [tableStyle]="{ 'min-width': '50rem' }" aria-label="Items Table">
+
+  <div class="search-bar">
+    <input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterItems()"/>
+  </div>
+
+  <p-table [value]="filteredItems" [tableStyle]="{ 'min-width': '50rem' }" aria-label="Items Table">
     <ng-template pTemplate="header">
       <tr>
         <th *ngFor="let label of itemLabels">{{ label }}</th>
@@ -27,7 +31,6 @@
   </p-table>
 
 
-  
 </div>
 
 

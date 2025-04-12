@@ -48,10 +48,11 @@ export class QuizListComponent implements OnInit {
         },
         (error:any) => {
           console.error('Error creating quiz:', error);
+          
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text:error.error.message || 'Failed to create quiz!',
+            text: error.error.message || 'Failed to create quiz!',
           })
         }
       )}

@@ -16,7 +16,6 @@ export class UpdateCourseComponent implements OnInit{
 
   @Input() courseId!:number;
   @Output() courseUpdated= new EventEmitter()
-  // @Output() cancel= new EventEmitter()
 
   updateCourseForm!: FormGroup;
 
@@ -74,10 +73,6 @@ export class UpdateCourseComponent implements OnInit{
         }
       );
     }
-
-    // onCancel(){
-    //   this.cancel.emit()
-    // }
 
     private getUpdatedValues(formValues:any):any{
       const updatedValues:any={};

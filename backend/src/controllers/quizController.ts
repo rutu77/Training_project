@@ -16,11 +16,11 @@ export class QuizController{
         const quiz = await quizService.createQuiz({courseId,title,userId});
         res.status(201).json({ message: "Quiz created successfully!", data: quiz });
       } catch (error) {
-        res.status(500).json({ error: (error as Error).message });
+        res.status(500).json({ message: (error as Error).message });
       }
     }
     
-    async getQuizById(req: Request, res: Response): Promise<void> {
+    async getQuizById(req: Request, res: Response){
       const quizId = Number(req.params.id);
       try {
         const quiz = await quizService.getQuizById(quizId);
@@ -30,7 +30,7 @@ export class QuizController{
       }
     }
   
-    async updateQuiz(req: Request, res: Response): Promise<void> {
+    async updateQuiz(req: Request, res: Response){
       const quizId = Number(req.params.id);
       const data = req.body;
       try {
@@ -41,7 +41,7 @@ export class QuizController{
       }
     }
   
-    async deleteQuiz(req: Request, res: Response): Promise<void> {
+    async deleteQuiz(req: Request, res: Response){
       const quizId = Number(req.params.id);
       try {
         await quizService.deleteQuiz(quizId);
@@ -51,7 +51,7 @@ export class QuizController{
       }
     }
   
-    async getAllQuizzes(req: Request, res: Response): Promise<void> {
+    async getAllQuizzes(req: Request, res: Response){
       try {
         const quizzes = await quizService.getAllQuizzes();
         res.status(200).json(quizzes);
