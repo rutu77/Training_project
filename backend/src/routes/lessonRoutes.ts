@@ -6,7 +6,7 @@ const lessonController= new LessonController()
 
 const router= Router()
 
-router.post('/',lessonController.createLesson)
+router.post('/:id',lessonController.createLesson)
 router.get('/:id',lessonController.getLessonById)
 router.get('/',lessonController.getAllLesson)
 router.put('/:id',lessonController.updateLesson)

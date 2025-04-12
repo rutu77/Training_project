@@ -27,9 +27,9 @@ export class UserService{
     }
 
     async deleteUser(id:number){
-        const result= await userRepository.delete(id);
-        if(result.affected===0) throw new Error("User not found!")
-        // await userRepository.update(id,{deleted:true})
+        // const result= await userRepository.delete(id);
+        // if(result.affected===0) throw new Error("User not found!")
+        await userRepository.update(id,{deleted:true})
     }
 
     async getAllUsers(){

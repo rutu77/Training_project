@@ -25,7 +25,7 @@ export class UserListComponent implements OnInit {
   loadUsers() {
     this.admin.getUsers().subscribe((data: any) => {
       this.users = data;
-      this.users= this.users.filter(user=>!user.deleted)
+      this.users= this.users.filter(user=>!user.deleted).filter(user=>user.email!=="admin@gmail.com")
     });
   }
 

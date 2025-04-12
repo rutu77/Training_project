@@ -5,10 +5,18 @@ import { lessonRepository } from "../repositories/lessonRepository"
 
 export class LessonService{
 
-    async createlesson(lessonData: {title:string,videoUrl:string,description:string,duration:number,courseId:number}){
+    async createlesson(lessonData: {title:string,videoUrl:string,description:string,duration:number,courseId:number,userId:number}){
         const coursedata = await courseRepository.findOne({where:{id:lessonData.courseId}}) as Course
-        const lesson = lessonRepository.create({...lessonData, course:coursedata});
-        return await lessonRepository.save(lesson);
+        // console.log("courseId and userId",coursedata,lessonData.courseId);
+        
+        if(coursedata.creator.id==lessonData.userId){
+            const lesson = lessonRepository.create({...lessonData, course:coursedata});
+            return await lessonRepository.save(lesson);
+        }
+        else{
+            throw new Error("You can only add lessons to the courses created by you!")
+        }
+
     }
 
     async getLessonById(id:number){

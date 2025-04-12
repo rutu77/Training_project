@@ -3,9 +3,7 @@
   [itemFields]="['id', 'name', 'email', 'role']"
   [itemLabels]="['Id', 'Name', 'Email', 'Role']"
   (updateItem)="onOpenUpdate($event)"
-  (deleteItem)="deleteUser($event)"
->
-  
+  (deleteItem)="deleteUser($event)">
 </app-generic-list>
 
 <p-dialog header="Update Item" [(visible)]="displayUpdateDialog" [modal]="true">

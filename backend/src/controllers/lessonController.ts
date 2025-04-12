@@ -5,17 +5,21 @@ import { title } from "process";
 import { Course } from "../models/Course";
 import { Lesson } from "../models/Lesson";
 
+
 const lessonService = new LessonService()
 
 export class LessonController{
   
     async createLesson(req: Request, res: Response){
       const {title,videoUrl,description,duration,courseId} = req.body;
+      const userId= Number(req.params.id)
+      // console.log(courseId);
+      
       try {
-        const lesson = await lessonService.createlesson({title,videoUrl,description,duration,courseId}) as Lesson;
+        const lesson = await lessonService.createlesson({title,videoUrl,description,duration,courseId,userId})
         res.status(201).json({ message: "lesson created successfully!", data: lesson });
       } catch (error) {
-        res.status(500).json({ error: error });
+        res.status(500).json({message:(error as Error).message});
       }
     }
 

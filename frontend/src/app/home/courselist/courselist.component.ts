@@ -45,7 +45,7 @@ export class CourseListComponent implements OnInit {
     this.courseService.getCourses().subscribe((data:any)=>{
       this.courses=data;
       this.filteredCourses=data
-      this.filteredCourses=this.filteredCourses.filter(course=>!course.deleted)
+      // this.filteredCourses=this.filteredCourses.filter(course=>!course.deleted)
     })
   }
 

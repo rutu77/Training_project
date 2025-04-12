@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CourseService } from '../../services/course.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -25,15 +25,17 @@ export class AddlessonsComponent {
       title: new FormControl(''),
       videoUrl: new FormControl(''),
       duration: new FormControl(0),
-      courseId: new FormControl(),
+      courseId: new FormControl(''),
     })
 
   }
 
   onSubmit(){
     if(this.lessonForm.valid){
-
-      this._course.addLesson(this.lessonForm.value).subscribe(
+  
+      console.log(this.lessonForm.value.courseId);
+      
+      this._course.addLesson(this.lessonForm.value,this.userId).subscribe(
         ()=>{
           Swal.fire({
             title: 'Lesson Added',

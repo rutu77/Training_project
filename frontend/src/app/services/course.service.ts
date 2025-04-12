@@ -50,8 +50,8 @@ export class CourseService {
     return this.http.get(`${this.api}/lesson/`)
   }
 
-  addLesson(lesson:Lesson){
-    return this.http.post(`${this.api}/lesson/`,lesson)
+  addLesson(lesson:Lesson, userId:number){
+    return this.http.post(`${this.api}/lesson/${userId}`,lesson)
   }
 
   updateLesson(id:number,lesson:Lesson){
