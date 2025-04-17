@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { User } from '../../models/model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,8 +13,9 @@ export class GenericListComponent<T> implements OnInit{
   @Input() items: T[] = [];
   @Input() itemFields: string[] = [];
   @Input() itemLabels: string[] = [];
+  @Input() isUser:boolean=false
 
-  @Output() addItem = new EventEmitter<void>();
+  @Output() addItem= new EventEmitter<void>();
   @Output() updateItem = new EventEmitter<number>();
   @Output() deleteItem = new EventEmitter<number>();
 
@@ -23,7 +25,6 @@ export class GenericListComponent<T> implements OnInit{
   constructor() {}
 
   ngOnInit(): void {
-  // console.log(this.itemFields);
     this.filteredItems= [...this.items]
   }
 
@@ -49,12 +50,9 @@ export class GenericListComponent<T> implements OnInit{
     this.updateItem.emit(itemId);
   }
 
-
-  openAddDialog() {
-    this.addItem.emit();
+  openAddDialog(){
+    this.addItem.emit()
   }
-  
-
 
   confirmDelete(id: number) {
     Swal.fire({

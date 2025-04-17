@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HomeService } from '../../services/home.service';
 import Swal from 'sweetalert2';
 import { Course, Enrollment } from '../../models/model';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-enroll',
@@ -10,7 +11,7 @@ import { Course, Enrollment } from '../../models/model';
   templateUrl: './enroll.component.html',
   styleUrl: './enroll.component.css'
 })
-export class EnrollComponent{
+export class EnrollComponent implements OnInit{
 
   @Input() course!: Course ;
   userId= Number(localStorage.getItem('userId'));
@@ -19,11 +20,16 @@ export class EnrollComponent{
   @Output() enrollSuccess= new EventEmitter<void>();
   @Output() cancel= new EventEmitter<void>();
 
-  constructor(private route: ActivatedRoute,private router: Router,private homeService: HomeService){}
+  constructor(private router: Router,private homeService: HomeService){}
+
+  ngOnInit(): void {
+    
+  }
 
 
 
   enroll(){
+    this.downloadEnrollReceipt()
     this.homeService.enrollCourse(this.userId, this.course.id).subscribe(
       () => {
         Swal.fire({
@@ -40,6 +46,19 @@ export class EnrollComponent{
           text: 'An error occurred while enrolling in the course.',
           icon: 'error',
         });
+        this.enrollSuccess.emit();
+      }
+    )
+  }
+
+  downloadEnrollReceipt(){
+    this.homeService.downloadEnrollmentReciept(+this.userId,this.course.id).subscribe(
+      (response:Blob)=>{
+        const fileName= `Enrollment_Receipt_${this.userId}.pdf`;
+        saveAs(response, fileName);
+      },
+      (error)=>{
+        console.error("Error downloading receipt", error)
       }
     )
   }

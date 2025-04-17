@@ -6,13 +6,12 @@ import { Enrollment } from "../models/Enrollment";
 import { Lesson } from "../models/Lesson";
 import { Quiz } from "../models/Quiz";
 import { Review } from "../models/Review";
-// import { Category } from "../models/Category";
 import { Comment } from "../models/Comment";
 import { Progress } from "../models/Progress";
 import { Question } from "../models/Question";
 
 
-dotenv.config(); // loads the environment variables from your .env file into process.env.
+dotenv.config(); 
 
 export const AppDataSource= new DataSource({
     type:"mssql",
@@ -23,7 +22,7 @@ export const AppDataSource= new DataSource({
     database: process.env.DB_NAME,
     // entities:["src/models/*.ts"],
     entities:[User,Course,Enrollment, Lesson, Quiz, Review, Question, Comment, Progress],
-    synchronize:true, // Automatically synchronizes the database schema with the entities each time the application runs.
+    synchronize:true, 
     options:{
         encrypt:false,
         trustServerCertificate:true

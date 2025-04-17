@@ -38,10 +38,8 @@ export class AddQuestionComponent implements OnInit{
   
     addQuestion(): void {
       if (this.questionForm.valid) {
-        const questionData = {
-          ...this.questionForm.value,
-          options: this.questionForm.value.options.split(',')
-        };
+        const questionData = {...this.questionForm.value, options: this.questionForm.value.options.split(',')};
+        
         this.homeService.addQuestiontoQuiz(this.quiz.id, questionData).subscribe(
           data => {
             this.quiz.questions.push(data);

@@ -1,4 +1,11 @@
-<p-table [value]="progresses" [tableStyle]="{ 'min-width': '50rem' }">
+
+<!-- <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+  <input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterProgress()">
+</div> -->
+<input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterProgress()">
+
+
+<p-table [value]="filteredProgress" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
         <tr>
           <th>User ID</th>

@@ -18,9 +18,10 @@ import { FooterComponent } from './footer/footer.component';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { GenericListComponent } from './generic-list/generic-list.component';
+import { RatingModule } from 'primeng/rating';
 
 
-const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModule,ScrollTopModule,TableModule, DropdownModule,MenubarModule, MenuModule, MultiSelectModule, RippleModule, DialogModule]
+const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModule,RatingModule,ScrollTopModule,TableModule, DropdownModule,MenubarModule, MenuModule, MultiSelectModule, RippleModule, DialogModule]
 
 
 @NgModule({

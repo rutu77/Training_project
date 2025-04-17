@@ -3,20 +3,24 @@
 [items]="courses"
 [itemFields]="['id','title','description','price','level','duration']"
 [itemLabels]="['Id','Title','Description','Price','Level','Duration']"
-(addItem)="refresh()"
+(addItem)="onOpenAdd()"
 (updateItem)="onOpenUpdate($event)"
 (deleteItem)="deleteCourse($event)"
 >
 
-  <ng-container add-form>
+  <!-- <ng-container add-form>
     <app-add-course (courseAdded)="refresh()"></app-add-course>
-  </ng-container>
+  </ng-container> -->
 
 
 </app-generic-list>
 
+<p-dialog header="add Course" [(visible)]="displayAddDialog" [modal]="true">
+  <app-add-course (courseAdded)="refresh()"></app-add-course>
+</p-dialog>
 
-<p-dialog header="Update Item" [(visible)]="displayUpdateDialog" [modal]="true">
+
+<p-dialog header="Update Course" [(visible)]="displayUpdateDialog" [modal]="true">
   <app-update-course [courseId]="selectCourseId" (courseUpdated)="refresh()"></app-update-course>
 </p-dialog>
 

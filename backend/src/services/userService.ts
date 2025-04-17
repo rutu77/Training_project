@@ -14,7 +14,6 @@ export class UserService{
     }
 
     async updateUserById(id:number,data:Partial<User>){
-
         if (data.password) {
             const hashedPassword = await bcrypt.hash(data.password, 10);
             data.password = hashedPassword;
@@ -37,18 +36,10 @@ export class UserService{
     }
 
    async updateProfilePicture(userId: string, filename: string) {
-            const user = await userRepository.findOne({ where: { id: +userId } });
-            if (!user) throw new Error("User not found!");
-            user.profilePicture = filename;
-            await userRepository.save(user);
-            return user;
-            
-            // return { userId, filename };
-    }
-
-        // async updateProfilePicture(userId, profilePicture) {
-        //   await userRepository.update(userId, { profilePicture });
-        //   return await userRepository.findOne(userId);
-        // }
-      
+        const user = await userRepository.findOne({ where: { id: +userId } });
+        if (!user) throw new Error("User not found!");
+        user.profilePicture = filename;
+        await userRepository.save(user);
+        return user;
+    }  
 }

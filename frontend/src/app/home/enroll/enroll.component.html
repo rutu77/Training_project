@@ -1,8 +1,9 @@
 <div class="enrollment-dialog">
-    <h2>{{ course.title }}</h2>
-    <p>{{ course.description }}</p>
-    <p>Duration: {{ course.duration }} hours</p>
-    <button (click)="enroll()" pButton class="enroll-button">Enroll</button>
-    <button (click)="onCancel()" pButton>Cancel</button>
+    <div *ngIf="course">
+        <h2>{{ course.title }}</h2>
+        <p>{{ course.description }}</p>
+      <p>Duration: {{ course.duration }} hours</p>
+      <button (click)="enroll()" pButton class="enroll-button">Enroll</button>
+    </div>
+  <!-- <button pButton (click)="downloadEnrollReceipt()" >Downlaod</button>  -->
 </div>
-  

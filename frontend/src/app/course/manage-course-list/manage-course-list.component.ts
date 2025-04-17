@@ -10,9 +10,11 @@ import { error } from 'console';
   templateUrl: './manage-course-list.component.html',
   styleUrl: './manage-course-list.component.css',
 })
+
 export class ManageCourseListComponent implements OnInit {
   courses: Course[] = [];
   displayUpdateDialog = false;
+  displayAddDialog=false;
   selectCourseId!: number;
   userId = Number(localStorage.getItem('userId'));
 
@@ -29,7 +31,6 @@ export class ManageCourseListComponent implements OnInit {
       this.courses = this.courses
         .filter((course) => !course.deleted)
         .filter((course) => course.creator.id === this.userId);
-
       // console.log([this.courses].flat());
     });
   }
@@ -37,6 +38,7 @@ export class ManageCourseListComponent implements OnInit {
   refresh() {
     this.loadCourses();
     this.displayUpdateDialog = false;
+    this.displayAddDialog= false
   }
 
   onOpenUpdate(id: number) {
@@ -44,14 +46,13 @@ export class ManageCourseListComponent implements OnInit {
     this.displayUpdateDialog = true;
   }
 
+  onOpenAdd(){
+    this.displayAddDialog= true
+  }
+
   deleteCourse(courseId: number) {
     this.course.deleteCourse(courseId).subscribe(
       () => {
-        // Swal.fire({
-        //   title: 'Course Deleted',
-        //   text: 'The course has been deleted successfully!',
-        //   icon: 'success',
-        // });
         this.loadCourses();
       },
       (error: any) => {

@@ -51,10 +51,10 @@ export class AddReviewComponent implements OnInit{
             title:"Oops...",
             text:error.error.message || "Something went wrong!"
           })
+          this.reviewAdded.emit()
         }
 
       )
     }
   }
 }
-

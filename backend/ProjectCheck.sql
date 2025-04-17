@@ -4,8 +4,6 @@ select * from Course_table147
  
 select * from Enrollment_table147
 
-select * from Category_table147
-
 select * from Quiz_table147
 
 select * from Question_table147

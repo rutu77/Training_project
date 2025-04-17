@@ -68,8 +68,9 @@ export interface Lesson{
 
 export interface Quiz{
     id?:number,
+    title:string,
     courseId:number,
-    questions:Question[]
+    // questions:Question[]
     deleted:boolean
 }
 

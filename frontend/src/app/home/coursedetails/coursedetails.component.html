@@ -4,18 +4,21 @@
     <p>{{ course.description }}</p>
     <div class="course-meta">
       <span>Price: ₹{{ course.price }}</span>
-      <!-- <span>Rating: {{ course.rating }}</span> -->
     </div>
-    <!-- <button (click)="enroll(course.course_id)" class="enroll-button">Enroll</button> -->
-    
 
+    
     <!-- enroll button-->
     <div *ngIf="!isEnrolled(course.id) && isLoggedIn">
-        <button (click)="openEnrollmentDialog(course)" pButton class="enroll-button">Enroll to this course</button>
-        <div *ngIf="showEnrollDialog" class="enrollment-dialog-overlay">
-          <app-enroll [course]="selectedCourse" (enrollmentCompleted)="refreshEnrollments()" (cancel)="closeEnrollmentDialog()" (closeDialog)="closeEnrollmentDialog()"></app-enroll>
-      </div>
+      <button pButton (click)="openEnrollmentDialog(course)"  class="enroll-button">Enroll to this course</button>
     </div>
+    
+    <p-dialog header="Enroll" [(visible)]="showEnrollDialog" [modal]="true">
+      <app-enroll [course]="selectedCourse" (enrollSuccess)="refreshEnrollments()" (cancel)="closeEnrollmentDialog()" (closeDialog)="closeEnrollmentDialog()"></app-enroll>
+    </p-dialog>
+
+    <!-- <div *ngIf="showEnrollDialog" class="enrollment-dialog-overlay">
+        <app-enroll [course]="selectedCourse" (enrollmentCompleted)="refreshEnrollments()" (cancel)="closeEnrollmentDialog()" (closeDialog)="closeEnrollmentDialog()"></app-enroll>
+    </div> -->
 
     <div *ngIf="!isLoggedIn" >
       <!-- Please login to enroll to this course -->
@@ -23,6 +26,7 @@
     </div>
 
 
+    
     <!-- lesson and quizzes -->
     <div *ngIf="isEnrolled(course.id)">
           <h2>Lessons</h2>
@@ -30,8 +34,9 @@
           <div *ngFor="let lesson of lessons" class="lesson-card" (click)="viewLesson(lesson.id)">
             <div class="lesson-details">
               <h2 class="lesson-title">{{ lesson.title }}</h2>
-              <span class="lesson-duration">{{ lesson.duration }}</span>
+              <span class="lesson-duration">{{ lesson.duration }} min</span>
             </div>
+              <p-checkbox (click)="checked(); $event.stopPropagation()" [binary]="true"/>
             <!-- <label><input type="checkbox" [(ngModel)]="lesson.completion" (change)="checkCourseCompletion()">Completed></label> -->
       </div>
       <!-- <p *ngIf="courseCompleted">Course Completed!</p -->
@@ -55,26 +60,39 @@
       <div *ngFor="let review of reviews" class="review-card">
         <p>{{ review.comment }}</p>
         <span class="review-author">By: {{ review.user.name }}</span>
-        <span class="review-rating">Rating: {{ review.rating }}</span>
+        <!-- <span class="review-rating">Rating: {{ review.rating }}</span> -->
+        <div class="card flex justify-center">
+          <p-rating [(ngModel)]="review.rating" [readonly]="true" />
+        </div>
 
         <div *ngIf="isReviewUserSame(review.user.id)">
           <button (click)="deleteReview(review.id)" pInputText class="delete-review-button">Delete</button>
-          <button (click)="showUpdateReview = !showUpdateReview" (click)="editReview(review)" pInputText class="edit-review-button">Edit</button>
-          <div *ngIf="editingReviewId === review.id" class="update-review-form">
-              <app-update-review [review]="selectedReview" (reviewUpdated)="loadReviewsByCourseId(selectedCourseId)" (cancel)="CancelUpdateReview()"></app-update-review>
-          </div>
+          <button (click)="updateReviewDialog(review)" pInputText class="edit-review-button">Edit</button>
+
+          <p-dialog header="Update Review" [(visible)]="displayUpdateReviewDialog" [modal]="true">
+            <app-update-review [review]="selectedReview" (reviewUpdated)="refreshReviews()"></app-update-review>
+          </p-dialog>
+          <!-- 
+          <div *ngIf="review" class="update-review-form">
+            <app-update-review [review]="selectedReview" (reviewUpdated)="refreshReviews()" (cancel)="CancelUpdateReview()"></app-update-review>
+          </div> -->
         </div>
 
     </div>
 
 
-
     <!-- add a review -->
     <div *ngIf="isEnrolled(course.id)">
-      <ng-container add-form>
-        <app-add-review [courseId]="selectedCourseId" (reviewAdded)="refresh()"></app-add-review>
-      </ng-container>   
+      <!-- <ng-container add-form>
+        <app-add-review [courseId]="selectedCourseId" (reviewAdded)="refreshReviews()"></app-add-review>
+      </ng-container>   -->
+      <button (click)="addReviewDialog()" pButton>Add a review</button>
+      <p-dialog header="Add Review" [(visible)]="displayAddReviewDialog" [modal]="true">
+        <app-add-review [courseId]="selectedCourseId" (reviewAdded)="refreshReviews()"></app-add-review>
+      </p-dialog>
+      
     </div>
+
 
 </div>
 

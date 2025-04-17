@@ -9,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   templateUrl: './quiz-list.component.html',
   styleUrl: './quiz-list.component.css'
 })
+
 export class QuizListComponent implements OnInit {
   quizzes: any[] = [];
   quizForm: FormGroup;
@@ -28,7 +29,7 @@ export class QuizListComponent implements OnInit {
   loadQuizzes(): void {
     this.homeService.getAllQuizzes().subscribe((data:any) => {
       this.quizzes = data;
-      this.quizzes= this.quizzes.filter(quiz=>!quiz.deleted)
+      this.quizzes= this.quizzes.filter(quiz=>!quiz.deleted).filter(quiz=>quiz.course.creator.id==this.userId)
     });
   }
 

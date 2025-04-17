@@ -8,7 +8,7 @@ export class AdminController{
 
     async updateRole(req: Request, res: Response) {
         const { email, newRole } = req.body;
-        console.log({email, newRole})
+        // console.log({email, newRole})
         try {
             const updatedUser = await adminService.updateUserRole(email, newRole);
             res.status(200).json({ message: "User role updated successfully!", data: updatedUser });
@@ -21,7 +21,7 @@ export class AdminController{
 
     async registerAdmin(req: Request, res: Response): Promise<void> {
         const { name, email, password, secretKey } = req.body;
-        console.log({ name, email, password, secretKey });
+        // console.log({ name, email, password, secretKey });
     
         if (!email || !password || !secretKey) {
             res.status(400).json({ message: 'Name, email, password, and secret key are required' });

@@ -1,12 +1,5 @@
-<!-- <div *ngIf="report" class="report-container">
-  <h2>Progress Report</h2>
-  <p>Score: {{ report.score }}%</p>
-  <p>Correct Answers: {{ report.correctAnswers }}</p>
-  <p>Total Questions: {{ report.totalQuestions }}</p>
-</div> -->
-
 <h3>Your Quiz Progress</h3>
-<table>
+<p-table>
   <tr>
     <th>Quiz Title</th>
     <th>Score</th>
@@ -19,6 +12,6 @@
     <td>{{ progress.total }}</td>
     <td>{{ progress.completion | date : "short" }}</td>
   </tr>
-</table>
+</p-table>
 
 <button (click)="downloadReport()" pInputText>Downlaod Report</button>

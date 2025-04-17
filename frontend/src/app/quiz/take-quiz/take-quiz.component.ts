@@ -23,6 +23,7 @@ export class TakeQuizComponent implements OnInit {
   
     ngOnInit(): void {
       const id = Number(this.route.snapshot.paramMap.get('id'));
+      
       this.homeService.getQuizById(id).subscribe((data: any) => {
         this.quiz = data.data;
         this.initializeForm();

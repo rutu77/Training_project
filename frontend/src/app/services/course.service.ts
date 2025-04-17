@@ -18,10 +18,15 @@ export class CourseService {
     return this.http.get(`${this.api}/course/${id}`);
   }
   
-  getCourses(query:string=''){
-    const url= query? `${this.api}/search?search=${encodeURIComponent(query)}`: `${this.api}/course/`
-    return this.http.get(url);
+  // getCourses(query:string=''){
+  //   const url= query? `${this.api}/search?search=${encodeURIComponent(query)}`: `${this.api}/course/`
+  //   return this.http.get(url);
+  // }
+
+  getCourses(){
+    return this.http.get(`${this.api}/course/`)
   }
+
 
   //Course managment by teacher/admin
   addCourse(course:FormData){
@@ -29,8 +34,6 @@ export class CourseService {
   }
 
   updateCourse(id:number,course:FormData){
-    // console.log('Course ID:', course.id); 
-    // console.log('Course Data:', course); 
     return this.http.put(`${this.api}/course/${id}`, course)
   }
 
@@ -62,17 +65,31 @@ export class CourseService {
     return this.http.put(`${this.api}/lesson/${id}`,{deleted:true})
   }
 
-  restore(id:number){
-    return this.http.put(`${this.api}/lesson/${id}`,{deleted:false})
-  }
-
   getLessonByCourseId(courseId:number){
     return this.http.get(`${this.api}/lesson/course/${courseId}`)
   }
 
+
+
   getReviewsByCourseId(courseId:number){
     return this.http.get(`${this.api}/review/course/${courseId}`)
   }
+
+  
+  // private reviewsSubject = new BehaviorSubject<any[]>([]);
+  // reviews$ = this.reviewsSubject.asObservable();
+
+  // reviews: any[] = [];
+  // getReviewsByCourseId(courseId: number) {
+  //   return this.http
+  //     .get(`${this.api}/review/course/${courseId}`)
+  //     .subscribe((res: any) => {
+  //       this.reviews = res.data.filter((review: any) => !review.deleted);
+  //       this.reviewsSubject.next(this.reviews);
+  //       console.log(this.reviews);
+  //     });
+  //   // return this.reviews$;
+  // }
 
   getDiscussionByCourseId(courseId:number){
     return this.http.get(`${this.api}/comment/course/${courseId}`)

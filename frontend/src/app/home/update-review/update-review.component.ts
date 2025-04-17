@@ -12,49 +12,36 @@ import Swal from 'sweetalert2';
 })
 export class UpdateReviewComponent{
 
-    @Input() review!: Review;
-    @Output() reviewUpdated = new EventEmitter<void>();
-    @Output() cancel= new EventEmitter<void>();
+  @Input() review!: Review;
+  @Output() reviewUpdated = new EventEmitter<void>();
 
-    userId= Number(localStorage.getItem("userId"));
-  
-    reviewEditForm = new FormGroup({
-      rating: new FormControl( ),
-      comment: new FormControl('', Validators.required),
-    });
-  
-    constructor(private homeService: HomeService) {}
-  
-    ngOnChanges() {
-      if (this.review) {
-        this.reviewEditForm.patchValue({
-          rating: this.review.rating,
-          comment: this.review.comment,
-        });
-      }
+  userId= Number(localStorage.getItem("userId"));
+
+  reviewEditForm = new FormGroup({
+    rating: new FormControl(),
+    comment: new FormControl(''),
+  });
+
+  constructor(private homeService: HomeService) {}
+
+  ngOnChanges() {
+    if (this.review) {
+      this.reviewEditForm.patchValue({
+        rating: this.review.rating,
+        comment: this.review.comment,
+      });
     }
-  
-    updateReview() {
-      if (this.reviewEditForm.invalid) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Invalid Input',
-          text: 'Please provide valid rating and comment!',
-        });
-        return;
-      }
+  }
 
-  
+  updateReview() {
+    if (this.reviewEditForm.valid){
       const reviewData = {
-        // userId: this.userId,
-        // courseId: this.review.course.id,
         rating: this.reviewEditForm.value.rating,
         comment: this.reviewEditForm.value.comment?? '',
       };
 
-
       this.homeService.updateReview(this.review.id, reviewData).subscribe(
-        (res: any) => {
+        () => {
           Swal.fire({
             icon: 'success',
             title: 'Updated',
@@ -72,9 +59,6 @@ export class UpdateReviewComponent{
         }
       );
     }
-
-    onCancel() {
-      this.cancel.emit();
-    }
   }
+}
   

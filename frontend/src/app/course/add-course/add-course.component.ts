@@ -15,6 +15,7 @@ export class AddCourseComponent implements OnInit{
   userId= Number(localStorage.getItem('userId'));
 
   @Output() courseAdded= new EventEmitter<void>()
+  
   selectedFile:File|null=null;
   
   constructor(private _course:CourseService){}
@@ -71,14 +72,15 @@ export class AddCourseComponent implements OnInit{
             title: "Oops...",
             text: error.error.message || "Something went wrong!",
           });
+          this.courseAdded.emit()
         }
       )
       }
     }
 
-    onCancel(){
-      this.courseForm.reset();
-    }
+    // onCancel(){
+    //   this.courseForm.reset();
+    // }
   }
 
 

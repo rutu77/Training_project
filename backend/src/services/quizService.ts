@@ -8,10 +8,9 @@ import { quizRepository } from "../repositories/quizRepository";
 
 export class QuizService {
   async createQuiz(quizData: { courseId: number; title: string , userId:number}) {
-    const course = (await courseRepository.findOne({
-      where: { id: quizData.courseId },
-    })) as Course;
+    const course = await courseRepository.findOne({where: { id: quizData.courseId },}) as Course;
     if (!course) throw new Error("Course not found!");
+
     if(course.creator.id==quizData.userId){
       const quiz = quizRepository.create({ ...quizData, course: course });
       return await quizRepository.save(quiz);
@@ -22,11 +21,8 @@ export class QuizService {
   }
 
   async getQuizById(id: number) {
-    const quiz = await quizRepository.findOne({
-      where: { id: id },
-      relations: ["course", "questions"],
-    });
-    // const quiz = await quizRepository.findOne({where:{id:id},});
+    const quiz = await quizRepository.findOne({where: { id: id },relations: ["course", "questions"],});
+    
     if (!quiz) throw new Error("Quiz not found!");
     return quiz;
   }
@@ -48,6 +44,7 @@ export class QuizService {
     return await quizRepository.find({ relations: ["course", "questions"] });
   }
 
+  
   async getQuizzesByCourse(courseId: number) {
     return await quizRepository.find({
       where: { course: { id: courseId } },
@@ -55,34 +52,24 @@ export class QuizService {
     });
   }
 
-  async addQuestionToQuiz(
-    id: number,
-    questionData: {
+
+  async addQuestionToQuiz(id: number,questionData: {
       question: string;
       options: string[];
       correctAnswer: string;
       explanation?: string;
-    }
-  ) {
-    const quiz = await quizRepository.findOne({
-      where: { id: id },
-      relations: ["course", "questions"],
-    });
+    }){
+
+    const quiz = await quizRepository.findOne({where: { id: id },relations: ["course", "questions"],});
     if (!quiz) throw new Error("Quiz not found!");
 
     const question = QuestionRepository.create({ ...questionData, quiz });
     return await QuestionRepository.save(question);
   }
 
-  async submitQuiz(
-    quizId: number,
-    userId: number,
-    answers: any
-  ): Promise<Progress> {
-    const quiz = await quizRepository.findOne({
-      where: { id: quizId },
-      relations: ["questions"],
-    });
+
+  async submitQuiz(quizId: number,userId: number,answers: any){
+    const quiz = await quizRepository.findOne({where: { id: quizId },relations: ["questions"],});
     if (!quiz) throw new Error("Quiz not found!");
 
     let correctAnswers = 0;
@@ -93,14 +80,8 @@ export class QuizService {
     });
 
     const score = (correctAnswers / quiz.questions.length) * 100;
-    const progress = progressRepository.create({
-      user: { id: userId },
-      quiz,
-      score,
-      total: quiz.questions.length,
-      completion: new Date(),
-    });
 
+    const progress = progressRepository.create({user: { id: userId },quiz,score,total: quiz.questions.length,completion: new Date(),});
     return await progressRepository.save(progress);
   }
 }

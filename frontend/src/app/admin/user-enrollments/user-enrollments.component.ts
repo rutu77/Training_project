@@ -10,6 +10,8 @@ import { HomeService } from '../../services/home.service';
 })
 export class UserEnrollmentsComponent {
   enrollments:Enrollment[]=[]
+  filterEnrolls:Enrollment[]=[]
+  searchText:string=''
 
   constructor(private homeService:HomeService){}
 
@@ -21,7 +23,17 @@ export class UserEnrollmentsComponent {
     this.homeService.getEnrollments().subscribe((data:any)=>{
       this.enrollments= data
       this.enrollments=this.enrollments.filter(enroll=>!enroll.deleted)
+      this.filterEnrolls=[...this.enrollments]
     })
+  }
+
+  filterEnrollments(): void {
+    this.filterEnrolls = this.enrollments.filter(enroll =>
+      enroll.user.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      enroll.course.title.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      enroll.user.id.toString().includes(this.searchText.toLowerCase())||
+      enroll.course.title.toLowerCase().includes(this.searchText.toLowerCase())
+    );
   }
 
 }

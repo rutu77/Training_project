@@ -18,6 +18,7 @@ export class LessonlistComponent implements OnInit {
   enrollments: Enrollment[] = [];
 
   displayUpdateDialog = false;
+  displayAddDialog=false;
   selectedLessonId!: number;
 
   constructor(
@@ -58,17 +59,15 @@ export class LessonlistComponent implements OnInit {
       this.lessons = this.lessons
       .filter((lesson) => !lesson.deleted)
       .filter((lesson)=>lesson.course.creator.id===this.userId);
-
-      console.log(this.lessons);
     });
   }
 
-  getLessonByCourseId(courseId: number) {
-    const lessonData = this.lessons.filter(
-      (lesson) => lesson.course.id === courseId
-    );
-    return lessonData;
-  }
+  // getLessonByCourseId(courseId: number) {
+  //   const lessonData = this.lessons.filter(
+  //     (lesson) => lesson.course.id === courseId
+  //   );
+  //   return lessonData;
+  // }
 
   isEnrolled(courseId: number): boolean {
     const enroll = this.enrollments.some(
@@ -81,11 +80,16 @@ export class LessonlistComponent implements OnInit {
   refresh() {
     this.loadLessons();
     this.displayUpdateDialog = false;
+    this.displayAddDialog= false
   }
 
   onOpenUpdate(id: number) {
     this.selectedLessonId = id;
     this.displayUpdateDialog = true;
+  }
+
+  onOpenAdd(){
+    this.displayAddDialog= true
   }
 
   deleteLesson(lessonId: any) {
@@ -100,6 +104,7 @@ export class LessonlistComponent implements OnInit {
           text: 'An error occurred while deleting the lesson.',
           icon: 'error',
         });
+
       }
     );
   }

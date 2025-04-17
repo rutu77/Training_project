@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
 import { HomeService } from '../../services/home.service';
 import { User } from '../../models/model';
-import { captureRejectionSymbol } from 'events';
-
 
 @Component({
   selector: 'app-profile',
@@ -14,8 +11,6 @@ import { captureRejectionSymbol } from 'events';
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
-
-
 
 export class ProfileComponent implements OnInit{
 
@@ -69,8 +64,6 @@ export class ProfileComponent implements OnInit{
     }
 
     const updatedUser = this.getUpdatedValues(this.updateUserForm.value);
-    
-
   
     const formData = new FormData();
 

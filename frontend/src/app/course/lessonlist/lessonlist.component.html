@@ -1,24 +1,42 @@
-<app-generic-list 
+<app-generic-list
   [items]="lessons"
-  [itemFields]="['id','title','videoUrl','duration','course.title', 'course.id']"
-  [itemLabels]="['Id','Title','Video URL','Duration','Course Title','Course Id']"
-  (addItem)="refresh()"
+  [itemFields]="[
+    'id',
+    'title',
+    'videoUrl',
+    'duration',
+    'course.title',
+    'course.id'
+  ]"
+  [itemLabels]="[
+    'Id',
+    'Title',
+    'Video URL',
+    'Duration',
+    'Course Title',
+    'Course Id'
+  ]"
+  (addItem)="onOpenAdd()"
   (updateItem)="onOpenUpdate($event)"
   (deleteItem)="deleteLesson($event)"
 >
-
-
-
+  <!-- 
   <ng-container add-form>
     <app-addlessons (lessonAdded)="refresh()"></app-addlessons>
-  </ng-container>
-  
-
+  </ng-container> -->
 </app-generic-list>
 
-
-<p-dialog header="Update Item" [(visible)]="displayUpdateDialog" [modal]="true">
-  <app-updatelesson [lessonId]="selectedLessonId" (lessonUpdated)="refresh()"></app-updatelesson>
+<p-dialog header="Add Lesson" [(visible)]="displayAddDialog" [modal]="true">
+  <app-addlessons (lessonAdded)="refresh()"></app-addlessons>
 </p-dialog>
 
-
+<p-dialog
+  header="Update Lesson"
+  [(visible)]="displayUpdateDialog"
+  [modal]="true"
+>
+  <app-updatelesson
+    [lessonId]="selectedLessonId"
+    (lessonUpdated)="refresh()"
+  ></app-updatelesson>
+</p-dialog>

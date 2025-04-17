@@ -21,10 +21,8 @@ export class CourseService{
     async updateCourse(id:number, data:Partial<Course>){
         // console.log(data);
         data = {...data,id:undefined}
-        await courseRepository.update({
-            id:+id
-        },
-        {...data})
+        await courseRepository.update({id:+id},{...data})
+        
         const updateCourse= await courseRepository.findOne({where:{id:+id}})
         if(!updateCourse) throw new Error("Course not found")
         return updateCourse
@@ -44,10 +42,10 @@ export class CourseService{
         return await courseRepository.find()
     }
 
-    async searchCourses(search:string){
-        return await courseRepository.createQueryBuilder('course')
-        .where('course.title LIKE :search OR course.description LIKE :search',{search:`%${search}`})
-        .getMany()
-    }
+    // async searchCourses(search:string){
+    //     return await courseRepository.createQueryBuilder('course')
+    //     .where('course.title LIKE :search OR course.description LIKE :search',{search:`%${search}`})
+    //     .getMany()
+    // }
 
 }

@@ -50,14 +50,12 @@ export class AddlessonsComponent {
             title: "Oops...",
             text: error.error.message || "Something went wrong!",
           });
+          this.lessonAdded.emit();
         }
       )
       }
     }
 
-    onCancel(){
-      this.lessonForm.reset();
-    }
   }
 
 

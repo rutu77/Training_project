@@ -7,11 +7,14 @@
 
 
     <label for="rating">Rating:</label>
-    <div class="rating-options">
+    <div class="card flex justify-center">
+      <p-rating formControlName="rating" />
+    </div>
+    <!-- <div class="rating-options">
       <label *ngFor="let rating of [1, 2, 3, 4, 5]">
         <input type="radio" formControlName="rating" [value]="rating"> {{ rating }}
       </label>
-    </div>
+    </div> -->
     
     <button pButton type="submit" label="Add"></button>
 </form>

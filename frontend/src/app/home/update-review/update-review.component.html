@@ -1,11 +1,13 @@
 <div *ngIf="review">
     <form [formGroup]="reviewEditForm" (ngSubmit)="updateReview()">
       <label for="rating">Rating:</label>
-      <input id="rating" formControlName="rating" type="number" min="1" max="5">
+      <!-- <input id="rating" formControlName="rating" type="number" min="1" max="5"> -->
+      <div class="card flex justify-center">
+            <p-rating formControlName="rating" />
+      </div>
       <label for="comment">Comment:</label>
       <textarea id="comment" formControlName="comment"></textarea>
       <button type="submit" [disabled]="reviewEditForm.invalid">Update Review</button>
-      <button pButton type="button" label="Cancel" (click)="onCancel()"></button>
-      </form>
-  </div>
+    </form>
+</div>
   

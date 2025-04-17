@@ -1,191 +1,197 @@
 import { Component, OnInit } from '@angular/core';
-import {Course, Enrollment, Lesson, Review, Quiz, User } from '../../models/model';
+import {Course,Enrollment,Lesson,Review,Quiz,User,} from '../../models/model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
 import { HomeService } from '../../services/home.service';
 import { AuthService } from '../../services/auth.service';
-import { FormControl, FormGroup } from '@angular/forms';
-import { title } from 'process';
 import Swal from 'sweetalert2';
-
 
 @Component({
   selector: 'app-coursedetails',
   standalone: false,
   templateUrl: './coursedetails.component.html',
-  styleUrl: './coursedetails.component.css'
+  styleUrl: './coursedetails.component.css',
 })
-export class CoursedetailsComponent implements OnInit{
 
-    course: Course | undefined;
-    userId= Number(localStorage.getItem("userId"))
-    enrollments:Enrollment[]=[]
-    lessons:Lesson[]=[]
-    reviews:Review[]=[]
-    quizzes:any[]=[]
-    isAdmin: boolean= false;;
-    isTeacher: boolean=false ;
-    displayUpdateDialog=false
-    isLoggedIn:boolean=false
-    reviewId!:number
-    showUpdateReview=false
-    displayUpdateEnrollDialog=false
-    showEnrollDialog=false
-    // showQuiz=false
-    courseId!:number
+export class CoursedetailsComponent implements OnInit {
+  course: Course | undefined;
+  userId = Number(localStorage.getItem('userId'));
+  enrollments: Enrollment[] = [];
+  lessons: Lesson[] = [];
+  reviews: Review[] = [];
+  quizzes: any[] = [];
+  isAdmin: boolean = false;
+  isTeacher: boolean = false;
+  isLoggedIn: boolean = false;
+  reviewId!: number;
+  showUpdateReview = false;
+  displayUpdateReviewDialog = false;
+  displayAddReviewDialog = false;
+  showEnrollDialog = false;
+  // showQuiz=false
+  courseId!: number;
 
-    editingReviewId:number |null= null
-    selectedCourseId!:number
-    selectedReview!: Review;
-    selectedCourse!:Course
-  
+  selectedCourseId!:number
+  selectedReview!: Review;
+  selectedCourse!: Course;
 
-    constructor(
-      private route: ActivatedRoute,
-      private courseService: CourseService,
-      private homeService:HomeService,
-      private router: Router,
-      private _auth:AuthService
-    ){
-      this._auth.$role.subscribe(role=>this.isTeacher=role==='teacher')
-      this._auth.$role.subscribe(role=>this.isAdmin=role==='admin')
-      this._auth.$authState.subscribe(loggedIn=>this.isLoggedIn=loggedIn)
+  constructor(
+    private route: ActivatedRoute,
+    public courseService: CourseService,
+    private homeService: HomeService,
+    private router: Router,
+    private _auth: AuthService
+  ) {
+    this._auth.$role.subscribe((role) => (this.isTeacher = role === 'teacher'));
+    this._auth.$role.subscribe((role) => (this.isAdmin = role === 'admin'));
+    this._auth.$authState.subscribe((loggedIn) => (this.isLoggedIn = loggedIn));
+  }
+
+  ngOnInit(): void {
+    const courseId = this.route.snapshot.paramMap.get('id');
+
+    if (courseId) {
+      this.courseId = +courseId;
+      this.loadCourseById(+courseId);
+      this.loadLessonsByCourseId(+courseId);
+      this.loadQuizzes(+courseId);
+      this.loadReviewsByCourseId(+courseId);
+
+      this.selectedCourseId = +courseId;
     }
-  
 
-    ngOnInit(): void {
-      const courseId = this.route.snapshot.paramMap.get('id');
-      
-      if (courseId) {
-        this.courseId= +courseId
-        this.loadCourseById(+courseId);
-        this.loadLessonsByCourseId(+courseId);
-        this.loadReviewsByCourseId(+courseId);
-        this.loadQuizzes(+courseId);
-       
-        this.selectedCourseId= +courseId;
-      }
+    // this.courseService.reviews$.subscribe((data) => {
+    //   this.reviews = data;
+    //   // console.log(data);
+    // });
 
-      this.loadEnrollments();
+    this.loadEnrollments();
   }
 
   loadCourseById(courseId: number) {
-    this.courseService.getCourseById(+courseId).subscribe((res:any) => {
+    this.courseService.getCourseById(courseId).subscribe((res: any) => {
       this.course = res.data;
     });
   }
 
-
   //lessons
-  loadLessonsByCourseId(courseId: number){
+  loadLessonsByCourseId(courseId: number) {
     this.courseService.getLessonByCourseId(+courseId).subscribe((res: any) => {
       this.lessons = res.data;
-      this.lessons= this.lessons.filter(lesson=>!lesson.deleted)
-  })
+      this.lessons = this.lessons.filter((lesson) => !lesson.deleted);
+    });
   }
 
-  viewLesson(lessonId:number){
+  viewLesson(lessonId: number) {
     this.router.navigate([`course/lesson/${lessonId}`]);
   }
 
+  count:number=0
+  checked(){
+    this.count= this.count+1
+    // console.log(this.count);
+  }
+  
 
   //Quiz
-  TakeQuiz(quizId:number){
-    this.router.navigate([`quiz/takeQuiz/${quizId}`])
+  TakeQuiz(quizId: number) {
+    this.router.navigate([`quiz/takeQuiz/${quizId}`]);
   }
 
-  loadQuizzes(courseId:number){
-    this.homeService.getQuizByCourse(courseId).subscribe((data:any)=>{
-      this.quizzes= data;
-      this.quizzes= this.quizzes.filter(quiz=>!quiz.deleted)     
-    })
+  loadQuizzes(courseId: number) {
+    this.homeService.getQuizByCourse(courseId).subscribe((data: any) => {
+      this.quizzes = data;
+      this.quizzes = this.quizzes.filter((quiz) => !quiz.deleted);
+    });
   }
-
-
 
   //Enrollments
-  loadEnrollments(){
-    this.homeService.getEnrollments().subscribe((data:any) => {
+  loadEnrollments() {
+    this.homeService.getEnrollments().subscribe((data: any) => {
       this.enrollments = data;
-      this.enrollments= this.enrollments.filter(enroll=>!enroll.deleted)
+      this.enrollments = this.enrollments.filter((enroll) => !enroll.deleted);
     });
   }
 
   isEnrolled(courseId: number): boolean {
-    const enroll = this.enrollments.some(enrollment => enrollment.user.id === this.userId && enrollment.course.id === courseId);
+    const enroll = this.enrollments.some(
+      (enrollment) =>
+        enrollment.user.id === this.userId && enrollment.course.id === courseId
+    );
     return enroll;
   }
 
-  openEnrollmentDialog(course:Course){
-    this.selectedCourse=course
-    this.showEnrollDialog=true
+  openEnrollmentDialog(course: Course) {
+    this.selectedCourse = course;
+    this.showEnrollDialog = true;
   }
 
-  closeEnrollmentDialog(){
-    this.showEnrollDialog=false
+  closeEnrollmentDialog() {
+    this.showEnrollDialog = false;
   }
 
-  refreshEnrollments(){
-    this.loadEnrollments()
-    this.displayUpdateEnrollDialog=false
+  refreshEnrollments() {
+    this.showEnrollDialog = false;
+    this.loadEnrollments();
   }
 
-  enroll(){
-    this.router.navigate(['home/enrollment'])
+  enroll() {
+    this.router.navigate(['home/enrollment']);
   }
 
-  
 
 
   //reviews
-  loadReviewsByCourseId(courseId:number){
-    this.courseService.getReviewsByCourseId(+courseId).subscribe((data:any) => {
-      this.reviews=data.data;
-      this.reviews= this.reviews.filter(review=>!review.deleted)
-    });
-    this.showUpdateReview=false
-  }
-
-  refresh(){
-    this.displayUpdateDialog=false
-    this.loadReviewsByCourseId(this.selectedCourseId)
-  }
-
-  CancelUpdateReview(){
-    this.showUpdateReview=false
-    this.editingReviewId = null;
+  loadReviewsByCourseId(courseId:number) {
+    // this.courseService.getReviewsByCourseId(this.courseId)
+    this.courseService.getReviewsByCourseId(courseId).subscribe((data:any)=>{
+      this.reviews=data.data.filter((review:any)=>!review.deleted)
+      // console.log(this.reviews);
+      //this.loadCourseById(courseId)
+      
+    })
   }
 
   //user logged in can delete and edit his own reviews
-  isReviewUserSame(reviewId:number):boolean{
+  isReviewUserSame(reviewId: number): boolean {
     return this.userId === reviewId;
   }
 
-  
-  editReview(review: Review) {
+  updateReviewDialog(review: Review) {
     this.selectedReview = review;
-    this.editingReviewId = review.id;
+    this.displayUpdateReviewDialog = true;
   }
 
+  refreshReviews() {
+    this.loadReviewsByCourseId(this.courseId);
+    this.displayUpdateReviewDialog = false;
+    this.displayAddReviewDialog = false;
+  }
 
-  deleteReview(reviewId:number){
+  addReviewDialog() {
+    this.displayAddReviewDialog = true;
+  }
+
+  deleteReview(reviewId: number) {
     this.homeService.deleteReview(reviewId).subscribe(
       () => {
+        this.loadReviewsByCourseId(this.courseId);
+        this.loadCourseById(this.courseId)
         Swal.fire({
           icon: 'success',
           title: 'Deleted',
           text: 'Review deleted successfully!',
-        })
-        this.loadReviewsByCourseId(this.selectedCourseId)
+        });
+
       },
-      (error:any) => {
+      (error: any) => {
         console.error('Error deleting review:', error);
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: 'Failed to delete review!',
-        })
+        });
       }
-    )}
+    );
+  }
 }
-  

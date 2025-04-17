@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
   templateUrl: './updatelesson.component.html',
   styleUrl: './updatelesson.component.css'
 })
+
 export class UpdatelessonComponent implements OnInit{
 
   @Input() lessonId!: number ;
@@ -29,56 +30,61 @@ export class UpdatelessonComponent implements OnInit{
       duration: new FormControl(''),
     })
 
-    this.loadlessonData()
+  }
 
+  ngOnChanges(){
+    this.loadlessonData()
   }
 
   loadlessonData(){
-    this._course.getLessonById(this.lessonId).subscribe((data:any)=>{
-      this.updateLessonForm.patchValue({
-        title: data.title,
-        videoUrl: data.videoUrl,
-        duration: data.duration,
-      });
-    })
+    if(this.lessonId){
+      this._course.getLessonById(this.lessonId).subscribe((res:any)=>{      
+        this.updateLessonForm.patchValue({
+          title: res.data.title,
+          videoUrl: res.data.videoUrl,
+          duration: res.data.duration,
+        });
+      })
+    }
   }
 
-  onSubmit() {
 
-      if (this.updateLessonForm.invalid) return;
+  onSubmit(){
+    if (this.updateLessonForm.invalid) return;
+  
+    // const updatedLesson= this.getUpdatedValues(this.updateLessonForm.value);
+
     
-      const updatedLesson= this.getUpdatedValues(this.updateLessonForm.value);
-
-      
-      this._course.updateLesson(this.lessonId, updatedLesson).subscribe(
-        () => {
-          Swal.fire({
-            title: 'Lesson Updated',
-            text: 'The lesson has been updated successfully!',
-            icon: 'success',
-          });
-          this.lessonUpdated.emit();
-        },
-        (error: any) => {
-          console.error('Error updating lesson:', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to update the lesson.'
-          });
-        }
-      );
-    }
-
-    private getUpdatedValues(formValues:any):any{
-      const updatedValues:any={};
-      for(const key in formValues){
-        if(formValues[key]!==''){
-          updatedValues[key]= formValues[key]
-        }
+    this._course.updateLesson(this.lessonId, this.updateLessonForm.value).subscribe(
+      () => {
+        Swal.fire({
+          title: 'Lesson Updated',
+          text: 'The lesson has been updated successfully!',
+          icon: 'success',
+        });
+        this.lessonUpdated.emit();
+      },
+      (error: any) => {
+        console.error('Error updating lesson:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to update the lesson.'
+        });
+        this.lessonUpdated.emit();
       }
-      return updatedValues;
-    }
+    );
+  }
+
+    // private getUpdatedValues(formValues:any):any{
+    //   const updatedValues:any={};
+    //   for(const key in formValues){
+    //     if(formValues[key]!==''){
+    //       updatedValues[key]= formValues[key]
+    //     }
+    //   }
+    //   return updatedValues;
+    // }
 
 }
 

@@ -2,9 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { Course } from '../../models/model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { error } from 'console';
 
 @Component({
   selector: 'app-update-course',
@@ -12,6 +9,7 @@ import { error } from 'console';
   templateUrl: './update-course.component.html',
   styleUrl: './update-course.component.css'
 })
+
 export class UpdateCourseComponent implements OnInit{
 
   @Input() courseId!:number;
@@ -31,58 +29,50 @@ export class UpdateCourseComponent implements OnInit{
       duration: new FormControl(''),
     })
 
+  }
+
+  ngOnChanges(){
     this.loadCourseData()
   }
 
-
   loadCourseData(){
-    this._course.getCourseById(this.courseId).subscribe((data:any)=>{
-      this.updateCourseForm.patchValue({
-        title: data.title,
-        description: data.description,
-        price: data.price, 
-        level: data.level,
-        duration: data.duration,
-      });
-    })
+    if(this.courseId){
+      this._course.getCourseById(this.courseId).subscribe((res:any)=>{
+        this.updateCourseForm.patchValue({
+          title: res.data.title,
+          description: res.data.description,
+          price: res.data.price, 
+          level: res.data.level,
+          duration: res.data.duration,
+        });
+      })
+    }
   }
 
   onSubmit() {
+    if (this.updateCourseForm.invalid) return;
+    
+    this._course.updateCourse(this.courseId, this.updateCourseForm.value).subscribe(
+      () => {
+        Swal.fire({
+          title: 'Course Updated',
+          text: 'The course has been updated successfully!',
+          icon: 'success',
+        });
+      this.courseUpdated.emit();
 
-      if (this.updateCourseForm.invalid) return;
-    
-      const updatedCourse = this.getUpdatedValues(this.updateCourseForm.value)
-    
-      this._course.updateCourse(this.courseId, updatedCourse).subscribe(
-        () => {
-          Swal.fire({
-            title: 'Course Updated',
-            text: 'The course has been updated successfully!',
-            icon: 'success',
-          });
+      },
+      (error: any) => {
+        console.error('Error updating course:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to update the course.'
+        });
         this.courseUpdated.emit();
-
-        },
-        (error: any) => {
-          console.error('Error updating course:', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to update the course.'
-          });
-        }
-      );
-    }
-
-    private getUpdatedValues(formValues:any):any{
-      const updatedValues:any={};
-      for(const key in formValues){
-        if(formValues[key]!==''){
-          updatedValues[key]= formValues[key]
-        }
       }
-      return updatedValues;
-    }
+    );
+  }
 }
 
 

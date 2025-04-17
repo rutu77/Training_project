@@ -39,6 +39,7 @@ export class CourseListComponent implements OnInit {
     this.courseService.query$.subscribe(query=>{
       this.filterCourses(query);
     })
+
   }
 
   loadCourses(){
@@ -64,12 +65,9 @@ export class CourseListComponent implements OnInit {
     });
   }
 
-  getReview(courseId: number){
-    const review= this.reviews.find(review=>review.course.id===courseId)
-    // this.rating= review?.rating
-  }
 
-  
+
+  //get average ratings
   calculateMeanRatings(): void {
     this.courses.forEach(course => {
       const courseReviews = this.reviews.filter(review => review.course.id === course.id);
@@ -85,19 +83,20 @@ export class CourseListComponent implements OnInit {
 
   viewCourse(courseId: number): void {
     this.router.navigate([`home/course/${courseId}`]);
-    // console.log(courseId);
-    
   }
+  
 
-  enroll(): void {
-    this.router.navigate(['home/enrollment']);
-  }
+  // enroll(): void {
+  //   this.router.navigate(['home/enrollment']);
+  // }
 
   isEnrolled(courseId: number): boolean {
     const enroll = this.enrollments.some(enrollment => enrollment.user.id === this.userId && enrollment.course.id === courseId);
     return enroll;
   }
 
+
+  //search
   filterCourses(query:string){
     if(!query){
       this.filteredCourses= this.courses

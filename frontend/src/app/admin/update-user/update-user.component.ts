@@ -29,15 +29,17 @@ export class UpdateUserComponent implements OnInit{
     this.updateUserForm = new FormGroup({
       role: new FormControl(''),
     });
+  }
 
+  ngOnChanges(){
     this.loadUserData();
   }
 
   loadUserData() {
     if (this.userId) {
-      this.admin.getUserById(this.userId).subscribe((data: any) => {
+      this.admin.getUserById(this.userId).subscribe((res: any) => {
         this.updateUserForm.patchValue({
-          role: data.role,
+          role: res.data.role,
         });
       });
     }
@@ -46,9 +48,7 @@ export class UpdateUserComponent implements OnInit{
   onSubmit() {
     if (this.updateUserForm.invalid) return;
 
-    const updatedUser = this.getUpdatedValues(this.updateUserForm.value);
-
-    this.admin.updateUser(this.userId, updatedUser).subscribe(
+    this.admin.updateUser(this.userId, this.updateUserForm.value).subscribe(
       () => {
         Swal.fire({
           title: 'User Updated',
@@ -64,95 +64,9 @@ export class UpdateUserComponent implements OnInit{
           text: 'An error occurred while updating the user.',
           icon: 'error',
         });
+        this.userUpdated.emit();
       }
     );
   }
-
-
-  private getUpdatedValues(formValues: any): any {
-    const updatedValues: any = {};
-    for (const key in formValues) {
-      if (formValues[key] !== '') {
-        updatedValues[key] = formValues[key];
-      }
-    }
-    return updatedValues;
-  }
 }
 
-
-//   @Input() userId!:number;
-//   @Output() userUpdated = new EventEmitter<void>();
-//   @Output() cancel = new EventEmitter<void>();
-//   roles: any[] = [];
-
-//   updateUserForm!: FormGroup;
-
-//   constructor(private admin: AdminService) {}
-
-//   ngOnInit(): void {
-//     this.updateUserForm = new FormGroup({
-//       role: new FormControl(''),
-//     });
-
-//     this.roles = [
-//       { label: 'User', value: 'user' },
-//       { label: 'Teacher', value: 'teacher' },
-//       { label: 'Admin', value: 'admin' }
-//     ];
-
-//     this.loadUserData();
-//   }
-
-//   loadUserData() {
-//     console.log(this.userId);
-    
-//     if (this.userId) {
-//       this.admin.getUserById(this.userId).subscribe((data: any) => {
-//         this.updateUserForm.patchValue({
-//           role: data.role,
-//         });
-//       });
-//     }
-//   }
-
-//   onSubmit() {
-//     if (this.updateUserForm.invalid) return;
-
-//     const updatedUser = this.getUpdatedValues(this.updateUserForm.value);
-
-//     this.admin.updateUser(this.userId, updatedUser).subscribe(
-//       () => {
-//         Swal.fire({
-//           title: 'User Updated',
-//           text: 'The user has been updated successfully!',
-//           icon: 'success',
-//         });
-
-//         this.userUpdated.emit();
-//       },
-//       (error: any) => {
-//         console.error('Error updating user:', error);
-//         Swal.fire({
-//           title: 'Error',
-//           text: 'An error occurred while updating the user.',
-//           icon: 'error',
-//         });
-//       }
-//     );
-//   }
-
-//   onCancel() {
-//     this.cancel.emit();
-//   }
-
-//   private getUpdatedValues(formValues: any): any {
-//     const updatedValues: any = {};
-//     for (const key in formValues) {
-//       if (formValues[key] !== '') {
-//         updatedValues[key] = formValues[key];
-//       }
-//     }
-//     return updatedValues;
-//   }
-// }

@@ -60,4 +60,22 @@ export class EnrollmentController {
         res.status(500).json({ error: "Error fetching enrollments" });
       }
     }
-  }
+
+    async downloadEnrollReceipt(req:Request, res:Response){
+      try {
+        const userId = Number(req.params.id);
+        const courseId= Number(req.params.cid)
+        
+        const filePath:string = await enrollmentService.generateEnrollReceipt(courseId,userId);
+  
+        res.download(filePath, `Enrollment_Receipt_${userId}.pdf`, (err: Error) => {
+          if (err) {
+            res.status(500).json({ error: "Failed to download the receipt" });
+          }
+        });
+      } catch (error) {
+        res.status(404).json({ message: (error as Error).message });
+      }
+    }
+    
+}

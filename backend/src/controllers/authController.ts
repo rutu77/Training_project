@@ -1,4 +1,3 @@
-import { validateOrReject } from "class-validator";
 import { RegisterDto } from "../dto/registerdto";
 import { AuthService } from "../services/authService";
 import { Request, Response } from "express";
@@ -18,7 +17,6 @@ export class AuthController{
         // console.log(userData);
         
         try{
-       
             const result= await authService.registerUser(userData)
             if(result.error){
                 res.status(400).json({ message: result.error });

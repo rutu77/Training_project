@@ -1,11 +1,9 @@
 
 <div>
-  <ng-content select="[add-form]"></ng-content>
-
-
-  <br>
-  <br>
-  <br>
+  <!-- <ng-content select="[add-form]"></ng-content> -->
+  <div *ngIf="!isUser">
+    <button pButton type="button" label="Add" (click)="openAddDialog()"></button>
+  </div>
 
   <div class="search-bar">
     <input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterItems()"/>

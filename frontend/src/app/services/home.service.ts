@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AddCourse, AddReview, Course, Quiz, UpdateCourse, UpdateReview, User } from '../models/model';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +23,10 @@ export class HomeService {
     return this.http.post(`${this.api}/enrollment/`, { userId, courseId });
   }
 
-  // getEnrollmentById(id:number){
-  //   return this.http.get(`${this.api}/enroll/${id}`)
-  // }
-
-  // markAsCompleted(id:number){
-  //   return this.http.get(`${this.api}/enroll/status/${id}`)
-  // }
-
+  downloadEnrollmentReciept(userId:number,courseId:number){
+    return this.http.get(`${this.api}/enrollment/receipt/${userId}/${courseId}`, {responseType: 'blob' })
+  }
+  
 
   //User
   getUserById(id: number){
@@ -58,8 +54,7 @@ export class HomeService {
   updateReview(id:number, review:UpdateReview){
     return this.http.put(`${this.api}/review/${id}`, review)
   }
-
-
+  
 
   //Quizzes
   getAllQuizzes(){

@@ -74,18 +74,18 @@ export class CourseController{
         }
     }
 
-    async getSearchCourses(req:Request,res:Response){
-      try{
-        const search= req.query.search as string ;
-        if(!search){
-          res.status(400).json({error:"search query required"})
-          return;
-        }
-        const courses = await courseService.searchCourses(search);
-        res.status(200).json(courses)
-      }catch(error){
-        res.status(500).json({error:"Error searching courses" });
-      }
+    // async getSearchCourses(req:Request,res:Response){
+    //   try{
+    //     const search= req.query.search as string ;
+    //     if(!search){
+    //       res.status(400).json({error:"search query required"})
+    //       return;
+    //     }
+    //     const courses = await courseService.searchCourses(search);
+    //     res.status(200).json(courses)
+    //   }catch(error){
+    //     res.status(500).json({error:"Error searching courses" });
+    //   }
 
-    }
+    // }
 }

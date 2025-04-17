@@ -26,27 +26,15 @@ export class LessonService{
     }
 
     async getLessonsByCourseId(courseId: number) {
-
-
-        const lessons = await lessonRepository.find({
-          where: { course: { id: courseId } },
-          relations: ['course'],
-        });
+        const lessons = await lessonRepository.find({ where: { course: { id: courseId } },relations: ['course'],});
         if (lessons.length === 0) throw new Error("No lessons found for this course!");
         return lessons;
       }
       
 
-      async updateLesson(id: number, data:Partial<Lesson>) {
-        console.log(data);
-        
-        // const course = await courseRepository.findOne({ where: { id: data.course?.id } }) as Course;
-        // if (!course) throw new Error("Course not found!");
-    
-        // const updateddata = { ...data, course };
- 
+    async updateLesson(id: number, data:Partial<Lesson>) {
         await lessonRepository.update({ id: +id }, data);
-    
+
         const updatedLesson = await lessonRepository.findOne({ where: { id }, relations: ['course'] });
         if (!updatedLesson) throw new Error("Lesson not found!");
     

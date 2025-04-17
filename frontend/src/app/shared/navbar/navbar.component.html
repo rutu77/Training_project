@@ -2,7 +2,9 @@
     <div class="left-section">
         <a routerLink="/home" class="nav-link">Home</a>
 
-        <input type="text" pInputText placeholder="Search courses..." class="search-bar" [(ngModel)]="searchValue"  (ngModelChange)="searchCourses($event)" />
+        <div *ngIf="isLoggedIn">
+            <input type="text" pInputText placeholder="Search courses..." class="search-bar" [(ngModel)]="searchValue"  (ngModelChange)="searchCourses($event)" />
+        </div>
 
         <div *ngIf="isTeacher || isAdmin" class="course-dropdown">
             <button pButton type="button" label="Course Settings" class="dropbtn" (click)="toggleCourseDropdown()"></button>

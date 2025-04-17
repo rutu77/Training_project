@@ -1,4 +1,7 @@
-<p-table [value]="enrollments" [tableStyle]="{ 'min-width': '50rem' }">
+
+<input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterEnrollments()">
+
+<p-table [value]="filterEnrolls" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
         <tr>
           <th>User ID</th>

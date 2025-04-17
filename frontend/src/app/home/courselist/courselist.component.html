@@ -1,28 +1,34 @@
 <div class="course-list" id="courseList">
+  <div *ngIf="filteredCourses.length === 0" class="no-courses">
+    No courses found!
+  </div>
 
-  <div *ngIf="filteredCourses.length === 0" class="no-courses">No courses found!</div>
+  <div
+    *ngFor="let course of filteredCourses" class="course-card" (click)="viewCourse(course.id)">
+    <img [src]="course.thumbnail" alt="{{ course.title }}" class="course-thumbnail"/>
 
-    <div *ngFor="let course of filteredCourses" class="course-card" (click)="viewCourse(course.id)">
-
-    <img [src]="course.thumbnail " alt="{{ course.title }}" class="course-thumbnail">
-
-      <div class="course-details">
-
+    <div class="course-details">
+      <div class="course-title">
         <h2 class="course-title">{{ course.title }}</h2>
+      </div>
 
+      <div class="course-description">
         <p class="course-description">{{ course.description }}</p>
+      </div>
 
-     
-        <div class="course-footer">
-          <span class="course-price">₹{{ course.price }}</span>
+      <div class="course-footer">
+        <span class="course-price">₹{{ course.price }}</span>
 
-          <span class="course-rating">Ratings: {{ratings[course.id]| number:'1.1-1' }}</span>
-
-          <!-- <div *ngIf="!isEnrolled(course.id)">
+        <span class="course-rating"
+          >Ratings: {{ ratings[course.id] | number : "1.1-1" }}</span
+        >
+        <!-- <div class="card flex justify-center">
+            <p-rating [(ngModel)]="ratings[course.id]" [readonly]="true" />
+          </div> -->
+        <!-- <div *ngIf="!isEnrolled(course.id)">
             <button (click)="enroll(); $event.stopPropagation()" class="enroll-button">Enroll</button>
           </div> -->
-
-        </div>
       </div>
     </div>
   </div>
+</div>
