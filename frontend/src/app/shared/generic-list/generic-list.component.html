@@ -28,7 +28,10 @@
     </ng-template>
   </p-table>
 
+</div>
 
+<div *ngIf="items.length === 0" [ngStyle]="{'text-align':'center'}">
+  <p-progressSpinner></p-progressSpinner>
 </div>
 
 

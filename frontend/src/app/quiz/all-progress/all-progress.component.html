@@ -1,8 +1,7 @@
-
-<!-- <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
-  <input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterProgress()">
-</div> -->
-<input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterProgress()">
+<div [ngStyle]="{'display': 'flex', 'justify-content': 'flex-end', 'margin-bottom': '1rem','margin':'1rem'}">
+  <input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterProgress()"/>
+</div>
+<!-- <input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterProgress()"> -->
 
 
 <p-table [value]="filteredProgress" [tableStyle]="{ 'min-width': '50rem' }">
@@ -25,3 +24,8 @@
         </tr>
     </ng-template>
   </p-table>
+
+  <div *ngIf="filteredProgress.length === 0" [ngStyle]="{'text-align':'center'}">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+  

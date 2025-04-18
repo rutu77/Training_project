@@ -1,3 +1,7 @@
+<div *ngIf="!course" [ngStyle]="{'text-align':'center'}">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+
 <div *ngIf="course" class="course-detail">
     <h1>{{ course.title }}</h1>
     <img [src]="course.thumbnail" alt="{{ course.title }}" class="course-thumbnail">

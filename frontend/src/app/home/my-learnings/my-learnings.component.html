@@ -11,3 +11,7 @@
       </ng-container>
   </ng-container>
 </div>
+
+<div *ngIf="courses.length === 0" [ngStyle]="{'text-align':'center'}">
+    <p-progressSpinner></p-progressSpinner>
+</div>

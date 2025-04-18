@@ -38,5 +38,7 @@
 </div>
 
 
-
+<div *ngIf="quizzes.length === 0" [ngStyle]="{'text-align':'center'}">
+  <p-progressSpinner></p-progressSpinner>
+</div>
 

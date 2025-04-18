@@ -1,5 +1,7 @@
 
-<input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterEnrollments()">
+<div [ngStyle]="{'display': 'flex', 'justify-content': 'flex-end', 'margin-bottom': '1rem','margin':'1rem'}">
+  <input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterEnrollments()"/>
+</div>
 
 <p-table [value]="filterEnrolls" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
@@ -19,3 +21,7 @@
         </tr>
     </ng-template>
   </p-table>
+
+<div *ngIf="filterEnrolls.length === 0" [ngStyle]="{'text-align':'center'}">
+  <p-progressSpinner></p-progressSpinner>
+</div>

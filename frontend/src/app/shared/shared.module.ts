@@ -19,16 +19,16 @@ import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { GenericListComponent } from './generic-list/generic-list.component';
 import { RatingModule } from 'primeng/rating';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
-const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModule,RatingModule,ScrollTopModule,TableModule, DropdownModule,MenubarModule, MenuModule, MultiSelectModule, RippleModule, DialogModule]
-
+const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModule,RatingModule,ProgressSpinnerModule,ScrollTopModule,TableModule, DropdownModule,MenubarModule, MenuModule, MultiSelectModule, RippleModule, DialogModule]
 
 @NgModule({
   declarations: [
     NavbarComponent,
     FooterComponent,
-    GenericListComponent
+    GenericListComponent,
   ],
   imports: [
     CommonModule,
@@ -43,4 +43,5 @@ const  ngPrimeModule = [ButtonModule,InputTextModule,CheckboxModule,SidebarModul
     GenericListComponent
   ]
 })
+
 export class SharedModule { }
