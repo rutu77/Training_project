@@ -15,6 +15,7 @@ export class UserListComponent implements OnInit {
   users: User[] = [];
   displayUpdateDialog= false;
   selectedUserId!:number;
+  isLoading:boolean=true
 
   constructor(private admin: AdminService) {}
 
@@ -26,6 +27,7 @@ export class UserListComponent implements OnInit {
     this.admin.getUsers().subscribe((data: any) => {
       this.users = data;
       this.users= this.users.filter(user=>!user.deleted).filter(user=>user.email!=="admin@gmail.com")
+      this.isLoading=false
     });
   }
 

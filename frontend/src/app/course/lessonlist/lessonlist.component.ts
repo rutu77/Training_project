@@ -20,6 +20,7 @@ export class LessonlistComponent implements OnInit {
   displayUpdateDialog = false;
   displayAddDialog=false;
   selectedLessonId!: number;
+  isLoading:boolean=true
 
   constructor(
     private route: ActivatedRoute,
@@ -59,6 +60,8 @@ export class LessonlistComponent implements OnInit {
       this.lessons = this.lessons
       .filter((lesson) => !lesson.deleted)
       .filter((lesson)=>lesson.course.creator.id===this.userId);
+      this.isLoading=false
+
     });
   }
 

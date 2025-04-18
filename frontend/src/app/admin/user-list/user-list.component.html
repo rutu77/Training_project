@@ -2,6 +2,7 @@
   [items]="users"
   [itemFields]="['id', 'name', 'email', 'role']"
   [itemLabels]="['Id', 'Name', 'Email', 'Role']"
+  [isLoading]="isLoading"
   [isUser]="true"
   (updateItem)="onOpenUpdate($event)"
   (deleteItem)="deleteUser($event)">

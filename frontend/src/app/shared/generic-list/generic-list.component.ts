@@ -14,6 +14,7 @@ export class GenericListComponent<T> implements OnInit{
   @Input() itemFields: string[] = [];
   @Input() itemLabels: string[] = [];
   @Input() isUser:boolean=false
+  @Input() isLoading:boolean=true
 
   @Output() addItem= new EventEmitter<void>();
   @Output() updateItem = new EventEmitter<number>();

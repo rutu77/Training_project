@@ -25,7 +25,12 @@
     </ng-template>
   </p-table>
 
-  <div *ngIf="filteredProgress.length === 0" [ngStyle]="{'text-align':'center'}">
+  <!-- <div *ngIf="filteredProgress.length === 0" [ngStyle]="{'text-align':'center'}">
     <p-progressSpinner></p-progressSpinner>
+  </div> -->
+
+  <div *ngIf="!filteredProgress || filteredProgress.length === 0" [ngStyle]="{'text-align':'center'}">
+    <p *ngIf="!isLoading">Quiz not found</p>
+    <p-progressSpinner *ngIf="isLoading" ></p-progressSpinner>
   </div>
   

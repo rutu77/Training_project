@@ -1,24 +1,18 @@
-<!-- <app-generic-list 
-  [items]="quizzes"
-  [itemFields]="['id','course.id','title','questions']"
-  [itemLabels]="['Id','Course Id','Title','Questions']"
-  (addItem)="refresh()"
-  (updateItem)="onOpenUpdate($event)"
-  (deleteItem)="deleteQuiz($event)"
->
-
-  <ng-container add-form>
-    <app-create-quiz (quizCreated)="refresh()"></app-create-quiz>
-  </ng-container>
-  
-</app-generic-list> -->
-
-
 <div class="quiz-container">
   <h3>Create New Quiz</h3>
   <form [formGroup]="quizForm" (ngSubmit)="createQuiz()">
-    <input type="text" formControlName="title" placeholder="Quiz Title" required>
-    <input type="number" formControlName="courseId" placeholder="Course ID" required>
+    <input
+      type="text"
+      formControlName="title"
+      placeholder="Quiz Title"
+      required
+    />
+    <input
+      type="number"
+      formControlName="courseId"
+      placeholder="Course ID"
+      required
+    />
     <button type="submit" [disabled]="quizForm.invalid">Create Quiz</button>
   </form>
 
@@ -37,8 +31,10 @@
   </div>
 </div>
 
-
-<div *ngIf="quizzes.length === 0" [ngStyle]="{'text-align':'center'}">
-  <p-progressSpinner></p-progressSpinner>
+<div
+  *ngIf="!quizzes || quizzes.length === 0"
+  [ngStyle]="{ 'text-align': 'center' }"
+>
+  <p *ngIf="!isLoading">Quiz not found</p>
+  <p-progressSpinner *ngIf="isLoading"></p-progressSpinner>
 </div>
-

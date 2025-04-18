@@ -30,8 +30,14 @@
 
 </div>
 
-<div *ngIf="items.length === 0" [ngStyle]="{'text-align':'center'}">
+<!-- <div *ngIf="!items.length" [ngStyle]="{'text-align':'center'}">
   <p-progressSpinner></p-progressSpinner>
+</div> -->
+
+<div *ngIf="!items || items.length === 0" [ngStyle]="{'text-align':'center'}">
+  <p *ngIf="!isLoading">Items not found</p>
+  <p-progressSpinner *ngIf="isLoading" ></p-progressSpinner>
 </div>
+
 
 

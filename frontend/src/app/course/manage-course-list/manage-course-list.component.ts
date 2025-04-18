@@ -15,6 +15,7 @@ export class ManageCourseListComponent implements OnInit {
   courses: Course[] = [];
   displayUpdateDialog = false;
   displayAddDialog=false;
+  isLoading:boolean=true
   selectCourseId!: number;
   userId = Number(localStorage.getItem('userId'));
 
@@ -31,6 +32,7 @@ export class ManageCourseListComponent implements OnInit {
       this.courses = this.courses
         .filter((course) => !course.deleted)
         .filter((course) => course.creator.id === this.userId);
+      this.isLoading=false
       // console.log([this.courses].flat());
     });
   }

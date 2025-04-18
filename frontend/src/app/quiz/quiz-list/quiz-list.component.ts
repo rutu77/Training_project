@@ -13,6 +13,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class QuizListComponent implements OnInit {
   quizzes: any[] = [];
   quizForm: FormGroup;
+  isLoading:boolean=true
   userId= Number(localStorage.getItem('userId'))
 
   constructor(private homeService: HomeService) {
@@ -30,8 +31,12 @@ export class QuizListComponent implements OnInit {
     this.homeService.getAllQuizzes().subscribe((data:any) => {
       this.quizzes = data;
       this.quizzes= this.quizzes.filter(quiz=>!quiz.deleted).filter(quiz=>quiz.course.creator.id==this.userId)
+      // console.log(this.quizzes);
+      this.isLoading=false
     });
   }
+
+
 
 
   createQuiz(){

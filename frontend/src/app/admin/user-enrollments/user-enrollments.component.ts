@@ -12,6 +12,7 @@ export class UserEnrollmentsComponent {
   enrollments:Enrollment[]=[]
   filterEnrolls:Enrollment[]=[]
   searchText:string=''
+  isLoading=true
 
   constructor(private homeService:HomeService){}
 
@@ -23,6 +24,7 @@ export class UserEnrollmentsComponent {
     this.homeService.getEnrollments().subscribe((data:any)=>{
       this.enrollments= data
       this.enrollments=this.enrollments.filter(enroll=>!enroll.deleted)
+      this.isLoading=false
       this.filterEnrolls=[...this.enrollments]
     })
   }

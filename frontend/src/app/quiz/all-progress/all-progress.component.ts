@@ -13,6 +13,7 @@ export class AllProgressComponent implements OnInit{
   filteredProgress:Progress[]=[]
   userId=Number(localStorage.getItem('userId'))
   searchText:string=''
+  isLoading:boolean=true
 
   constructor(private homeService:HomeService){}
 
@@ -24,6 +25,7 @@ export class AllProgressComponent implements OnInit{
     this.homeService.getAllProgress().subscribe((data:any)=>{
       this.progresses= data
       this.progresses= this.progresses.filter(progress=>!progress.deleted)
+      this.isLoading=false
       this.filteredProgress=[...this.progresses]
     })
   }

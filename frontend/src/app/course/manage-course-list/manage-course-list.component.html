@@ -3,6 +3,7 @@
 [items]="courses"
 [itemFields]="['id','title','description','price','level','duration']"
 [itemLabels]="['Id','Title','Description','Price','Level','Duration']"
+[isLoading]="isLoading"
 (addItem)="onOpenAdd()"
 (updateItem)="onOpenUpdate($event)"
 (deleteItem)="deleteCourse($event)"
