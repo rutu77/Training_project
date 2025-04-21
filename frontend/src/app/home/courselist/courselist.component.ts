@@ -16,8 +16,9 @@ import Swal from 'sweetalert2';
 export class CourseListComponent implements OnInit {
  
   enrollments: Enrollment[] = [];
+  
   userId = Number(localStorage.getItem('userId'))
-  backendUrl: string="http://localhost:3000/";
+  // backendUrl: string="http://localhost:3000/";
   reviews: Review[]=[];
   ratings: { [key: number]: any } = {}; 
   courses: Course[] = [];
@@ -39,7 +40,6 @@ export class CourseListComponent implements OnInit {
     this.courseService.query$.subscribe(query=>{
       this.filterCourses(query);
     })
-
   }
 
   loadCourses(){

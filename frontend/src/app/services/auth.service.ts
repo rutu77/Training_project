@@ -19,12 +19,21 @@ export class AuthService {
   $role = this.roleSubject.asObservable();
 
 
-  api= `http://localhost:3000`
+  private readonly api= `http://localhost:3000`
   // Login(data:any){
   //   return this.http.post(`${this.api}/auth/login`,data)
   // }
 
   Login(data: any) {
+    if (this.isLoggedIn()){
+      Swal.fire({
+        title: 'Alert!',
+        text: 'You are already logged in!',
+        icon: 'info'
+      });
+      return;
+    }
+  
     return this.http.post(`${this.api}/auth/login`, data).subscribe(
       (res: any) => {
         if (res.data.token) {
@@ -36,9 +45,15 @@ export class AuthService {
           const decodedToken = jwt_decode(res.data.token) as { id: string, email: string, iat: number, exp: number };
           const userId = decodedToken.id;
           localStorage.setItem('userId',userId)
+          Swal.fire({
+            title: "Good job!",
+            text: "Login Successful!",
+            icon: "success"
+          });
+
         } 
         else{
-          console.error("Token not foun");
+          console.error("Token not found");
         }
       },
       (error: any) => {

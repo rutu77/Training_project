@@ -40,20 +40,23 @@
               <h2 class="lesson-title">{{ lesson.title }}</h2>
               <span class="lesson-duration">{{ lesson.duration }} min</span>
             </div>
-              <p-checkbox (click)="checked(); $event.stopPropagation()" [binary]="true"/>
-            <!-- <label><input type="checkbox" [(ngModel)]="lesson.completion" (change)="checkCourseCompletion()">Completed></label> -->
+    
+              <!-- <p-checkbox (click)="parentClick(lesson); $event.stopPropagation()" [(ngModel)]="lesson.completed" [binary]="true"></p-checkbox> -->
+         
       </div>
-      <!-- <p *ngIf="courseCompleted">Course Completed!</p -->
   
-
+        <!-- <div *ngIf="allLessonsCompleted"> -->
           <h2>Quizzes</h2>
-         <div *ngIf="quizzes.length===0" class="no-quizzes">No Quiz Found</div>
+          <div *ngIf="quizzes.length===0" class="no-quizzes">No Quiz Found</div>
+    
           <div *ngFor="let quiz of quizzes" class="quiz-card" (click)="TakeQuiz(quiz.id)">
             <div class="quiz-details">
               <h2 class="quiz-title">{{ quiz.title }}</h2>
             </div>
           </div>  
-    </div>
+        </div>
+
+    <!-- </div> -->
 
   
 

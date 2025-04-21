@@ -39,7 +39,6 @@ export class TakeQuizComponent implements OnInit {
       });
     }
 
-  
     submitQuiz(): void {
       if (this.quizForm.valid) {
         const answers = this.quizForm.value;
@@ -58,7 +57,7 @@ export class TakeQuizComponent implements OnInit {
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Failed to submit quiz!',
+              text: error.error.message|| 'Failed to submit quiz!',
             });
           }
         );

@@ -1,5 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {Course,Enrollment,Lesson,Review,Quiz,User,} from '../../models/model';
+import {
+  Course,
+  Enrollment,
+  Lesson,
+  Review,
+  Quiz,
+  User,
+  Progress,
+} from '../../models/model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
 import { HomeService } from '../../services/home.service';
@@ -12,7 +20,6 @@ import Swal from 'sweetalert2';
   templateUrl: './coursedetails.component.html',
   styleUrl: './coursedetails.component.css',
 })
-
 export class CoursedetailsComponent implements OnInit {
   course: Course | undefined;
   userId = Number(localStorage.getItem('userId'));
@@ -28,10 +35,11 @@ export class CoursedetailsComponent implements OnInit {
   displayUpdateReviewDialog = false;
   displayAddReviewDialog = false;
   showEnrollDialog = false;
-  // showQuiz=false
   courseId!: number;
+  // allLessonsCompleted=false
+  progress!:Progress
 
-  selectedCourseId!:number
+  selectedCourseId!: number;
   selectedReview!: Review;
   selectedCourse!: Course;
 
@@ -66,6 +74,7 @@ export class CoursedetailsComponent implements OnInit {
     // });
 
     this.loadEnrollments();
+    // this.loadLessonCompletion()
   }
 
   loadCourseById(courseId: number) {
@@ -86,12 +95,38 @@ export class CoursedetailsComponent implements OnInit {
     this.router.navigate([`course/lesson/${lessonId}`]);
   }
 
-  count:number=0
-  checked(){
-    this.count= this.count+1
-    // console.log(this.count);
-  }
+
   
+
+  // parentClick(lesson:Lesson){
+  //   this.courseService.updateLesson(lesson.id,{ completed: lesson.completed }).subscribe((data:any)=>{})
+  //   // this.lessons.forEach((lesson, index) => {
+  //   //   console.log(`Lesson ${index + 1} completed:`, lesson.completed);
+  //   // });
+  //   this.loadLessonCompletion()
+  // }
+
+  // loadLessonCompletion(){
+  //   this.allLessonsCompleted = this.lessons.every(lesson => lesson.completed);
+  // }
+
+  // parentClick(lesson:any){
+  //   this.homeService.updateProgress(lesson.id, {completed:this.progress.lesson.completed}).subscribe((data:any)=>{
+  //     this.loadLessonCompletion();
+  //   })
+  // }
+  
+  // loadLessonCompletion(){
+  //   this.homeService.getProgressByUser(this.userId).subscribe((progress:any)=>{
+  //     this.lessons.forEach(lesson=>{
+  //       const lessonProgress = progress.find((p:any) => p.lesson.id === lesson.id);
+  //       lesson.completed=lessonProgress?lessonProgress.completed:false
+  //     })
+  //     this.allLessonsCompleted = this.lessons.every(lesson => lesson.completed);
+  //   })
+  // }
+  
+
 
   //Quiz
   TakeQuiz(quizId: number) {
@@ -139,17 +174,14 @@ export class CoursedetailsComponent implements OnInit {
     this.router.navigate(['home/enrollment']);
   }
 
-
-
   //reviews
-  loadReviewsByCourseId(courseId:number) {
+  loadReviewsByCourseId(courseId: number) {
     // this.courseService.getReviewsByCourseId(this.courseId)
-    this.courseService.getReviewsByCourseId(courseId).subscribe((data:any)=>{
-      this.reviews=data.data.filter((review:any)=>!review.deleted)
+    this.courseService.getReviewsByCourseId(courseId).subscribe((data: any) => {
+      this.reviews = data.data.filter((review: any) => !review.deleted);
       // console.log(this.reviews);
       //this.loadCourseById(courseId)
-      
-    })
+    });
   }
 
   //user logged in can delete and edit his own reviews
@@ -176,13 +208,12 @@ export class CoursedetailsComponent implements OnInit {
     this.homeService.deleteReview(reviewId).subscribe(
       () => {
         this.loadReviewsByCourseId(this.courseId);
-        this.loadCourseById(this.courseId)
+        this.loadCourseById(this.courseId);
         Swal.fire({
           icon: 'success',
           title: 'Deleted',
           text: 'Review deleted successfully!',
         });
-
       },
       (error: any) => {
         console.error('Error deleting review:', error);

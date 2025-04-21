@@ -1,3 +1,4 @@
+import { error } from "console";
 import { Course } from "../models/Course";
 import { Progress } from "../models/Progress";
 import { Quiz } from "../models/Quiz";
@@ -67,10 +68,11 @@ export class QuizService {
     return await QuestionRepository.save(question);
   }
 
-
   async submitQuiz(quizId: number,userId: number,answers: any){
     const quiz = await quizRepository.findOne({where: { id: quizId },relations: ["questions"],});
     if (!quiz) throw new Error("Quiz not found!");
+
+    let existingProgress= await progressRepository.findOne({where:{user:{id:userId}, quiz:{id:quizId}}})
 
     let correctAnswers = 0;
     quiz.questions.forEach((question) => {
@@ -81,7 +83,40 @@ export class QuizService {
 
     const score = (correctAnswers / quiz.questions.length) * 100;
 
-    const progress = progressRepository.create({user: { id: userId },quiz,score,total: quiz.questions.length,completion: new Date(),});
-    return await progressRepository.save(progress);
+    const total= quiz.questions.length
+
+    if(existingProgress){
+
+      if(existingProgress.attempt>=3){
+        throw new Error("Sorry! Maximum attempt limit reached")
+      }
+      existingProgress.attempt+=1
+      existingProgress.score=score
+      existingProgress.total=total
+      existingProgress.completion=new Date()
+      return progressRepository.save(existingProgress)
+    }
+    else{
+      const progress = progressRepository.create({user: { id: userId },quiz,score,total,completion: new Date(),attempt:1});
+      return await progressRepository.save(progress);
+    }
   }
+
+
+  // async submitQuiz(quizId: number,userId: number,answers: any){
+  //   const quiz = await quizRepository.findOne({where: { id: quizId },relations: ["questions"],});
+  //   if (!quiz) throw new Error("Quiz not found!");
+
+  //   let correctAnswers = 0;
+  //   quiz.questions.forEach((question) => {
+  //     if (answers[question.id] === question.correctAnswer) {
+  //       correctAnswers++;
+  //     }
+  //   });
+
+  //   const score = (correctAnswers / quiz.questions.length) * 100;
+
+  //   const progress = progressRepository.create({user: { id: userId },quiz,score,total: quiz.questions.length,completion: new Date(),});
+  //   return await progressRepository.save(progress);
+  // }
 }

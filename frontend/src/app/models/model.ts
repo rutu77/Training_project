@@ -64,6 +64,7 @@ export interface Lesson{
     duration?:number
     course:Course
     deleted:boolean
+    completed:boolean
 }
 
 export interface Quiz{
@@ -116,8 +117,10 @@ export interface Progress{
     score:number
     total:number
     completion:string
+    attempt:number
     user:User
     quiz:Quiz
+    lesson:Lesson
     deleted:boolean
 }
 

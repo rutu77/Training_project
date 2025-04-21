@@ -12,6 +12,7 @@
           <th>Score</th>
           <th>Total Question</th>
           <th>Quiz Title</th>
+          <th>Attempt</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-progress>
@@ -21,6 +22,7 @@
           <td>{{ progress.score }}%</td>
           <td>{{ progress.total }}</td>
           <td>{{ progress.quiz.title }}</td>
+          <td>{{progress.attempt}}</td>
         </tr>
     </ng-template>
   </p-table>
@@ -30,7 +32,7 @@
   </div> -->
 
   <div *ngIf="!filteredProgress || filteredProgress.length === 0" [ngStyle]="{'text-align':'center'}">
-    <p *ngIf="!isLoading">Quiz not found</p>
+    <p *ngIf="!isLoading">Progress not found</p>
     <p-progressSpinner *ngIf="isLoading" ></p-progressSpinner>
   </div>
   

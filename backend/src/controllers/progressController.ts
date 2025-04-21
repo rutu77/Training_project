@@ -66,26 +66,26 @@ export class ProgressController {
     }
   
   
-    // async updateprogress(req: Request, res: Response): Promise<void> {
-    //   const progressId = Number(req.params.id);
-    //   const data = req.body;
-    //   try {
-    //     const updatedprogress = await progressService.updateprogress(progressId, data);
-    //     res.status(200).json({message:"progress updated successfully", data: updatedprogress });
-    //   } catch (error) {
-    //     res.status(404).json({ message: (error as Error).message });
-    //   }
-    // }
+    async updateprogress(req: Request, res: Response): Promise<void> {
+      const lessonId = Number(req.params.id);
+      const data = req.body;
+      try {
+        const updatedprogress = await progressService.updateProgress(lessonId, data);
+        res.status(200).json({message:"progress updated successfully", data: updatedprogress });
+      } catch (error) {
+        res.status(404).json({ message: (error as Error).message });
+      }
+    }
   
-    // async deleteprogress(req: Request, res: Response): Promise<void> {
-    //   const progressId = Number(req.params.id);
-    //   try {
-    //     await progressService.deleteprogress(progressId);
-    //     res.status(200).json({ message: "progress deleted successfully!" });
-    //   } catch (error) {
-    //     res.status(404).json({ message: (error as Error).message });
-    //   }
-    // }
+    async deleteprogress(req: Request, res: Response): Promise<void> {
+      const progressId = Number(req.params.id);
+      try {
+        await progressService.deleteProgress(progressId);
+        res.status(200).json({ message: "progress deleted successfully!" });
+      } catch (error) {
+        res.status(404).json({ message: (error as Error).message });
+      }
+    }
   
 
 

@@ -11,7 +11,7 @@ router.get('/:id',progressController.getprogressById)
 router.get('/user/:id',progressController.getProgressByUser)
 router.get('/report/:id',progressController.downloadProgressReport)
 router.get('/',progressController.getAllprogresss)
-// router.put('/:id',progressController.updateprogress)
-// router.put('/:id',progressController.deleteprogress)
+router.put('/:id',progressController.updateprogress)
+router.delete('/:id',progressController.deleteprogress)
 
 export {router as progressRoutes}

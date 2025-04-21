@@ -49,6 +49,8 @@ export class LessonController{
     async updateLesson(req: Request, res:Response){
         const lessonId = Number(req.params.id);
          const data = req.body;
+         console.log(data);
+         
          try{
            const updatedLesson=await lessonService.updateLesson(lessonId,data);
            res.status(200).json({message:"Lesson updated successfully",data:updatedLesson});

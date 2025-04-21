@@ -120,5 +120,9 @@ export class HomeService {
     return this.http.get(`${this.api}/progress/report/${id}`,{ responseType: 'blob' })
   }
 
+  updateProgress(id:number,data:any){
+    return this.http.put(`${this.api}/progress/user/${id}`,data)
+  }
+
 }
 

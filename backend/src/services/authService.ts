@@ -2,6 +2,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { userRepository } from "../repositories/userRepository"
 import { UserService } from "./userService"
+import { error } from "console"
 
 
 const secretKey= "Rutuja1147"
@@ -33,6 +34,7 @@ export class AuthService{
         
         const token = jwt.sign({ email: user.email, id:user.id }, secretKey, { expiresIn: '1h' });
         const role=user.role
+
         return { user, token, role };        
     }
 

@@ -11,7 +11,7 @@ import { saveAs } from 'file-saver';
   templateUrl: './enroll.component.html',
   styleUrl: './enroll.component.css'
 })
-export class EnrollComponent implements OnInit{
+export class EnrollComponent{
 
   @Input() course!: Course ;
   userId= Number(localStorage.getItem('userId'));
@@ -21,11 +21,6 @@ export class EnrollComponent implements OnInit{
   @Output() cancel= new EventEmitter<void>();
 
   constructor(private router: Router,private homeService: HomeService){}
-
-  ngOnInit(): void {
-    
-  }
-
 
 
   enroll(){

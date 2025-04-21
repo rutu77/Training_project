@@ -1,17 +1,22 @@
 <h3>Your Quiz Progress</h3>
-<p-table>
+<table>
   <tr>
     <th>Quiz Title</th>
     <th>Score</th>
     <th>Total</th>
     <th>Completion</th>
+    <th>Attempt</th>
   </tr>
   <tr *ngFor="let progress of progressList">
     <td>{{ progress.quiz.title }}</td>
     <td>{{ progress.score }} %</td>
     <td>{{ progress.total }}</td>
     <td>{{ progress.completion | date : "short" }}</td>
+    <td>{{progress.attempt}}</td>
   </tr>
-</p-table>
+</table>
 
 <button (click)="downloadReport()" pInputText>Downlaod Report</button>
+
+
+<app-chart></app-chart>

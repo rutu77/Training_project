@@ -16,13 +16,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GenericListComponent } from './shared/generic-list/generic-list.component';
 import { QuizModule } from './quiz/quiz.module';
 import { GlobalErrorHandler } from './global/error-handler';
-
+import { HighchartsChartModule } from 'highcharts-angular';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NotfoundComponent
+    NotfoundComponent,
    ],
   imports: [
     BrowserModule,
@@ -35,7 +35,8 @@ import { GlobalErrorHandler } from './global/error-handler';
     BrowserAnimationsModule,
     HomeModule,
     CourseModule,
-    QuizModule
+    QuizModule,
+    HighchartsChartModule
 ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

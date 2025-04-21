@@ -49,4 +49,5 @@ export class User {
 
     @OneToMany(() =>Progress,(progress)=>progress.user, { cascade: true, onDelete: 'CASCADE' })
     progress: Progress[];
+
 }

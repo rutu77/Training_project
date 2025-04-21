@@ -20,12 +20,12 @@ export class Lesson {
     deleted: boolean 
 
     @Column({default:false})
-    completed:boolean
+    completed:boolean //
 
     @ManyToOne(() => Course, (course) => course.lessons, { onDelete: 'CASCADE' ,eager:true})
     @JoinColumn({ name: "course_id" }) 
     course: Course;
 
     // @OneToMany(()=>Progress,(progress)=>progress.lesson,{ cascade: true })
-    // progress:Progress[];
+    // progress:Progress[]; //
 }

@@ -9,6 +9,8 @@ import { rejects } from "assert";
 const PDFDocument = require('pdfkit')
 import fs from 'fs';
 import path from 'path';
+import { lessonRepository } from "../repositories/lessonRepository";
+import { Lesson } from "../models/Lesson";
 
 
 export class ProgressService{
@@ -40,6 +42,11 @@ export class ProgressService{
 
   async getAllprogresss(){
     return await progressRepository.find({relations:['user','quiz']})
+  }
+
+  async deleteProgress(id: number) {
+    const result = await progressRepository.delete(id);
+    if (result.affected === 0) throw new Error("Progress not found!");
   }
 
   async generateProgressReport(userId:number){
@@ -76,5 +83,16 @@ export class ProgressService{
     });
   };
 
+
+  async updateProgress(id: number, data:Partial<Progress>) {
+      const lesson = await lessonRepository.findOne({ where: { course: { id: +id } },relations: ['course','progress'],}) as Lesson;
+
+      await progressRepository.update({ id: +lesson.id }, data);
+
+      const updatedProgress = await progressRepository.findOne({ where: { id }, relations: ['course','lesson','user'] });
+      if (!updatedProgress) throw new Error("Progress not found!");
+  
+      return updatedProgress;
+  }
 
 }

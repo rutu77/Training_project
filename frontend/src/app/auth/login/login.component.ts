@@ -20,19 +20,11 @@ export class LoginComponent {
     password: new FormControl('',[Validators.minLength(8),Validators.required])
   })
 
-    onSubmit() {
-      this._auth.Login(this.loginForm.value);
-      this._auth.$authState.subscribe(isLoggedIn => {
-        if (isLoggedIn) {
-          Swal.fire({
-            title: "Good job!",
-            text: "Login Successful!",
-            icon: "success"
-          });
-          this.router.navigate(['/home']);
-        }
-      })
+  onSubmit(){
+    this._auth.Login(this.loginForm.value);
+    this.router.navigate(['/home']);
   }
+
     // onSubmit(){
   //   this._auth.Login(this.loginForm.value).subscribe(
   //       (res: any) => {

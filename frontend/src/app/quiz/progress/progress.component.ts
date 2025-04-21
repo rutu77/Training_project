@@ -23,9 +23,11 @@ export class ProgressComponent implements OnInit{
     this.homeService.getProgressByUser(this.userId).subscribe((data: any) => {
       this.progressList = data.data;
       this.progressList= this.progressList.filter(list=>!list.deleted)
-      // console.log(data.data);
+      console.log(this.progressList);
     });
   }
+
+  
 
   downloadReport() {
     this.homeService.downloadQuizReport(+this.userId).subscribe(
