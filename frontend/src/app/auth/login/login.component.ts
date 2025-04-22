@@ -11,8 +11,6 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
-  errorMsg:string=''
-
   constructor(private _auth:AuthService, private router:Router){}
 
   loginForm= new FormGroup({
@@ -25,7 +23,7 @@ export class LoginComponent {
     this.router.navigate(['/home']);
   }
 
-    // onSubmit(){
+  // onSubmit(){
   //   this._auth.Login(this.loginForm.value).subscribe(
   //       (res: any) => {
   //         console.log("Login form submitted");

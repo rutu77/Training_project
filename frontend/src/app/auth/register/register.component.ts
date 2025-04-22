@@ -13,7 +13,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 
 export class RegisterComponent implements OnInit {
-  errorMsg: string = '';
   passMismatch: boolean = false;
   isAdmin: boolean = false;
 
@@ -34,7 +33,6 @@ export class RegisterComponent implements OnInit {
       if (params['key']===expectedSecretKey){
         localStorage.setItem('user_role','admin')
         this.isAdmin=this._auth.getRole()==="admin"
-        console.log(this.isAdmin);
         
         this.registerForm.get('secretKey')?.setValidators([Validators.required]);
         this.registerForm.get('role')?.setValue('admin');
@@ -42,13 +40,13 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-    nameValidator() {
-        return (control: AbstractControl): ValidationErrors | null => {
-            const name = control.value;
-            const valid = /^[a-zA-Z\s]+$/.test(name);
-            return valid ? null : { invalidName: 'Name must contain only letters and spaces' };
-        };
-    }
+  nameValidator() {
+    return (control: AbstractControl): ValidationErrors | null => {
+        const name = control.value;
+        const valid = /^[a-zA-Z\s]+$/.test(name);
+        return valid ? null : { invalidName: 'Name must contain only letters and spaces' };
+    };
+  }
 
   onSubmit() {
     const password = this.registerForm.get('password')?.value;

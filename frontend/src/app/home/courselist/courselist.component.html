@@ -17,7 +17,7 @@
       </div>
 
       <div class="course-footer">
-        <span class="course-price">₹{{ course.price }}</span>
+        <span class="course-price">{{ course.price | currency:'INR'}}</span>
 
         <span class="course-rating"
           >Ratings: {{ ratings[course.id] | number : "1.1-1" }}</span

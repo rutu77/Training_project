@@ -1,5 +1,5 @@
 import { Question } from "../models/Question";
-import { QuestionRepository } from "../repositories/attemptRepository";
+import { QuestionRepository } from "../repositories/questionRepository";
 import { quizRepository } from "../repositories/quizRepository";
 
 export class QuestionService {

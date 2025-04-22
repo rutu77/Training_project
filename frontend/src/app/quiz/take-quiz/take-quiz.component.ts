@@ -29,8 +29,6 @@ export class TakeQuizComponent implements OnInit {
         this.initializeForm();
         // console.log(data);
       });
-
-
     }
   
     initializeForm(): void {

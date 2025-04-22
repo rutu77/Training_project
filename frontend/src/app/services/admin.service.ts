@@ -10,7 +10,7 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
-  api= `http://localhost:3000`
+  private readonly api= `http://localhost:3000`
   updateRole(data:any){
     return this.http.post(`${this.api}/admin/updateRole`,data)
   }

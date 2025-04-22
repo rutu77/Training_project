@@ -37,7 +37,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
       .subscribe({
         next: (data) => {
           const chartData = data.map((item: any) => ({
-            name: item.quiz.title, // Assuming quiz has a title property
+            name: item.quiz.title, 
             y: item.score
           }));
 
@@ -90,11 +90,11 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
         }
       },
       series: [{
-        type: 'pie', // Ensure the type property is included
+        type: 'pie', 
         name: 'Score',
-        colorByPoint: true, // This property is valid
+        colorByPoint: true,
         data: chartData
-      } as Highcharts.SeriesPieOptions] // Cast to the correct type
+      } as Highcharts.SeriesPieOptions] 
     });
   }
   

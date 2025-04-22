@@ -47,10 +47,6 @@ export class NavbarComponent {
   }
 
   //dropdowns
-  toggleDropdown() {
-    this.dropdownOpen = !this.dropdownOpen;
-  }
-
   toggleProfileDropdown() {
     this.profileDropdownOpen = !this.profileDropdownOpen;
   }

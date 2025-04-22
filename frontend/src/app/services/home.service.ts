@@ -11,7 +11,7 @@ export class HomeService {
 
   constructor(private http:HttpClient) { }
 
-  api= `http://localhost:3000`
+  private readonly api= `http://localhost:3000`
 
   
   //Enrollment

@@ -17,6 +17,7 @@ import { questionRoutes } from "./routes/questionRoutes";
 import { reviewRoutes } from "./routes/reviewRoutes";
 import { progressRoutes } from "./routes/progressRoutes";
 import { errorMiddleware } from "./middleware/error-middleware";
+import { authenticateUser } from "./middleware/middleware";
 
 const app = express();
 
@@ -30,6 +31,8 @@ app.use(
 );
 
 app.use(express.json());
+
+app.use(authenticateUser)
 
 app.use("/uploads", express.static("uploads"));
 

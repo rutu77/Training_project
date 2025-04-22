@@ -7,7 +7,7 @@
     <img [src]="course.thumbnail" alt="{{ course.title }}" class="course-thumbnail">
     <p>{{ course.description }}</p>
     <div class="course-meta">
-      <span>Price: ₹{{ course.price }}</span>
+      <span>Price: {{ course.price  | currency:'INR' }}</span>
     </div>
 
     

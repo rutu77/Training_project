@@ -1,56 +1,80 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
-import { User } from './User';
-import { Lesson } from './Lesson';
-import { Quiz } from './Quiz';
-import { Comment } from './Comment';
-import { Review } from './Review';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinColumn,
+} from "typeorm";
+import { User } from "./User";
+import { Lesson } from "./Lesson";
+import { Quiz } from "./Quiz";
+import { Comment } from "./Comment";
+import { Review } from "./Review";
 // import { Category } from './Category';
-import { Enrollment } from './Enrollment';
+import { Enrollment } from "./Enrollment";
 
-@Entity({name:"Course_table147"})
+@Entity({ name: "Course_table147" })
 export class Course {
   @PrimaryGeneratedColumn()
-  id:number;
+  id: number;
 
   @Column()
-  title:string;
+  title: string;
 
   @Column()
-  description:string;
+  description: string;
 
-  @Column({nullable:true})
-  thumbnail:string;
+  @Column({ nullable: true })
+  thumbnail: string;
 
-  @Column({nullable:true})
-  level: 'beginner' | 'intermediate' | 'advanced';
+  @Column({ nullable: true })
+  level: "beginner" | "intermediate" | "advanced";
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   duration: number;
 
-  @Column({type: 'decimal',default: 0})
+  @Column({ type: "decimal", default: 0 })
   price: number;
 
   @CreateDateColumn()
-  createdAt:Date;
+  createdAt: Date;
 
-  @Column({default:false})
-  deleted:boolean
+  @Column({ default: false })
+  deleted: boolean;
 
-  @ManyToOne(() =>User,(user)=>user.courses,{ cascade: true ,eager:true})
-  creator:User;
-  
-  @OneToMany(()=>Lesson,(lesson)=>lesson.course,{ cascade: true , onDelete: 'CASCADE' })
-  lessons:Lesson[];
+  @ManyToOne(() => User, (user) => user.courses, { cascade: true, eager: true })
+  creator: User;
 
-  @OneToMany(()=>Quiz,(quiz)=>quiz.course,{ cascade: true , onDelete: 'CASCADE' })
-  quizzes:Quiz[];
+  @OneToMany(() => Lesson, (lesson) => lesson.course, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
+  lessons: Lesson[];
 
-  @OneToMany(()=>Comment,(comment)=>comment.course,{ cascade: true , onDelete: 'CASCADE' })
-  comments:Comment[];
+  @OneToMany(() => Quiz, (quiz) => quiz.course, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
+  quizzes: Quiz[];
 
-  @OneToMany(()=>Review,(review)=>review.course,{ cascade: true , onDelete: 'CASCADE' })
-  reviews:Review[];
+  @OneToMany(() => Comment, (comment) => comment.course, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
+  comments: Comment[];
 
-  @OneToMany(()=>Enrollment,(enrollments)=>enrollments.course,{ cascade: true , onDelete: 'CASCADE' })
-  enrollments:Enrollment[];
+  @OneToMany(() => Review, (review) => review.course, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
+  reviews: Review[];
+
+  @OneToMany(() => Enrollment, (enrollments) => enrollments.course, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
+  enrollments: Enrollment[];
 }
