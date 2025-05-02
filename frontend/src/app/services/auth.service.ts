@@ -20,6 +20,7 @@ export class AuthService {
 
 
   private readonly api= `http://localhost:3000`
+
   // Login(data:any){
   //   return this.http.post(`${this.api}/auth/login`,data)
   // }

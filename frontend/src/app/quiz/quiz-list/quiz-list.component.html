@@ -33,8 +33,7 @@
 
 <div
   *ngIf="!quizzes || quizzes.length === 0"
-  [ngStyle]="{ 'text-align': 'center' }"
->
+  [ngStyle]="{ 'text-align': 'center' }">
   <p *ngIf="!isLoading">Quiz not created</p>
   <p-progressSpinner *ngIf="isLoading"></p-progressSpinner>
 </div>

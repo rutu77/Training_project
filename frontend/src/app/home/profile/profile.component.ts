@@ -63,7 +63,7 @@ export class ProfileComponent implements OnInit{
       return;
     }
 
-    const updatedUser = this.getUpdatedValues(this.updateUserForm.value);
+    const updatedUser = this.updateUserForm.value;
   
     const formData = new FormData();
 
@@ -99,15 +99,5 @@ export class ProfileComponent implements OnInit{
         });
       }
     );
-  }
-
-  private getUpdatedValues(formValues: any): any {
-    const updatedValues: any = {};
-    for (const key in formValues) {
-      if (formValues[key] !== '') {
-        updatedValues[key] = formValues[key];
-      }
-    }
-    return updatedValues;
   }
 }

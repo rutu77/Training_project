@@ -21,8 +21,6 @@ import { authenticateUser } from "./middleware/middleware";
 
 const app = express();
 
-dotenv.config();
-
 app.use(
   cors({
     origin: "*",
@@ -31,8 +29,6 @@ app.use(
 );
 
 app.use(express.json());
-
-app.use(authenticateUser)
 
 app.use("/uploads", express.static("uploads"));
 

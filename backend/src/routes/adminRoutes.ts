@@ -6,7 +6,7 @@ const adminController= new AdminController()
 
 const router=Router()
 
-router.put('/updateRole',adminController.updateRole)
+router.put('/updateRole',authenticateUser,authorizeRole(["admin"]),adminController.updateRole)
 
 router.post('/AdminRegister',adminController.registerAdmin)
 

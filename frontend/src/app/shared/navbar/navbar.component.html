@@ -4,7 +4,7 @@
 
         <div *ngIf="isLoggedIn">
             <input type="text" pInputText placeholder="Search courses..." class="search-bar" [(ngModel)]="searchValue"  (ngModelChange)="searchCourses($event)" />
-        </div>
+       
 
         <div *ngIf="isTeacher || isAdmin" class="course-dropdown">
             <button pButton type="button" label="Course Settings" class="dropbtn" (click)="toggleCourseDropdown()"></button>
@@ -14,8 +14,9 @@
                 <a routerLink="/quiz/managequiz" class="nav-link">Manage Quizzes</a>
             </div>
         </div>
-      
-        <div *ngIf="isLoggedIn">
+
+
+     
             <div *ngIf="!isTeacher && !isAdmin">
                 <a routerLink="/quiz/progress" class="nav-link">Your Progress</a>
             </div>

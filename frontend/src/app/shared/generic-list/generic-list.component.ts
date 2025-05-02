@@ -6,53 +6,52 @@ import Swal from 'sweetalert2';
   selector: 'app-generic-list',
   standalone: false,
   templateUrl: './generic-list.component.html',
-  styleUrl: './generic-list.component.css'
+  styleUrl: './generic-list.component.css',
 })
-export class GenericListComponent<T> implements OnInit{
-
+export class GenericListComponent<T> implements OnInit {
   @Input() items: T[] = [];
   @Input() itemFields: string[] = [];
   @Input() itemLabels: string[] = [];
-  @Input() isUser:boolean=false
-  @Input() isLoading:boolean=true
+  @Input() isUser: boolean = false;
+  @Input() isLoading: boolean = true;
 
-  @Output() addItem= new EventEmitter<void>();
+  @Output() addItem = new EventEmitter<void>();
   @Output() updateItem = new EventEmitter<number>();
   @Output() deleteItem = new EventEmitter<number>();
 
-  filteredItems:T[]=[];
-  searchText:string=''
+  filteredItems: T[] = [];
+  searchText: string = '';
 
   constructor() {}
 
   ngOnInit(): void {
-    this.filteredItems= [...this.items]
+    this.filteredItems = [...this.items];
   }
 
-  ngOnChanges(){
-    this.filteredItems=[...this.items]
+  ngOnChanges() {
+    this.filteredItems = [...this.items];
   }
 
-  getFieldValue(item:any, fieldPath:string){
-    return fieldPath.split('.').reduce((obj,key)=>obj?.[key],item);
+  getFieldValue(item: any, fieldPath: string) {
+    return fieldPath.split('.').reduce((obj, key) => obj?.[key], item);
   }
 
-  filterItems(){
-    const searchValue= this.searchText.toLowerCase()
-    this.filteredItems= this.items.filter(item=>{
-      return this.itemFields.some(field=>{
-        const value= this.getFieldValue(item,field);
-        return value?.toString().toLowerCase().includes(searchValue)
-      })
-    })
+  filterItems() {
+    const searchValue = this.searchText.toLowerCase();
+    this.filteredItems = this.items.filter((item) => {
+      return this.itemFields.some((field) => {
+        const value = this.getFieldValue(item, field);
+        return value?.toString().toLowerCase().includes(searchValue);
+      });
+    });
   }
 
   openUpdateDialog(itemId: number) {
     this.updateItem.emit(itemId);
   }
 
-  openAddDialog(){
-    this.addItem.emit()
+  openAddDialog() {
+    this.addItem.emit();
   }
 
   confirmDelete(id: number) {
@@ -61,18 +60,16 @@ export class GenericListComponent<T> implements OnInit{
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: "Yes, delete!",
+      confirmButtonText: 'Yes, delete!',
     }).then((result) => {
       if (result.isConfirmed) {
         this.deleteItem.emit(id);
         Swal.fire({
           title: 'Deleted',
-          text: "Your item has been deleted",
+          text: 'Your item has been deleted',
           icon: 'success',
         });
       }
     });
   }
 }
-
-

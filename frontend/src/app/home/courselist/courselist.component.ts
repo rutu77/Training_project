@@ -18,7 +18,6 @@ export class CourseListComponent implements OnInit {
   enrollments: Enrollment[] = [];
   
   userId = Number(localStorage.getItem('userId'))
-  // backendUrl: string="http://localhost:3000/";
   reviews: Review[]=[];
   ratings: { [key: number]: any } = {}; 
   courses: Course[] = [];
@@ -46,7 +45,6 @@ export class CourseListComponent implements OnInit {
     this.courseService.getCourses().subscribe((data:any)=>{
       this.courses=data;
       this.filteredCourses=data
-      // this.filteredCourses=this.filteredCourses.filter(course=>!course.deleted)
     })
   }
 

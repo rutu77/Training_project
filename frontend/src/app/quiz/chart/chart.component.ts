@@ -16,10 +16,8 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
   userId= Number(localStorage.getItem("userId"))
   constructor(private homeService: HomeService) {}
 
-  // Highcharts instance
   Highcharts: typeof Highcharts = Highcharts;
 
-  // Track subscriptions for cleanup
   private subscriptions: Subscription[] = [];
 
   ngAfterViewInit(): void {
@@ -27,7 +25,6 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // to prevent memory leaks
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 

@@ -20,9 +20,6 @@
       <app-enroll [course]="selectedCourse" (enrollSuccess)="refreshEnrollments()" (cancel)="closeEnrollmentDialog()" (closeDialog)="closeEnrollmentDialog()"></app-enroll>
     </p-dialog>
 
-    <!-- <div *ngIf="showEnrollDialog" class="enrollment-dialog-overlay">
-        <app-enroll [course]="selectedCourse" (enrollmentCompleted)="refreshEnrollments()" (cancel)="closeEnrollmentDialog()" (closeDialog)="closeEnrollmentDialog()"></app-enroll>
-    </div> -->
 
     <div *ngIf="!isLoggedIn" >
       <!-- Please login to enroll to this course -->
@@ -67,7 +64,7 @@
       <div *ngFor="let review of reviews" class="review-card">
         <p>{{ review.comment }}</p>
         <span class="review-author">By: {{ review.user.name }}</span>
-        <!-- <span class="review-rating">Rating: {{ review.rating }}</span> -->
+      
         <div class="card flex justify-center">
           <p-rating [(ngModel)]="review.rating" [readonly]="true" />
         </div>
@@ -79,10 +76,7 @@
           <p-dialog header="Update Review" [(visible)]="displayUpdateReviewDialog" [modal]="true">
             <app-update-review [review]="selectedReview" (reviewUpdated)="refreshReviews()"></app-update-review>
           </p-dialog>
-          <!-- 
-          <div *ngIf="review" class="update-review-form">
-            <app-update-review [review]="selectedReview" (reviewUpdated)="refreshReviews()" (cancel)="CancelUpdateReview()"></app-update-review>
-          </div> -->
+
         </div>
 
     </div>

@@ -51,7 +51,7 @@ export class EnrollmentService {
     return await enrollRepository.find({ relations: ["course", "user"] });
   }
 
-  async getEnrollmentByCourse(courseId: number, userId: number) {
+  async getEnrollmentByCourse(courseId: number) {
     const enrollment = await enrollRepository.findOne({
       where: { course: { id: courseId } },
       relations: ["course", "user"],
@@ -61,7 +61,8 @@ export class EnrollmentService {
   }
 
   async generateEnrollReceipt(courseId: number, userId: number) {
-    const enrollment = await this.getEnrollmentByCourse(courseId, userId);
+    const enrollment = await this.getEnrollmentByCourse(courseId);
+    const user= await userRepository.findOne({where:{id:userId}})
 
     const reportsDir = path.join(__dirname, "..", "enrollment_receipts");
     if (!fs.existsSync(reportsDir)) {
@@ -86,7 +87,7 @@ export class EnrollmentService {
       .text(
         `Enrolled on: ${new Date(enrollment.enrollment_date).toLocaleString()}`
       )
-      .text(`User Details: \n name: ${enrollment.user.name}`)
+      .text(`User Details: \n UserId: ${userId} \n User Name: ${user?.name}`)
       .moveDown();
 
     doc.end();

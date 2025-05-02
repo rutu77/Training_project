@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+  array=[{id:1,name:"rutuja"},{id:2,name:"abc"},{id:3,name:"xyz"},{id:4,name:"lmn"}]
 
   constructor(private _auth:AuthService, private router:Router){}
 
@@ -18,34 +19,14 @@ export class LoginComponent {
     password: new FormControl('',[Validators.minLength(8),Validators.required])
   })
 
+
+
   onSubmit(){
     this._auth.Login(this.loginForm.value);
     this.router.navigate(['/home']);
   }
 
-  // onSubmit(){
-  //   this._auth.Login(this.loginForm.value).subscribe(
-  //       (res: any) => {
-  //         console.log("Login form submitted");
-  //       localStorage.setItem('token', res.data.token);
-  //         Swal.fire({
-  //           title: "Good job!",
-  //           text: "Login Successful!",
-  //           icon: "success"
-  //         });
-  //         if (this._auth.isLoggedIn()) { 
-  //           this.router.navigate(['/index'])
-  //         }
-          
-  //     },
-  //       (error: any) => {
-  //           console.error("Error during login:", error);
-  //           Swal.fire({
-  //             icon: "error",
-  //             title: "Oops...",
-  //             text: error.error.message||"Invalid Credentials!!",
-  //           });
-  //       }
-  //   );
+  // deleteFromArray(index:number){
+  //   this.array.splice(index,1)
   // }
 }

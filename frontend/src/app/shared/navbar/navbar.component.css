@@ -55,11 +55,6 @@
   background-color: #f1f1f1;
 }
 
-
-.dropdown-content {
-  display: block;
-}
-
 .search-bar {
   padding: 5px;
   margin: 0 10px;
@@ -79,7 +74,7 @@
   z-index: 1;
 }
 
-.course-dropdown .dropdown-content a, .profile-dropdown .dropdown-content a {
+.course-dropdown .dropdown-content a .profile-dropdown .dropdown-content a {
   color: black;
   padding: 12px 16px;
   text-decoration: none;
@@ -105,4 +100,14 @@ button {
 
 button:hover {
   background-color: #0056b3; /* Darker blue for hover effect */
+}
+
+/* Ensure the "Your Progress" link stays aligned */
+.left-section > div {
+  display: flex;
+  align-items: center;
+}
+
+.left-section > div > .nav-link {
+  margin: 0 10px;
 }

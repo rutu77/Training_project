@@ -27,15 +27,10 @@ import { HighchartsChartModule } from 'highcharts-angular';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AuthModule,
     RouterModule,
     HttpClientModule,
     SharedModule,
-    AdminModule,
     BrowserAnimationsModule,
-    HomeModule,
-    CourseModule,
-    QuizModule,
     HighchartsChartModule
 ],
   providers: [{
