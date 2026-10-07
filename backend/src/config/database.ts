@@ -14,7 +14,7 @@ import { Question } from "../models/Question";
 dotenv.config(); 
 
 export const AppDataSource= new DataSource({
-    type:"mssql",
+    type:"postgres",
     port : Number(process.env.DB_PORT),
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -23,10 +23,6 @@ export const AppDataSource= new DataSource({
     // entities:["src/models/*.ts"],
     entities:[User,Course,Enrollment, Lesson, Quiz, Review, Question, Comment, Progress],
     synchronize:true, 
-    options:{
-        encrypt:false,
-        trustServerCertificate:true
-    }
 })
 
 

@@ -37,7 +37,7 @@ export class Progress {
   // @Column({ default: false })
   // completed: boolean; //
 
-  @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   completion: Date;
 
   // @ManyToOne(() => Lesson, (lesson) => lesson.progress, { onDelete: "CASCADE" })
