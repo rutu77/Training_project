@@ -1,23 +1,24 @@
 import { Request, Response } from "express";
 import { Enrollment } from "../models/Enrollment";
 import { EnrollmentService } from "../services/enrollmentService";
+import { AuthRequest } from "../types/authRequest";
 
 const enrollmentService = new EnrollmentService();
 export class EnrollmentController {
 
   
     async createEnrollment(req: Request, res: Response){
-      const enrollmentData: any = req.body; 
-      // console.log(enrollmentData.userId, enrollmentData.courseId);
-      // const userId=enrollmentData.userId;
-      // const courseId=enrollmentData.courseId;
-           
-
+      const user = (req as AuthRequest).user;
+      const courseId = Number(req.body.courseId);
+      if (!user || !Number.isInteger(courseId) || courseId <= 0) {
+        res.status(400).json({ message: "A valid course ID is required" });
+        return;
+      }
       try {
-        const enrollment = await enrollmentService.createEnrollment(enrollmentData);
+        const enrollment = await enrollmentService.createEnrollment(user.id, courseId);
         res.status(201).json({ message: "Enrollment created successfully!", data: enrollment });
       } catch (error) {
-        res.status(500).json({ error: (error as Error).message});
+        res.status(400).json({ error: (error as Error).message});
       }
     }
   
@@ -61,14 +62,30 @@ export class EnrollmentController {
       }
     }
 
+    async getMyEnrollments(req: Request, res: Response): Promise<void> {
+      const user = (req as AuthRequest).user;
+      if (!user) {
+        res.status(401).json({ message: "Authentication is required" });
+        return;
+      }
+      try {
+        res.status(200).json(await enrollmentService.getEnrollmentsByUser(user.id));
+      } catch (error) {
+        res.status(500).json({ message: "Error fetching enrollments" });
+      }
+    }
+
     async downloadEnrollReceipt(req:Request, res:Response){
       try {
-        const userId = Number(req.params.id);
-        const courseId= Number(req.params.cid)
-        
-        const filePath:string = await enrollmentService.generateEnrollReceipt(courseId,userId);
+        const user = (req as AuthRequest).user;
+        const courseId= Number(req.params.courseId)
+        if (!user || !Number.isInteger(courseId) || courseId <= 0) {
+          res.status(400).json({ message: "A valid course ID is required" });
+          return;
+        }
+        const filePath:string = await enrollmentService.generateEnrollReceipt(courseId,user.id);
   
-        res.download(filePath, `Enrollment_Receipt_${userId}.pdf`, (err: Error) => {
+        res.download(filePath, `Enrollment_Receipt_${user.id}.pdf`, (err: Error) => {
           if (err) {
             res.status(500).json({ error: "Failed to download the receipt" });
           }

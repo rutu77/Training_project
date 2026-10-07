@@ -1,18 +1,18 @@
-select * from User_table147
+select * from User_table
 
-select * from Course_table147
+select * from Course_table
  
-select * from Enrollment_table147
+select * from Enrollment_table
 
-select * from Quiz_table147
+select * from Quiz_table
 
-select * from Question_table147
+select * from Question_table
 
-select * from Review_table147
+select * from Review_table
 
-select * from Comment_table147
+select * from Comment_table
 
-select * from Progress_table147
+select * from Progress_table
 
 select * from Lesson_table174
 

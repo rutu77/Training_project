@@ -11,6 +11,9 @@ export class AdminService{
     }
 
     async updateUserRole(email: string, newRole: 'user' | 'teacher' | 'admin') {
+        if (!["user", "teacher", "admin"].includes(newRole)) {
+            return { error: "Invalid role" };
+        }
         const user = await userService.getUserByEmail(email);
         if (!user) return {error:"User not found!"};
     

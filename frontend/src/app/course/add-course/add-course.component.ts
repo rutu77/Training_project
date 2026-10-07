@@ -12,8 +12,6 @@ import Swal from 'sweetalert2';
 })
 export class AddCourseComponent implements OnInit{
 
-  userId= Number(localStorage.getItem('userId'));
-
   @Output() courseAdded= new EventEmitter<void>()
   
   selectedFile:File|null=null;
@@ -30,7 +28,6 @@ export class AddCourseComponent implements OnInit{
       isPublished: new FormControl(false),
       thumbnail: new FormControl(''),
       price: new FormControl(0),
-      creatorId: new FormControl(this.userId),
       level: new FormControl(''),
       duration: new FormControl(0)
     })
@@ -47,7 +44,6 @@ export class AddCourseComponent implements OnInit{
       form.append('description', this.courseForm.value.description);
       form.append('isPublished', this.courseForm.value.isPublished);
       form.append('price', this.courseForm.value.price);
-      form.append('creatorId', this.courseForm.value.creatorId);
       form.append('level', this.courseForm.value.level);
       form.append('duration', this.courseForm.value.duration);
 
@@ -82,6 +78,5 @@ export class AddCourseComponent implements OnInit{
     //   this.courseForm.reset();
     // }
   }
-
 
 

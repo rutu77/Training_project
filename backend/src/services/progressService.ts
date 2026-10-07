@@ -1,36 +1,14 @@
-import { resolve } from "path";
 import { Progress } from "../models/Progress";
-import { Quiz } from "../models/Quiz";
-import { User } from "../models/User";
 import { progressRepository } from "../repositories/progressRepository";
-import { quizRepository } from "../repositories/quizRepository";
-import { userRepository } from "../repositories/userRepository";
-import { rejects } from "assert";
 const PDFDocument = require('pdfkit')
 import fs from 'fs';
 import path from 'path';
-import { lessonRepository } from "../repositories/lessonRepository";
-import { Lesson } from "../models/Lesson";
 
 
 export class ProgressService{
 
-  async createProgress(progressData: { userId: number; quizId: number; score: number; total: number }) {
-    const { userId, quizId, score, total } = progressData;
-  
-    const progress = progressRepository.create({
-      user: { id: userId } as User,
-      quiz: { id: quizId } as Quiz,
-      score,
-      total,
-    });
-  
-    return await progressRepository.save(progress);
-  }
-    
-
   async getprogressById(id:number){
-    const progress= await progressRepository.findOne({where:{id}, relations:['quiz'], order:{completion:'DESC'}})
+    const progress= await progressRepository.findOne({where:{id}, relations:['quiz', 'user'], order:{completion:'DESC'}})
     if(!progress) throw new Error("progress not found!")
     return progress
   }
@@ -82,16 +60,5 @@ export class ProgressService{
     });
   };
 
-
-  async updateProgress(id: number, data:Partial<Progress>) {
-      const lesson = await lessonRepository.findOne({ where: { course: { id: +id } },relations: ['course','progress'],}) as Lesson;
-
-      await progressRepository.update({ id: +lesson.id }, data);
-
-      const updatedProgress = await progressRepository.findOne({ where: { id }, relations: ['course','lesson','user'] });
-      if (!updatedProgress) throw new Error("Progress not found!");
-  
-      return updatedProgress;
-  }
 
 }

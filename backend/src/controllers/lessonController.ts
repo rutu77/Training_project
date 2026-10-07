@@ -1,32 +1,35 @@
 import { Request, Response } from "express";
 import { LessonService } from "../services/lessonService";
-import { error } from "console";
-import { title } from "process";
-import { Course } from "../models/Course";
-import { Lesson } from "../models/Lesson";
+import { AuthRequest } from "../types/authRequest";
 
 const lessonService = new LessonService();
 
 export class LessonController {
   async createLesson(req: Request, res: Response) {
-    const { title, videoUrl, description, duration, courseId } = req.body;
-    const userId = Number(req.params.id);
-    // console.log(courseId);
+    const user = (req as AuthRequest).user;
+    const { title, videoUrl, duration } = req.body;
+    const courseId = Number(req.body.courseId);
+    const parsedDuration = Number(duration);
+    if (!user || typeof title !== "string" || !title.trim() ||
+        !Number.isInteger(courseId) || courseId <= 0 ||
+        !Number.isFinite(parsedDuration) || parsedDuration < 0) {
+      res.status(400).json({ message: "Valid title, course ID, and duration are required" });
+      return;
+    }
 
     try {
       const lesson = await lessonService.createlesson({
-        title,
+        title: title.trim(),
         videoUrl,
-        description,
-        duration,
+        duration: parsedDuration,
         courseId,
-        userId,
-      });
+      }, user);
       res
         .status(201)
         .json({ message: "lesson created successfully!", data: lesson });
     } catch (error) {
-      res.status(500).json({ message: (error as Error).message });
+      const message = (error as Error).message;
+      res.status(message === "Course not found" ? 404 : message.includes("own") ? 403 : 500).json({ message });
     }
   }
 
@@ -52,8 +55,24 @@ export class LessonController {
 
   async updateLesson(req: Request, res: Response) {
     const lessonId = Number(req.params.id);
-    const data = req.body;
-    console.log(data);
+    const { title, videoUrl, duration } = req.body;
+    const data: { title?: string; videoUrl?: string; duration?: number } = {};
+    if (title !== undefined) {
+      if (typeof title !== "string" || !title.trim()) {
+        res.status(400).json({ message: "Lesson title must not be empty" });
+        return;
+      }
+      data.title = title.trim();
+    }
+    if (videoUrl !== undefined) data.videoUrl = videoUrl;
+    if (duration !== undefined) {
+      const parsedDuration = Number(duration);
+      if (!Number.isFinite(parsedDuration) || parsedDuration < 0) {
+        res.status(400).json({ message: "Lesson duration must be a non-negative number" });
+        return;
+      }
+      data.duration = parsedDuration;
+    }
 
     try {
       const updatedLesson = await lessonService.updateLesson(lessonId, data);

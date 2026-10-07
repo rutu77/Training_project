@@ -1,19 +1,25 @@
 import { Request, Response } from "express";
 import { CommentService } from "../services/commentService";
+import { AuthRequest } from "../types/authRequest";
 
 const commentService = new CommentService();
 
 export class CommentController {
 
   async createComment(req: Request, res: Response){
-    const commentData = req.body;
+    const user = (req as AuthRequest).user;
+    const courseId = Number(req.body.courseId);
+    const { message } = req.body;
+    if (!user || !Number.isInteger(courseId) || courseId <= 0 ||
+        typeof message !== "string" || !message.trim()) {
+      res.status(400).json({ message: "A valid course ID and comment message are required" });
+      return;
+    }
     try {
-      const comment = await commentService.createComment(commentData);
+      const comment = await commentService.createComment({ courseId, message: message.trim() }, user.id);
       res.status(201).json({ message: "comment created successfully!", data: comment });
     } catch (error) {
-      // res.status(500).json({ error: "Error creating comment" });
-      res.status(500).json({ error: (error as Error).message  });
-
+      res.status(400).json({ message: (error as Error).message });
     }
   }  
 
@@ -40,23 +46,33 @@ export class CommentController {
     
   
     async updateComment(req: Request, res: Response): Promise<void> {
+      const user = (req as AuthRequest).user;
+      const { message } = req.body;
+      if (!user || typeof message !== "string" || !message.trim()) {
+        res.status(400).json({ message: "A comment message is required" });
+        return;
+      }
       const commentId = Number(req.params.id);
-      const data = req.body;
       try {
-        const updatedComment = await commentService.updateCommentById(commentId, data);
+        const updatedComment = await commentService.updateCommentById(commentId, message.trim(), user.id, user.role === "admin");
         res.status(200).json({message:"Comment updated successfully", data: updatedComment });
       } catch (error) {
-        res.status(404).json({ message: (error as Error).message });
+        res.status((error as Error).message.includes("cannot") ? 403 : 404).json({ message: (error as Error).message });
       }
     }
   
     async deleteComment(req: Request, res: Response): Promise<void> {
+      const user = (req as AuthRequest).user;
+      if (!user) {
+        res.status(401).json({ message: "Authentication is required" });
+        return;
+      }
       const commentId = Number(req.params.id);
       try {
-        await commentService.deleteComment(commentId);
+        await commentService.deleteComment(commentId, user.id, user.role === "admin");
         res.status(200).json({ message: "Comment deleted successfully!" });
       } catch (error) {
-        res.status(404).json({ message: (error as Error).message });
+        res.status((error as Error).message.includes("cannot") ? 403 : 404).json({ message: (error as Error).message });
       }
     }
   

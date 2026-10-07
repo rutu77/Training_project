@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
-import dotenv from "dotenv"
+import { env } from "./env";
+import { InitialPostgresSchema1791417600000 } from "../migrations/1791417600000-InitialPostgresSchema";
 import {User} from "../models/User"
 import { Course } from "../models/Course";
 import { Enrollment } from "../models/Enrollment";
@@ -11,19 +12,14 @@ import { Progress } from "../models/Progress";
 import { Question } from "../models/Question";
 
 
-dotenv.config(); 
-
 export const AppDataSource= new DataSource({
     type:"postgres",
-    port : Number(process.env.DB_PORT),
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    // entities:["src/models/*.ts"],
+    port: env.database.port,
+    username: env.database.username,
+    password: env.database.password,
+    host: env.database.host,
+    database: env.database.name,
     entities:[User,Course,Enrollment, Lesson, Quiz, Review, Question, Comment, Progress],
-    synchronize:true, 
+    synchronize: false,
+    migrations: [InitialPostgresSchema1791417600000],
 })
-
-
-

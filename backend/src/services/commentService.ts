@@ -1,11 +1,18 @@
 import { Comment } from "../models/Comment";
 import { commentRepository } from "../repositories/commentRepository";
+import { userRepository } from "../repositories/userRepository";
+import { courseRepository } from "../repositories/courseRepository";
 
 export class CommentService{
 
-    async createComment(commentData: Partial<Comment>){
-        const enrollment = commentRepository.create(commentData);
-        return await commentRepository.save(enrollment);
+    async createComment(commentData: { message: string; courseId: number }, userId: number){
+        const [user, course] = await Promise.all([
+            userRepository.findOne({ where: { id: userId } }),
+            courseRepository.findOne({ where: { id: commentData.courseId } }),
+        ]);
+        if (!user || !course) throw new Error("User or course not found");
+        const comment = commentRepository.create({ message: commentData.message, user, course });
+        return commentRepository.save(comment);
     }
       
     
@@ -26,18 +33,21 @@ export class CommentService{
     }
 
 
-    async updateCommentById(id: number, data: Partial<Comment>){
-    commentRepository.update(id, data);
-    const updatedComment = await commentRepository.findOne({ where: {id } });
-    if (!updatedComment) throw new Error("Comment not found!");
-    return updatedComment;
+    async updateCommentById(id: number, message: string, userId: number, isAdmin: boolean){
+    const comment = await commentRepository.findOne({ where: { id }, relations: ["user"] });
+    if (!comment) throw new Error("Comment not found!");
+    if (!isAdmin && comment.user.id !== userId) throw new Error("You cannot update this comment");
+    comment.message = message;
+    return commentRepository.save(comment);
     }
 
 
-    async deleteComment(id: number){
-    // const result = await commentRepository.delete(id);
-    // if (result.affected === 0) throw new Error("Comment not found!");
-        await commentRepository.update(id,{deleted:true})
+    async deleteComment(id: number, userId: number, isAdmin: boolean){
+        const comment = await commentRepository.findOne({ where: { id }, relations: ["user"] });
+        if (!comment) throw new Error("Comment not found!");
+        if (!isAdmin && comment.user.id !== userId) throw new Error("You cannot delete this comment");
+        comment.deleted = true;
+        await commentRepository.save(comment);
     }
 
 

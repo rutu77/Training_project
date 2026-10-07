@@ -3,7 +3,7 @@ import { User } from './User';
 import { Course } from './Course';
 
 
-@Entity({name:'Review_table147'})
+@Entity({name:'Review_table'})
 export class Review {
   @PrimaryGeneratedColumn()
   id:number;

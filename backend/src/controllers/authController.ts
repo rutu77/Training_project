@@ -12,7 +12,6 @@ export class AuthController{
         userData.name= req.body.name
         userData.email= req.body.email
         userData.password= req.body.password
-        userData.role= req.body.role
         // const {name,email,password,role}= req.body;
         // console.log(userData);
         
@@ -23,7 +22,7 @@ export class AuthController{
                 console.log(result.error);
                 return;
             }
-            res.status(200).json({message:"Data saved to DB!", data:result.user});
+            res.status(201).json({message:"Data saved to DB!", data:result.user});
         }catch(error){
             res.status(500).json({error})
         } 
@@ -41,7 +40,7 @@ export class AuthController{
                 console.log(result.error);
                 return;
             }
-            res.status(201).json({message:"Login Successful!", data:{user:result.user,token:result.token,role:result.role}})
+            res.status(200).json({message:"Login Successful!", data:{user:result.user,token:result.token,role:result.role}})
             console.log("Login Successful!");
         }catch(error){
             res.status(500).json({error})

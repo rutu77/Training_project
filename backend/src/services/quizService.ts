@@ -1,35 +1,37 @@
-import { error } from "console";
 import { Course } from "../models/Course";
-import { Progress } from "../models/Progress";
 import { Quiz } from "../models/Quiz";
 import { QuestionRepository } from "../repositories/questionRepository";
 import { courseRepository } from "../repositories/courseRepository";
 import { progressRepository } from "../repositories/progressRepository";
 import { quizRepository } from "../repositories/quizRepository";
+import { User } from "../models/User";
 
 export class QuizService {
   async createQuiz(quizData: {
     courseId: number;
     title: string;
-    userId: number;
-  }) {
+  }, user: User) {
     const course = (await courseRepository.findOne({
       where: { id: quizData.courseId },
+      relations: ["creator"],
     })) as Course;
     if (!course) throw new Error("Course not found!");
 
-    if (course.creator.id == quizData.userId) {
-      const quiz = quizRepository.create({ ...quizData, course: course });
-      return await quizRepository.save(quiz);
-    } else {
+    if (user.role !== "admin" && course.creator.id !== user.id) {
       throw new Error("You can only create quiz on courses you have created");
     }
+
+    const quiz = quizRepository.create({
+      title: quizData.title,
+      course,
+    });
+    return await quizRepository.save(quiz);
   }
 
   async getQuizById(id: number) {
     const quiz = await quizRepository.findOne({
       where: { id: id },
-      relations: ["course", "questions"],
+      relations: ["course", "course.creator", "questions"],
     });
 
     if (!quiz) throw new Error("Quiz not found!");
@@ -50,13 +52,15 @@ export class QuizService {
   }
 
   async getAllQuizzes() {
-    return await quizRepository.find({ relations: ["course", "questions"] });
+    return await quizRepository.find({
+      relations: ["course", "course.creator", "questions"],
+    });
   }
 
   async getQuizzesByCourse(courseId: number) {
     return await quizRepository.find({
       where: { course: { id: courseId } },
-      relations: ["questions"],
+      relations: ["course", "course.creator", "questions"],
     });
   }
 
@@ -69,22 +73,44 @@ export class QuizService {
       explanation?: string;
     }
   ) {
+    if (
+      typeof questionData.question !== "string" ||
+      !questionData.question.trim() ||
+      !Array.isArray(questionData.options) ||
+      questionData.options.length < 2 ||
+      questionData.options.some((option) => typeof option !== "string" || !option.trim()) ||
+      typeof questionData.correctAnswer !== "string" ||
+      !questionData.options.some((option) => option.trim() === questionData.correctAnswer.trim())
+    ) {
+      throw new Error("A question, at least two options, and a matching correct answer are required");
+    }
     const quiz = await quizRepository.findOne({
       where: { id: id },
       relations: ["course", "questions"],
     });
     if (!quiz) throw new Error("Quiz not found!");
 
-    const question = QuestionRepository.create({ ...questionData, quiz });
+    const question = QuestionRepository.create({
+      question: questionData.question.trim(),
+      options: questionData.options.map((option) => option.trim()),
+      correctAnswer: questionData.correctAnswer.trim(),
+      explanation: questionData.explanation,
+      quiz,
+    });
     return await QuestionRepository.save(question);
   }
 
-  async submitQuiz(quizId: number, userId: number, answers: any) {
+  async submitQuiz(quizId: number, userId: number, answers: unknown) {
     const quiz = await quizRepository.findOne({
       where: { id: quizId },
       relations: ["questions"],
     });
     if (!quiz) throw new Error("Quiz not found!");
+    if (quiz.questions.length === 0) throw new Error("This quiz has no questions");
+    if (!answers || typeof answers !== "object" || Array.isArray(answers)) {
+      throw new Error("Answers must be an object keyed by question ID");
+    }
+    const submittedAnswers = answers as Record<string, unknown>;
 
     let existingProgress = await progressRepository.findOne({
       where: { user: { id: userId }, quiz: { id: quizId } },
@@ -92,7 +118,7 @@ export class QuizService {
 
     let correctAnswers = 0;
     quiz.questions.forEach((question) => {
-      if (answers[question.id] === question.correctAnswer) {
+      if (submittedAnswers[String(question.id)] === question.correctAnswer) {
         correctAnswers++;
       }
     });

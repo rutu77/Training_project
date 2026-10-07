@@ -1,15 +1,21 @@
 import { Router } from "express"
 import {AuthController} from "../controllers/authController"
-import { authenticateUser } from "../middleware/middleware";
+import { validateBody } from "../middleware/requestValidation";
 
 const authController= new AuthController()
 
 const router=Router()
 
-router.post('/register',authController.Register);
+router.post('/register',validateBody({
+  name: { type: "string", required: true, minLength: 3, maxLength: 100 },
+  email: { type: "email", required: true },
+  password: { type: "string", required: true, minLength: 8 },
+}),authController.Register);
 
-router.post('/login',authController.login)
+router.post('/login',validateBody({
+  email: { type: "email", required: true },
+  password: { type: "string", required: true },
+}),authController.login)
 
 
 export {router as authRoutes}
-

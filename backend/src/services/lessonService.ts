@@ -2,21 +2,29 @@ import { Course } from "../models/Course";
 import { Lesson } from "../models/Lesson"
 import { courseRepository } from "../repositories/courseRepository";
 import { lessonRepository } from "../repositories/lessonRepository"
+import { User } from "../models/User";
 
 export class LessonService{
 
-    async createlesson(lessonData: {title:string,videoUrl:string,description:string,duration:number,courseId:number,userId:number}){
-        const coursedata = await courseRepository.findOne({where:{id:lessonData.courseId}}) as Course
-        // console.log("courseId and userId",coursedata,lessonData.courseId);
-        
-        if(coursedata.creator.id==lessonData.userId){
-            const lesson = lessonRepository.create({...lessonData, course:coursedata});
-            return await lessonRepository.save(lesson);
+    async createlesson(
+        lessonData: {title:string;videoUrl:string;duration:number;courseId:number},
+        user: User
+    ){
+        const course = await courseRepository.findOne({
+            where:{id:lessonData.courseId},
+            relations:["creator"],
+        });
+        if (!course) throw new Error("Course not found");
+        if (user.role !== "admin" && course.creator.id !== user.id) {
+            throw new Error("You can only add lessons to courses you own");
         }
-        else{
-            throw new Error("You can only add lessons to the courses created by you!")
-        }
-
+        const lesson = lessonRepository.create({
+            title: lessonData.title,
+            videoUrl: lessonData.videoUrl,
+            duration: lessonData.duration,
+            course,
+        });
+        return lessonRepository.save(lesson);
     }
 
     async getLessonById(id:number){
@@ -32,13 +40,13 @@ export class LessonService{
       }
       
 
-    async updateLesson(id: number, data:Partial<Lesson>) {
-        await lessonRepository.update({ id: +id }, data);
-
-        const updatedLesson = await lessonRepository.findOne({ where: { id }, relations: ['course'] });
-        if (!updatedLesson) throw new Error("Lesson not found!");
-    
-        return updatedLesson;
+    async updateLesson(id: number, data: Pick<Partial<Lesson>, "title" | "videoUrl" | "duration">) {
+        const lesson = await lessonRepository.findOne({ where: { id }, relations: ["course"] });
+        if (!lesson) throw new Error("Lesson not found!");
+        if (data.title !== undefined) lesson.title = data.title;
+        if (data.videoUrl !== undefined) lesson.videoUrl = data.videoUrl;
+        if (data.duration !== undefined) lesson.duration = data.duration;
+        return lessonRepository.save(lesson);
     }
     
 

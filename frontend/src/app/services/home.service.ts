@@ -16,15 +16,19 @@ export class HomeService {
   
   //Enrollment
   getEnrollments(){
-    return this.http.get(`${this.api}/enrollment/`);
+    return this.http.get(`${this.api}/enrollment/me`);
   }
   
-  enrollCourse(userId: number, courseId: number) {
-    return this.http.post(`${this.api}/enrollment/`, { userId, courseId });
+  getAllEnrollments(){
+    return this.http.get(`${this.api}/enrollment/`);
   }
 
-  downloadEnrollmentReciept(userId:number,courseId:number){
-    return this.http.get(`${this.api}/enrollment/receipt/${userId}/${courseId}`, {responseType: 'blob' })
+  enrollCourse(courseId: number) {
+    return this.http.post(`${this.api}/enrollment/`, { courseId });
+  }
+
+  downloadEnrollmentReciept(courseId:number){
+    return this.http.get(`${this.api}/enrollment/receipt/${courseId}`, {responseType: 'blob' })
   }
   
 
@@ -48,7 +52,7 @@ export class HomeService {
   }
 
   deleteReview(id:number){
-    return this.http.put(`${this.api}/review/${id}`,{deleted:true})
+    return this.http.delete(`${this.api}/review/${id}`)
   }
 
   updateReview(id:number, review:UpdateReview){
@@ -61,8 +65,8 @@ export class HomeService {
     return this.http.get(`${this.api}/quiz/`);
   }
 
-  createQuiz(quizData:any,userId:number){
-    return this.http.post(`${this.api}/quiz/${userId}`,quizData)
+  createQuiz(quizData:any){
+    return this.http.post(`${this.api}/quiz/`,quizData)
   }
 
   updateQuiz(courseId:number,data:Quiz){
@@ -97,7 +101,7 @@ export class HomeService {
     return this.http.get(`${this.api}/quiz/${id}`)
   }
 
-  submitQuiz(id: number, data: { userId: number; answers: any }) {
+  submitQuiz(id: number, data: { answers: Record<string, string> }) {
     return this.http.post(`${this.api}/quiz/submit/${id}`, data);
   }
   
@@ -120,9 +124,4 @@ export class HomeService {
     return this.http.get(`${this.api}/progress/report/${id}`,{ responseType: 'blob' })
   }
 
-  updateProgress(id:number,data:any){
-    return this.http.put(`${this.api}/progress/user/${id}`,data)
-  }
-
 }
-

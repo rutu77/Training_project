@@ -9,7 +9,7 @@ import {
 import { Course } from "./Course";
 import { Question } from "./Question";
 
-@Entity({ name: "Quiz_table147" })
+@Entity({ name: "Quiz_table" })
 export class Quiz {
   @PrimaryGeneratedColumn()
   id: number;

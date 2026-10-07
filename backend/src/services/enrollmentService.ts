@@ -1,4 +1,3 @@
-import e from "cors";
 import { Enrollment } from "../models/Enrollment";
 import { enrollRepository } from "../repositories/enrollmentRepository";
 import { userRepository } from "../repositories/userRepository";
@@ -7,23 +6,20 @@ const PDFDocument = require("pdfkit");
 import fs from "fs";
 import path from "path";
 
-interface EnrollmentData {
-  userId: number;
-  courseId: number;
-}
-
 export class EnrollmentService {
-  async createEnrollment(enrollmentData: EnrollmentData) {
+  async createEnrollment(userId: number, courseId: number) {
     const user = await userRepository.findOne({
-      where: { id: enrollmentData.userId },
+      where: { id: userId },
     });
     const course = await courseRepository.findOne({
-      where: { id: enrollmentData.courseId },
+      where: { id: courseId },
     });
 
     if (!user || !course) {
       throw new Error("Invalid user or course ID");
     }
+    const existing = await enrollRepository.findOne({ where: { user: { id: userId }, course: { id: courseId } } });
+    if (existing) throw new Error("Already enrolled in this course");
     const enrollment = enrollRepository.create({ user, course });
     return await enrollRepository.save(enrollment);
   }
@@ -35,7 +31,11 @@ export class EnrollmentService {
   }
 
   async updateEnrollmentById(id: number, data: Partial<Enrollment>) {
-    await enrollRepository.update(id, data);
+    const status = data.status;
+    if (status !== "in_progress" && status !== "completed") {
+      throw new Error("Invalid enrollment status");
+    }
+    await enrollRepository.update(id, { status });
     const updatedEnrollment = await enrollRepository.findOne({ where: { id } });
     if (!updatedEnrollment) throw new Error("Enrollment not found!");
     return updatedEnrollment;
@@ -51,6 +51,13 @@ export class EnrollmentService {
     return await enrollRepository.find({ relations: ["course", "user"] });
   }
 
+  async getEnrollmentsByUser(userId: number) {
+    return await enrollRepository.find({
+      where: { user: { id: userId } },
+      relations: ["course", "user"],
+    });
+  }
+
   async getEnrollmentByCourse(courseId: number) {
     const enrollment = await enrollRepository.findOne({
       where: { course: { id: courseId } },
@@ -61,7 +68,11 @@ export class EnrollmentService {
   }
 
   async generateEnrollReceipt(courseId: number, userId: number) {
-    const enrollment = await this.getEnrollmentByCourse(courseId);
+    const enrollment = await enrollRepository.findOne({
+      where: { course: { id: courseId }, user: { id: userId } },
+      relations: ["course", "user"],
+    });
+    if (!enrollment) throw new Error("Enrollment not found!");
     const user= await userRepository.findOne({where:{id:userId}})
 
     const reportsDir = path.join(__dirname, "..", "enrollment_receipts");

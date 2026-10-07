@@ -1,9 +1,8 @@
 import cors from "cors";
-import express, { Request, Response } from "express";
-
+import express from "express";
+import path from "path";
 import { AppDataSource } from "./config/database";
-
-import dotenv from "dotenv";
+import { env } from "./config/env";
 import { authRoutes } from "./routes/authRoutes";
 import { adminRoutes } from "./routes/adminRoutes";
 import { userRoutes } from "./routes/userRoutes";
@@ -17,7 +16,6 @@ import { questionRoutes } from "./routes/questionRoutes";
 import { reviewRoutes } from "./routes/reviewRoutes";
 import { progressRoutes } from "./routes/progressRoutes";
 import { errorMiddleware } from "./middleware/error-middleware";
-import { authenticateUser } from "./middleware/middleware";
 
 const app = express();
 
@@ -28,9 +26,9 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.resolve(process.cwd(), "uploads")));
 
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
@@ -45,16 +43,27 @@ app.use("/review", reviewRoutes);
 app.use("/question", questionRoutes);
 app.use("/progress", progressRoutes);
 
-// app.use(errorMiddleware)
+app.use((req, res) => {
+  res.status(404).json({ status: "error", message: "Route not found" });
+});
+app.use(errorMiddleware);
 
-// const admin= new AdminService()
-AppDataSource.initialize()
-  .then(async () => {
-    app.listen(3000, () => {
-      console.log("Server running!");
-      // admin.initializeAdmin();
+async function startServer(): Promise<void> {
+  await AppDataSource.initialize();
+  await AppDataSource.runMigrations();
+  await new Promise<void>((resolve, reject) => {
+    const server = app.listen(env.port, () => {
+      console.log(`Server running on port ${env.port}`);
+      resolve();
     });
-  })
-  .catch((error: any) => {
-    console.log("Error occured while initializing: ", error);
+    server.once("error", reject);
   });
+}
+
+startServer().catch(async (error: unknown) => {
+  console.error("Backend startup failed:", error);
+  if (AppDataSource.isInitialized) {
+    await AppDataSource.destroy();
+  }
+  process.exitCode = 1;
+});

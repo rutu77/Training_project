@@ -1,13 +1,21 @@
 import { Course } from "../models/Course";
 import { User } from "../models/User";
 import { courseRepository } from "../repositories/courseRepository";
-import { userRepository } from "../repositories/userRepository";
 
 export class CourseService{
-    async createCourse(courseData: { title:string, description:string, isPublished:boolean, thumbnail:string, price:number, creatorId:number, level:'beginner' | 'intermediate' | 'advanced', duration:number } ){
-        // console.log(courseData.creatorId);
-        const user= await userRepository.findOne({where:{id:courseData.creatorId}}) as User
-        const course = courseRepository.create({...courseData, creator:user});
+    async createCourse(
+        courseData: {
+            title: string;
+            description: string;
+            isPublished: boolean;
+            thumbnail: string;
+            price: number;
+            level: 'beginner' | 'intermediate' | 'advanced';
+            duration: number;
+        },
+        creator: User
+    ){
+        const course = courseRepository.create({...courseData, creator});
         return await courseRepository.save(course);
     }
 

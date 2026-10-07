@@ -2,14 +2,21 @@ import { Course } from "../models/Course";
 import { Review } from "../models/Review";
 import { User } from "../models/User";
 import { reviewRepository } from "../repositories/reviewRepository";
+import { userRepository } from "../repositories/userRepository";
+import { courseRepository } from "../repositories/courseRepository";
 
 export class ReviewService{
 
-    async createreview(reviewData:{comment:string,courseId:number,userId:number,rating:number}){
-
-        const user = await reviewRepository.manager.findOne('User', { where: { id: reviewData.userId } }) as User;
-        const course = await reviewRepository.manager.findOne('Course', { where: { id: reviewData.courseId } }) as Course;
-        const review = reviewRepository.create({...reviewData, user, course});
+    async createreview(reviewData:{comment:string;courseId:number;rating:number}, userId:number){
+        const user = await userRepository.findOne({ where: { id: userId } }) as User;
+        const course = await courseRepository.findOne({ where: { id: reviewData.courseId } }) as Course;
+        if (!user || !course) throw new Error("User or course not found");
+        const review = reviewRepository.create({
+            comment: reviewData.comment,
+            rating: reviewData.rating,
+            user,
+            course,
+        });
         return await reviewRepository.save(review);
     }
        
@@ -28,17 +35,21 @@ export class ReviewService{
         return reviews;
     }
 
-    async updateReviewById(id: number, data: Partial<Review>){
-        await reviewRepository.update(id, data);
-        const updatedReview = await reviewRepository.findOne({ where: {id } });
-        if (!updatedReview) throw new Error("Review not found!");
-        return updatedReview;
+    async updateReviewById(id: number, data: { rating?: number; comment?: string }, userId: number, isAdmin: boolean){
+        const review = await reviewRepository.findOne({ where: { id }, relations: ["user"] });
+        if (!review) throw new Error("Review not found!");
+        if (!isAdmin && review.user.id !== userId) throw new Error("You cannot update this review");
+        if (data.rating !== undefined) review.rating = data.rating;
+        if (data.comment !== undefined) review.comment = data.comment;
+        return reviewRepository.save(review);
     }
 
-    async deleteReview(id: number){
-        // const result = await reviewRepository.delete(id);
-        // if (result.affected === 0) throw new Error("Review not found!");
-        await reviewRepository.update(id,{deleted:true})
+    async deleteReview(id: number, userId: number, isAdmin: boolean){
+        const review = await reviewRepository.findOne({ where: { id }, relations: ["user"] });
+        if (!review) throw new Error("Review not found!");
+        if (!isAdmin && review.user.id !== userId) throw new Error("You cannot delete this review");
+        review.deleted = true;
+        await reviewRepository.save(review);
     }
 
     async getAllReviews(){

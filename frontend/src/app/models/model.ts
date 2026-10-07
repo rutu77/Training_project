@@ -29,8 +29,6 @@ export interface AddCourse{
     isPublished:boolean,
     thumbnail:string,
     price:number,
-    // tags:string[],
-    creatorId:number,
     level:string,
     duration:number
 
@@ -100,7 +98,6 @@ export interface Review{
 }
 
 export interface AddReview{
-    userId:number,
     courseId:number,
     rating:number,
     comment:string
@@ -123,5 +120,3 @@ export interface Progress{
     lesson:Lesson
     deleted:boolean
 }
-
-

@@ -9,7 +9,7 @@ import { User } from "./User";
 import { Lesson } from "./Lesson";
 import { Quiz } from "./Quiz";
 
-@Entity({ name: "Progress_table147" })
+@Entity({ name: "Progress_table" })
 export class Progress {
   @PrimaryGeneratedColumn()
   id: number;

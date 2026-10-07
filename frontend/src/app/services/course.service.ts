@@ -53,8 +53,8 @@ export class CourseService {
     return this.http.get(`${this.api}/lesson/`)
   }
 
-  addLesson(lesson:Lesson, userId:number){
-    return this.http.post(`${this.api}/lesson/${userId}`,lesson)
+  addLesson(lesson:Lesson){
+    return this.http.post(`${this.api}/lesson/`,lesson)
   }
 
   updateLesson(id:number,lesson:any){
@@ -62,7 +62,7 @@ export class CourseService {
   }
 
   deleteLesson(id:number){
-    return this.http.put(`${this.api}/lesson/${id}`,{deleted:true})
+    return this.http.delete(`${this.api}/lesson/${id}`)
   }
 
   getLessonByCourseId(courseId:number){
@@ -106,4 +106,3 @@ export class CourseService {
   }
 
 }
-

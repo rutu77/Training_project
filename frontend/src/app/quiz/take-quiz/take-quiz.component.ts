@@ -15,7 +15,6 @@ export class TakeQuizComponent implements OnInit {
 
     quiz: any;
     quizForm: FormGroup;
-    userId=Number(localStorage.getItem("userId"))
   
     constructor(private route: ActivatedRoute, private homeService: HomeService, private router:Router) {
       this.quizForm = new FormGroup({});
@@ -40,8 +39,7 @@ export class TakeQuizComponent implements OnInit {
     submitQuiz(): void {
       if (this.quizForm.valid) {
         const answers = this.quizForm.value;
-        const userId = this.userId;
-        this.homeService.submitQuiz(this.quiz.id, {userId, answers}).subscribe(
+        this.homeService.submitQuiz(this.quiz.id, { answers }).subscribe(
           () => {
             Swal.fire({
               icon: 'success',

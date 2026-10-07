@@ -12,8 +12,6 @@ import Swal from 'sweetalert2';
 
 export class AddlessonsComponent {
 
-  userId= Number(localStorage.getItem('userId'));
-  
   constructor(private _course:CourseService){}
 
   @Output() lessonAdded= new EventEmitter<void>();
@@ -33,7 +31,7 @@ export class AddlessonsComponent {
   onSubmit(){
     if(this.lessonForm.valid){
   
-      this._course.addLesson(this.lessonForm.value,this.userId).subscribe(
+      this._course.addLesson(this.lessonForm.value).subscribe(
         ()=>{
           Swal.fire({
             title: 'Lesson Added',
@@ -57,6 +55,5 @@ export class AddlessonsComponent {
     }
 
   }
-
 
 

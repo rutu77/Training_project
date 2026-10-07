@@ -15,6 +15,7 @@ export class QuizListComponent implements OnInit {
   quizForm: FormGroup;
   isLoading:boolean=true
   userId= Number(localStorage.getItem('userId'))
+  isAdmin = localStorage.getItem('user_role') === 'admin';
 
   constructor(private homeService: HomeService) {
     this.quizForm = new FormGroup({
@@ -30,7 +31,10 @@ export class QuizListComponent implements OnInit {
   loadQuizzes(): void {
     this.homeService.getAllQuizzes().subscribe((data:any) => {
       this.quizzes = data;
-      this.quizzes= this.quizzes.filter(quiz=>!quiz.deleted).filter(quiz=>quiz.course.creator.id==this.userId)
+      this.quizzes= this.quizzes.filter(quiz=>!quiz.deleted);
+      if (!this.isAdmin) {
+        this.quizzes = this.quizzes.filter(quiz => quiz.course.creator.id === this.userId);
+      }
       // console.log(this.quizzes);
       this.isLoading=false
     });
@@ -42,7 +46,7 @@ export class QuizListComponent implements OnInit {
   createQuiz(){
     if(this.quizForm.valid){
 
-      this.homeService.createQuiz(this.quizForm.value, this.userId).subscribe(
+      this.homeService.createQuiz(this.quizForm.value).subscribe(
         () => {
           Swal.fire({
             icon: 'success',

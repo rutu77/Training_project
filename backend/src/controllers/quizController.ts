@@ -1,22 +1,32 @@
 import { Request, Response } from "express";
 import { QuizService } from "../services/quizService";
-import { Quiz } from "../models/Quiz";
+import { AuthRequest } from "../types/authRequest";
 
 const quizService = new QuizService();
 
 export class QuizController {
   async createQuiz(req: Request, res: Response) {
-    const { courseId, title } = req.body;
-    const userId = Number(req.params.id);
-    console.log(courseId);
+    const user = (req as AuthRequest).user;
+    const courseId = Number(req.body.courseId);
+    const { title } = req.body;
+    if (!user) {
+      res.status(401).json({ message: "Authentication is required" });
+      return;
+    }
+    if (!Number.isInteger(courseId) || courseId <= 0 || typeof title !== "string" || !title.trim()) {
+      res.status(400).json({ message: "A valid course ID and quiz title are required" });
+      return;
+    }
 
     try {
-      const quiz = await quizService.createQuiz({ courseId, title, userId });
+      const quiz = await quizService.createQuiz({ courseId, title: title.trim() }, user);
       res
         .status(201)
         .json({ message: "Quiz created successfully!", data: quiz });
     } catch (error) {
-      res.status(500).json({ message: (error as Error).message });
+      const message = (error as Error).message;
+      const status = message === "Course not found!" ? 404 : message.startsWith("You can only") ? 403 : 500;
+      res.status(status).json({ message });
     }
   }
 
@@ -24,7 +34,7 @@ export class QuizController {
     const quizId = Number(req.params.id);
     try {
       const quiz = await quizService.getQuizById(quizId);
-      res.status(200).json({ data: quiz });
+      res.status(200).json({ data: this.quizForUser(quiz, (req as AuthRequest).user) });
     } catch (error) {
       res.status(404).json({ message: (error as Error).message });
     }
@@ -32,9 +42,13 @@ export class QuizController {
 
   async updateQuiz(req: Request, res: Response) {
     const quizId = Number(req.params.id);
-    const data = req.body;
+    const { title } = req.body;
+    if (typeof title !== "string" || !title.trim()) {
+      res.status(400).json({ message: "Quiz title is required" });
+      return;
+    }
     try {
-      const updatedQuiz = await quizService.updateQuizById(quizId, data);
+      const updatedQuiz = await quizService.updateQuizById(quizId, { title: title.trim() });
       res
         .status(200)
         .json({ message: "Quiz updated successfully", data: updatedQuiz });
@@ -56,7 +70,7 @@ export class QuizController {
   async getAllQuizzes(req: Request, res: Response) {
     try {
       const quizzes = await quizService.getAllQuizzes();
-      res.status(200).json(quizzes);
+      res.status(200).json(quizzes.map((quiz) => this.quizForUser(quiz, (req as AuthRequest).user)));
     } catch (error) {
       res.status(500).json({ error: "Error fetching quizzes" });
     }
@@ -66,7 +80,7 @@ export class QuizController {
     try {
       const courseId = Number(req.params.id);
       const quizzes = await quizService.getQuizzesByCourse(courseId);
-      res.status(200).json(quizzes);
+      res.status(200).json(quizzes.map((quiz) => this.quizForUser(quiz, (req as AuthRequest).user)));
     } catch (error) {
       res.status(500).json({ error: "Error fetching quizzes" });
     }
@@ -87,14 +101,32 @@ export class QuizController {
   }
 
   async submitQuiz(req: Request, res: Response) {
+    const user = (req as AuthRequest).user;
+    if (!user) {
+      res.status(401).json({ message: "Authentication is required" });
+      return;
+    }
     try {
       const quizId = Number(req.params.id);
-      const userId = Number(req.body.userId);
       const answers = req.body.answers;
-      const result = await quizService.submitQuiz(quizId, userId, answers);
+      if (!Number.isInteger(quizId) || quizId <= 0) {
+        res.status(400).json({ message: "Invalid quiz ID" });
+        return;
+      }
+      const result = await quizService.submitQuiz(quizId, user.id, answers);
       res.status(200).json(result);
     } catch (error) {
-      res.status(500).json({ message: (error as Error).message });
+      const message = (error as Error).message;
+      res.status(message === "Quiz not found!" ? 404 : 400).json({ message });
     }
+  }
+
+  private quizForUser(quiz: Awaited<ReturnType<QuizService["getQuizById"]>>, user?: AuthRequest["user"]) {
+    const canSeeAnswers = user?.role === "admin" || quiz.course?.creator?.id === user?.id;
+    if (canSeeAnswers) return quiz;
+    return {
+      ...quiz,
+      questions: quiz.questions?.map(({ correctAnswer, explanation, ...question }) => question),
+    };
   }
 }

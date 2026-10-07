@@ -18,6 +18,7 @@ export class ManageCourseListComponent implements OnInit {
   isLoading:boolean=true
   selectCourseId!: number;
   userId = Number(localStorage.getItem('userId'));
+  isAdmin = localStorage.getItem('user_role') === 'admin';
 
   constructor(private course: CourseService) {}
 
@@ -30,8 +31,10 @@ export class ManageCourseListComponent implements OnInit {
       this.courses = data;
 
       this.courses = this.courses
-        .filter((course) => !course.deleted)
-        .filter((course) => course.creator.id === this.userId);
+        .filter((course) => !course.deleted);
+      if (!this.isAdmin) {
+        this.courses = this.courses.filter((course) => course.creator.id === this.userId);
+      }
       this.isLoading=false
       // console.log([this.courses].flat());
     });

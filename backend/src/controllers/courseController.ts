@@ -1,43 +1,100 @@
 import { Request, Response } from "express";
 import { CourseService } from "../services/courseService";
-import { Course } from "../models/Course";
-import { error } from "console";
+import { AuthRequest } from "../types/authRequest";
 
 const courseService = new CourseService();
 
 export class CourseController {
   async createCourse(req: Request, res: Response) {
-    // console.log(req.body);
-    const {
-      title,
-      description,
-      isPublished,
-      price,
-      creatorId,
-      level,
-      duration,
-    } = req.body;
-    let thumbnailUrl = `http://localhost:3000/uploads/${req.file?.filename}`;
-    if (thumbnailUrl === "http://localhost:3000/uploads/undefined") {
-      thumbnailUrl =
-        "http://localhost:3000/uploads/thumbnail-1744171929158-151282897.jpg";
+    const creator = (req as AuthRequest).user;
+    if (!creator) {
+      res.status(401).json({ message: "Authentication is required" });
+      return;
     }
+
+    let courseData: {
+      title: string;
+      description: string;
+      isPublished: boolean;
+      thumbnail: string;
+      price: number;
+      level: "beginner" | "intermediate" | "advanced";
+      duration: number;
+    };
+
     try {
-      const course = await courseService.createCourse({
-        title,
-        description,
+      const { title, description, price, level, duration } = req.body;
+
+      if (typeof title !== "string" || !title.trim()) {
+        throw new Error("Course title is required");
+      }
+      if (typeof description !== "string" || !description.trim()) {
+        throw new Error("Course description is required");
+      }
+
+      const parseNonNegativeNumber = (value: unknown, field: string): number => {
+        if (
+          (typeof value !== "string" && typeof value !== "number") ||
+          String(value).trim() === ""
+        ) {
+          throw new Error(`${field} must be a non-negative number`);
+        }
+        const parsed = Number(value);
+        if (!Number.isFinite(parsed) || parsed < 0) {
+          throw new Error(`${field} must be a non-negative number`);
+        }
+        return parsed;
+      };
+
+      const parsedPrice = parseNonNegativeNumber(price, "Course price");
+      const parsedDuration = parseNonNegativeNumber(duration, "Course duration");
+
+      if (!Number.isInteger(parsedDuration) || parsedDuration < 0) {
+        throw new Error("Course duration must be a non-negative integer");
+      }
+      if (!["beginner", "intermediate", "advanced"].includes(level)) {
+        throw new Error("Course level is invalid");
+      }
+
+      const publishedValue = req.body.isPublished;
+      const isPublished =
+        publishedValue === true ||
+        publishedValue === "true";
+      if (
+        publishedValue !== undefined &&
+        publishedValue !== null &&
+        publishedValue !== "null" &&
+        publishedValue !== "" &&
+        publishedValue !== true &&
+        publishedValue !== false &&
+        publishedValue !== "true" &&
+        publishedValue !== "false"
+      ) {
+        throw new Error("isPublished must be true or false");
+      }
+
+      courseData = {
+        title: title.trim(),
+        description: description.trim(),
         isPublished,
-        thumbnail: thumbnailUrl,
-        price,
-        creatorId,
+        thumbnail: `http://localhost:3000/uploads/${req.file?.filename ?? "thumbnail-1744171929158-151282897.jpg"}`,
+        price: parsedPrice,
         level,
-        duration,
-      });
+        duration: parsedDuration,
+      };
+    } catch (error) {
+      res.status(400).json({ message: (error as Error).message });
+      return;
+    }
+
+    try {
+      const course = await courseService.createCourse(courseData, creator);
       res
         .status(201)
         .json({ message: "Course created successfully!", data: course });
     } catch (error) {
-      res.status(404).json({ message: (error as Error).message });
+      console.error("Error creating course:", error);
+      res.status(500).json({ message: "Failed to create course" });
     }
   }
 
@@ -53,7 +110,8 @@ export class CourseController {
 
   async updateCourse(req: Request, res: Response) {
     const courseId = Number(req.params.id);
-    const data = req.body;
+    const { title, description, price, level, duration, isPublished, thumbnail } = req.body;
+    const data = { title, description, price, level, duration, isPublished, thumbnail };
     try {
       const updatedCourse = await courseService.updateCourse(courseId, data);
       res

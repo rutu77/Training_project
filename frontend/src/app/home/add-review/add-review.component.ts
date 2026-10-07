@@ -16,15 +16,12 @@ export class AddReviewComponent implements OnInit{
   @Output() reviewAdded= new EventEmitter()
 
   reviewForm!:FormGroup
-  userId= Number(localStorage.getItem('userId'))
-
   constructor(private homeService:HomeService){}
 
   ngOnInit():void{
     this.reviewForm= new FormGroup({
       comment:new FormControl(''),
       rating: new FormControl(),
-      userId:new FormControl(this.userId),
       courseId:new FormControl(this.courseId)
     })
   }
@@ -32,8 +29,6 @@ export class AddReviewComponent implements OnInit{
 
   onSubmitReview(){
     if(this.reviewForm.valid){
-      console.log(this.reviewForm.value);
-      
       this.homeService.addReview(this.reviewForm.value).subscribe(
         ()=>{
           Swal.fire({

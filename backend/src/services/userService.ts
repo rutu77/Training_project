@@ -14,6 +14,8 @@ export class UserService{
     }
 
     async updateUserById(id:number,data:Partial<User>){
+        const existingUser = await userRepository.findOne({ where: { id } });
+        if (!existingUser) throw new Error("User not found!");
         if (data.password) {
             const hashedPassword = await bcrypt.hash(data.password, 10);
             data.password = hashedPassword;
@@ -26,9 +28,8 @@ export class UserService{
     }
 
     async deleteUser(id:number){
-        // const result= await userRepository.delete(id);
-        // if(result.affected===0) throw new Error("User not found!")
-        await userRepository.update(id,{deleted:true})
+        const result = await userRepository.update(id,{deleted:true});
+        if (!result.affected) throw new Error("User not found!");
     }
 
     async getAllUsers(){

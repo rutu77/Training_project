@@ -21,7 +21,7 @@ export class UserEnrollmentsComponent {
   }
 
   loadEnrollments(){
-    this.homeService.getEnrollments().subscribe((data:any)=>{
+    this.homeService.getAllEnrollments().subscribe((data:any)=>{
       this.enrollments= data
       this.enrollments=this.enrollments.filter(enroll=>!enroll.deleted)
       this.isLoading=false

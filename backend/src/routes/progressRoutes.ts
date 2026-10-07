@@ -1,18 +1,23 @@
 import { Router } from "express"
 import { ProgressController } from "../controllers/progressController"
-import { authenticateUser } from "../middleware/middleware"
+import {
+  authenticateUser,
+  authorizeProgressOwnerOrAdmin,
+  authorizeRole,
+  authorizeUserSelfOrAdminForParam,
+} from "../middleware/middleware"
+import { validateIdParam } from "../middleware/requestValidation"
 
 
 const progressController= new ProgressController()
 
 const router= Router()
+router.param("id", validateIdParam());
 
-router.post('/',authenticateUser,progressController.createProgress)
-router.get('/:id',authenticateUser,progressController.getprogressById)
-router.get('/user/:id',authenticateUser,progressController.getProgressByUser)
-router.get('/report/:id',authenticateUser,progressController.downloadProgressReport)
-router.get('/',authenticateUser,progressController.getAllprogresss)
-router.put('/:id',authenticateUser,progressController.updateprogress)
-router.delete('/:id',authenticateUser,progressController.deleteprogress)
+router.get('/:id',authenticateUser,authorizeProgressOwnerOrAdmin,progressController.getprogressById)
+router.get('/user/:id',authenticateUser,authorizeUserSelfOrAdminForParam,progressController.getProgressByUser)
+router.get('/report/:id',authenticateUser,authorizeUserSelfOrAdminForParam,progressController.downloadProgressReport)
+router.get('/',authenticateUser,authorizeRole(["admin"]),progressController.getAllprogresss)
+router.delete('/:id',authenticateUser,authorizeRole(["admin"]),progressController.deleteprogress)
 
 export {router as progressRoutes}

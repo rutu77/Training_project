@@ -20,7 +20,7 @@ export class AdminService {
   }
 
   deleteUser(id:number){
-    return this.http.put(`${this.api}/user/${id}`,{deleted:true})
+    return this.http.delete(`${this.api}/user/${id}`)
   }
 
   getUserById(id:number){

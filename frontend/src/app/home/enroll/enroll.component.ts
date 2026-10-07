@@ -24,14 +24,14 @@ export class EnrollComponent{
 
 
   enroll(){
-    this.downloadEnrollReceipt()
-    this.homeService.enrollCourse(this.userId, this.course.id).subscribe(
+    this.homeService.enrollCourse(this.course.id).subscribe(
       () => {
         Swal.fire({
           title: 'Enrollment Successful',
           text: 'You have been successfully enrolled in the course!',
           icon: 'success',
         });
+        this.downloadEnrollReceipt();
         this.enrollSuccess.emit();
       },
       (error) => {
@@ -47,7 +47,7 @@ export class EnrollComponent{
   }
 
   downloadEnrollReceipt(){
-    this.homeService.downloadEnrollmentReciept(+this.userId,this.course.id).subscribe(
+    this.homeService.downloadEnrollmentReciept(this.course.id).subscribe(
       (response:Blob)=>{
         const fileName= `Enrollment_Receipt_${this.userId}.pdf`;
         saveAs(response, fileName);

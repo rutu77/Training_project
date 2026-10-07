@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMan
 import { User } from './User';
 import { Course } from './Course';
 
-@Entity({name:'Comment_table147'})
+@Entity({name:'Comment_table'})
 export class Comment {
   @PrimaryGeneratedColumn()
   id:number;

@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, JoinColumn } from 't
 import { Quiz } from './Quiz';
 import { User } from './User';
 
-@Entity({name:"Question_table147"})
+@Entity({name:"Question_table"})
 export class Question {
   @PrimaryGeneratedColumn()
   id:number;
@@ -10,7 +10,7 @@ export class Question {
   @Column()
   question:string;
 
-  @Column('simple-array')
+  @Column({ type: "jsonb" })
   options: string[];
 
   @Column()

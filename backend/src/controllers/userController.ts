@@ -15,7 +15,13 @@ export class UserController {
 
   async updateUser(req: Request, res: Response) {
     const userId = Number(req.params.id);
-    const data = req.body;
+    const { name, email, password, bio } = req.body;
+    const data: { name?: string; email?: string; password?: string; bio?: string; profilePicture?: string } = {
+      name,
+      email,
+      password,
+      bio,
+    };
     try {
       if (req.file) {
         data.profilePicture = `http://localhost:3000/uploads/${req.file.filename}`;
