@@ -12,5 +12,5 @@ export class RegisterDto{
     @MinLength(8,{message:"minimum length should be 8"})
     password:string;
 
-    role?:string;
+    requestedRole?:"user"|"teacher";
 }

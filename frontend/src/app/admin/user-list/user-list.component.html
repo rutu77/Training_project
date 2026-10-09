@@ -1,3 +1,14 @@
+<section class="mb-4" *ngIf="teacherRequests.length">
+  <h2>Teacher access requests</h2>
+  <div class="surface-card p-3 mb-2 border-round" *ngFor="let request of teacherRequests">
+    <span>{{ request.name }} ({{ request.email }})</span>
+    <button pButton type="button" label="Approve" class="ml-3"
+      (click)="reviewTeacherRequest(request.id, 'approved')"></button>
+    <button pButton type="button" label="Reject" class="p-button-secondary ml-2"
+      (click)="reviewTeacherRequest(request.id, 'rejected')"></button>
+  </div>
+</section>
+
 <app-generic-list 
   [items]="users"
   [itemFields]="['id', 'name', 'email', 'role']"

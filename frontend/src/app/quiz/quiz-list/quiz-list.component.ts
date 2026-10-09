@@ -29,14 +29,23 @@ export class QuizListComponent implements OnInit {
   }
 
   loadQuizzes(): void {
-    this.homeService.getAllQuizzes().subscribe((data:any) => {
-      this.quizzes = data;
-      this.quizzes= this.quizzes.filter(quiz=>!quiz.deleted);
-      if (!this.isAdmin) {
-        this.quizzes = this.quizzes.filter(quiz => quiz.course.creator.id === this.userId);
+    this.homeService.getAllQuizzes().subscribe({
+      next: (data: any) => {
+        this.quizzes = data.filter((quiz: any) => !quiz.deleted);
+        if (!this.isAdmin) {
+          this.quizzes = this.quizzes.filter((quiz: any) => quiz.course?.creator?.id === this.userId);
+        }
+        this.isLoading = false;
+      },
+      error: (error: any) => {
+        console.error('Error fetching quizzes:', error);
+        this.isLoading = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.error?.error || 'Error fetching quizzes',
+        });
       }
-      // console.log(this.quizzes);
-      this.isLoading=false
     });
   }
 

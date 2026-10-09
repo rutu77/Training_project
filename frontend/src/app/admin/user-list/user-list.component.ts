@@ -13,6 +13,7 @@ import { UpdateUserComponent } from '../update-user/update-user.component';
 export class UserListComponent implements OnInit {
  
   users: User[] = [];
+  teacherRequests: User[] = [];
   displayUpdateDialog= false;
   selectedUserId!:number;
   isLoading:boolean=true
@@ -21,6 +22,21 @@ export class UserListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUsers();
+    this.loadTeacherRequests();
+  }
+
+  loadTeacherRequests() {
+    this.admin.getTeacherRequests().subscribe({
+      next: (response) => this.teacherRequests = response.data,
+      error: (error) => {
+        console.error('Error loading teacher requests:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Unable to load teacher access requests.',
+          icon: 'error',
+        });
+      }
+    });
   }
 
   loadUsers() {
@@ -33,7 +49,29 @@ export class UserListComponent implements OnInit {
 
   refresh(){
     this.loadUsers()
+    this.loadTeacherRequests()
     this.displayUpdateDialog=false
+  }
+
+  reviewTeacherRequest(userId: number, decision: 'approved' | 'rejected') {
+    this.admin.reviewTeacherRequest(userId, decision).subscribe({
+      next: () => {
+        Swal.fire({
+          title: decision === 'approved' ? 'Teacher access approved' : 'Request rejected',
+          icon: 'success',
+        });
+        this.loadTeacherRequests();
+        this.loadUsers();
+      },
+      error: (error: any) => {
+        console.error('Error reviewing teacher request:', error);
+        Swal.fire({
+          title: 'Error',
+          text: error.error?.message || 'Unable to review teacher request.',
+          icon: 'error',
+        });
+      }
+    });
   }
 
 
@@ -63,5 +101,4 @@ export class UserListComponent implements OnInit {
     this.displayUpdateDialog= true
   }
 }
-
 

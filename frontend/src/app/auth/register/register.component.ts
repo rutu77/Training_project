@@ -24,7 +24,7 @@ export class RegisterComponent implements OnInit {
     password: new FormControl('', [Validators.minLength(8), Validators.required]),
     confirmPassword: new FormControl('', [Validators.required]),
     secretKey: new FormControl(''),
-    role: new FormControl('user')
+    requestedRole: new FormControl('user')
   });
 
   ngOnInit(): void {
@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
         this.isAdmin=this._auth.getRole()==="admin"
         
         this.registerForm.get('secretKey')?.setValidators([Validators.required]);
-        this.registerForm.get('role')?.setValue('admin');
+        this.registerForm.get('requestedRole')?.setValue('user');
       }
     });
   }
@@ -94,7 +94,7 @@ export class RegisterComponent implements OnInit {
             console.log("Registration form submitted");
             Swal.fire({
               title: "Good job!",
-              text: "Registration Successful!",
+              text: res.message || "Registration Successful!",
               icon: "success"
             });
             this.router.navigate(['/auth/login'])

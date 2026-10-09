@@ -25,11 +25,12 @@
         <div *ngIf="!isAdmin">
         <label for="role">Role</label>
         <div class="flex align-items-center">
-          <input type="radio" id="user" formControlName="role" value="user">
+          <input type="radio" id="user" formControlName="requestedRole" value="user">
           <label for="user" class="mr-2">User</label>
-          <input type="radio" id="teacher" formControlName="role" value="teacher">
+          <input type="radio" id="teacher" formControlName="requestedRole" value="teacher">
           <label for="teacher">Teacher</label>
         </div>
+        <small class="block text-600 mb-3">Teacher access requires approval by an administrator.</small>
       </div>
 
         <div *ngIf="isAdmin">
@@ -41,5 +42,4 @@
       </form>
   </div>
 </div>
-
 

@@ -11,6 +11,14 @@ export class AdminService {
   constructor(private http: HttpClient) { }
 
   private readonly api= `http://localhost:3000`
+  getTeacherRequests(){
+    return this.http.get<any>(`${this.api}/admin/teacher-requests`)
+  }
+
+  reviewTeacherRequest(id: number, decision: 'approved' | 'rejected'){
+    return this.http.patch(`${this.api}/admin/teacher-requests/${id}`, { decision })
+  }
+
   updateRole(data:any){
     return this.http.post(`${this.api}/admin/updateRole`,data)
   }

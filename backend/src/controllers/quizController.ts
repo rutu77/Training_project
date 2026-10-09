@@ -4,6 +4,19 @@ import { AuthRequest } from "../types/authRequest";
 
 const quizService = new QuizService();
 
+function quizForUser(
+  quiz: Awaited<ReturnType<QuizService["getQuizById"]>>,
+  user?: AuthRequest["user"]
+) {
+  const canSeeAnswers =
+    user?.role === "admin" || quiz.course?.creator?.id === user?.id;
+  if (canSeeAnswers) return quiz;
+  return {
+    ...quiz,
+    questions: quiz.questions?.map(({ correctAnswer, explanation, ...question }) => question),
+  };
+}
+
 export class QuizController {
   async createQuiz(req: Request, res: Response) {
     const user = (req as AuthRequest).user;
@@ -34,7 +47,7 @@ export class QuizController {
     const quizId = Number(req.params.id);
     try {
       const quiz = await quizService.getQuizById(quizId);
-      res.status(200).json({ data: this.quizForUser(quiz, (req as AuthRequest).user) });
+      res.status(200).json({ data: quizForUser(quiz, (req as AuthRequest).user) });
     } catch (error) {
       res.status(404).json({ message: (error as Error).message });
     }
@@ -70,8 +83,9 @@ export class QuizController {
   async getAllQuizzes(req: Request, res: Response) {
     try {
       const quizzes = await quizService.getAllQuizzes();
-      res.status(200).json(quizzes.map((quiz) => this.quizForUser(quiz, (req as AuthRequest).user)));
+      res.status(200).json(quizzes.map((quiz) => quizForUser(quiz, (req as AuthRequest).user)));
     } catch (error) {
+      console.error("Error fetching quizzes:", error);
       res.status(500).json({ error: "Error fetching quizzes" });
     }
   }
@@ -80,8 +94,9 @@ export class QuizController {
     try {
       const courseId = Number(req.params.id);
       const quizzes = await quizService.getQuizzesByCourse(courseId);
-      res.status(200).json(quizzes.map((quiz) => this.quizForUser(quiz, (req as AuthRequest).user)));
+      res.status(200).json(quizzes.map((quiz) => quizForUser(quiz, (req as AuthRequest).user)));
     } catch (error) {
+      console.error("Error fetching quizzes for course:", error);
       res.status(500).json({ error: "Error fetching quizzes" });
     }
   }
@@ -119,14 +134,5 @@ export class QuizController {
       const message = (error as Error).message;
       res.status(message === "Quiz not found!" ? 404 : 400).json({ message });
     }
-  }
-
-  private quizForUser(quiz: Awaited<ReturnType<QuizService["getQuizById"]>>, user?: AuthRequest["user"]) {
-    const canSeeAnswers = user?.role === "admin" || quiz.course?.creator?.id === user?.id;
-    if (canSeeAnswers) return quiz;
-    return {
-      ...quiz,
-      questions: quiz.questions?.map(({ correctAnswer, explanation, ...question }) => question),
-    };
   }
 }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CourseService } from '../../services/course.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { HomeService } from '../../services/home.service';
 
@@ -21,15 +21,17 @@ export class AddReviewComponent implements OnInit{
   ngOnInit():void{
     this.reviewForm= new FormGroup({
       comment:new FormControl(''),
-      rating: new FormControl(),
-      courseId:new FormControl(this.courseId)
+      rating: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(5)])
     })
   }
 
 
   onSubmitReview(){
     if(this.reviewForm.valid){
-      this.homeService.addReview(this.reviewForm.value).subscribe(
+      this.homeService.addReview({
+        ...this.reviewForm.value,
+        courseId: this.courseId
+      }).subscribe(
         ()=>{
           Swal.fire({
             title:"Review Submitted",
@@ -37,7 +39,7 @@ export class AddReviewComponent implements OnInit{
             icon:'success'
           })
           this.reviewAdded.emit()
-          this.reviewForm.reset()
+          this.reviewForm.reset({ comment: '', rating: null })
         },
         (error:any)=>{
           console.error("Error adding review",error)

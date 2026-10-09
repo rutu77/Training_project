@@ -1,6 +1,8 @@
 import { DataSource } from "typeorm";
 import { env } from "./env";
 import { InitialPostgresSchema1791417600000 } from "../migrations/1791417600000-InitialPostgresSchema";
+import { RenameLegacyPostgresTables1791417601000 } from "../migrations/1791417601000-RenameLegacyPostgresTables";
+import { AddTeacherRequestStatus1791417602000 } from "../migrations/1791417602000-AddTeacherRequestStatus";
 import {User} from "../models/User"
 import { Course } from "../models/Course";
 import { Enrollment } from "../models/Enrollment";
@@ -21,5 +23,9 @@ export const AppDataSource= new DataSource({
     database: env.database.name,
     entities:[User,Course,Enrollment, Lesson, Quiz, Review, Question, Comment, Progress],
     synchronize: false,
-    migrations: [InitialPostgresSchema1791417600000],
+    migrations: [
+      InitialPostgresSchema1791417600000,
+      RenameLegacyPostgresTables1791417601000,
+      AddTeacherRequestStatus1791417602000,
+    ],
 })

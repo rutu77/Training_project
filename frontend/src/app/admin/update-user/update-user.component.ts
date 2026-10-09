@@ -16,6 +16,7 @@ export class UpdateUserComponent implements OnInit{
  
 
   updateUserForm!: FormGroup;
+  private userEmail = '';
 
   constructor(private admin: AdminService) {}
 
@@ -29,15 +30,17 @@ export class UpdateUserComponent implements OnInit{
     this.updateUserForm = new FormGroup({
       role: new FormControl(''),
     });
+    this.loadUserData();
   }
 
   ngOnChanges(){
-    this.loadUserData();
+    if (this.updateUserForm) this.loadUserData();
   }
 
   loadUserData() {
     if (this.userId) {
       this.admin.getUserById(this.userId).subscribe((res: any) => {
+        this.userEmail = res.data.email;
         this.updateUserForm.patchValue({
           role: res.data.role,
         });
@@ -46,9 +49,9 @@ export class UpdateUserComponent implements OnInit{
   }
 
   onSubmit() {
-    if (this.updateUserForm.invalid) return;
+    if (this.updateUserForm.invalid || !this.userEmail) return;
 
-    this.admin.updateUser(this.userId, this.updateUserForm.value).subscribe(
+    this.admin.updateRole({ email: this.userEmail, newRole: this.updateUserForm.value.role }).subscribe(
       () => {
         Swal.fire({
           title: 'User Updated',
@@ -69,4 +72,3 @@ export class UpdateUserComponent implements OnInit{
     );
   }
 }
-

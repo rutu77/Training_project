@@ -52,16 +52,22 @@ export class QuizService {
   }
 
   async getAllQuizzes() {
-    return await quizRepository.find({
-      relations: ["course", "course.creator", "questions"],
-    });
+    return await quizRepository
+      .createQueryBuilder("quiz")
+      .leftJoinAndSelect("quiz.course", "course")
+      .leftJoinAndSelect("course.creator", "creator")
+      .leftJoinAndSelect("quiz.questions", "questions")
+      .getMany();
   }
 
   async getQuizzesByCourse(courseId: number) {
-    return await quizRepository.find({
-      where: { course: { id: courseId } },
-      relations: ["course", "course.creator", "questions"],
-    });
+    return await quizRepository
+      .createQueryBuilder("quiz")
+      .leftJoinAndSelect("quiz.course", "course")
+      .leftJoinAndSelect("course.creator", "creator")
+      .leftJoinAndSelect("quiz.questions", "questions")
+      .where("course.id = :courseId", { courseId })
+      .getMany();
   }
 
   async addQuestionToQuiz(

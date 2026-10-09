@@ -9,14 +9,20 @@ const userService= new UserService
 
 export class AuthService{
 
-    async registerUser(userData:{name:string;email:string;password:string}){
+    async registerUser(userData:{name:string;email:string;password:string;requestedRole?:"user"|"teacher"}){
         const existing= await userService.getUserByEmail(userData.email);
         if (existing) {
             return { error: "User already exists! Please login." };
         }
     
         const hashedPassword= await bcrypt.hash(userData.password,10)
-        const user= userRepository.create({name:userData.name,email:userData.email,password:hashedPassword,role:"user"});
+        const user= userRepository.create({
+            name:userData.name,
+            email:userData.email,
+            password:hashedPassword,
+            role:"user",
+            teacherRequestStatus:userData.requestedRole === "teacher" ? "pending" : "none",
+        });
         const savedUser = await userRepository.save(user)
         return {message:"user registered!",user:toPublicUser(savedUser)}
     }

@@ -42,7 +42,7 @@ export class AddCourseComponent implements OnInit{
       const form= new FormData();
       form.append('title', this.courseForm.value.title);
       form.append('description', this.courseForm.value.description);
-      form.append('isPublished', this.courseForm.value.isPublished);
+      form.append('isPublished', String(this.courseForm.value.isPublished ?? false));
       form.append('price', this.courseForm.value.price);
       form.append('level', this.courseForm.value.level);
       form.append('duration', this.courseForm.value.duration);
@@ -58,7 +58,16 @@ export class AddCourseComponent implements OnInit{
             text: 'The course has been added successfully!',
             icon: 'success',
           });
-          this.courseForm.reset()
+          this.courseForm.reset({
+            title: '',
+            description: '',
+            isPublished: false,
+            thumbnail: '',
+            price: 0,
+            level: '',
+            duration: 0
+          });
+          this.selectedFile = null;
           this.courseAdded.emit()
         },
         (error:any)=>{
@@ -78,5 +87,4 @@ export class AddCourseComponent implements OnInit{
     //   this.courseForm.reset();
     // }
   }
-
 

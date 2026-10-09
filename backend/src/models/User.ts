@@ -23,6 +23,9 @@ export class User {
     @Column({default:'user'})
     role: 'user'|'teacher'|'admin';
 
+    @Column({ type: "varchar", default: "none" })
+    teacherRequestStatus: "none" | "pending" | "approved" | "rejected";
+
     @Column({nullable:true})
     profilePicture: string;
 

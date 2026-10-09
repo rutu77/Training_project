@@ -12,8 +12,7 @@ export class AuthController{
         userData.name= req.body.name
         userData.email= req.body.email
         userData.password= req.body.password
-        // const {name,email,password,role}= req.body;
-        // console.log(userData);
+        userData.requestedRole = req.body.requestedRole;
         
         try{
             const result= await authService.registerUser(userData)
@@ -22,7 +21,12 @@ export class AuthController{
                 console.log(result.error);
                 return;
             }
-            res.status(201).json({message:"Data saved to DB!", data:result.user});
+            res.status(201).json({
+                message: result.user?.teacherRequestStatus === "pending"
+                    ? "Registration successful. Your teacher access request is pending admin approval."
+                    : "Registration successful.",
+                data:result.user
+            });
         }catch(error){
             res.status(500).json({error})
         } 
