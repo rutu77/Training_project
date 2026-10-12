@@ -9,6 +9,17 @@
     text-align: center;
 }
 
+.profile-state {
+    display: flex;
+    min-height: 10rem;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.75rem;
+    color: #68758b;
+    text-align: center;
+}
+
 .profile-container h1 {
     font-size: 24px;
     color: #333;

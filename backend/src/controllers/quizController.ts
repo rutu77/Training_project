@@ -1,21 +1,9 @@
 import { Request, Response } from "express";
 import { QuizService } from "../services/quizService";
 import { AuthRequest } from "../types/authRequest";
+import { toQuizResponse } from "../utils/quizResponse";
 
 const quizService = new QuizService();
-
-function quizForUser(
-  quiz: Awaited<ReturnType<QuizService["getQuizById"]>>,
-  user?: AuthRequest["user"]
-) {
-  const canSeeAnswers =
-    user?.role === "admin" || quiz.course?.creator?.id === user?.id;
-  if (canSeeAnswers) return quiz;
-  return {
-    ...quiz,
-    questions: quiz.questions?.map(({ correctAnswer, explanation, ...question }) => question),
-  };
-}
 
 export class QuizController {
   async createQuiz(req: Request, res: Response) {
@@ -35,7 +23,7 @@ export class QuizController {
       const quiz = await quizService.createQuiz({ courseId, title: title.trim() }, user);
       res
         .status(201)
-        .json({ message: "Quiz created successfully!", data: quiz });
+        .json({ message: "Quiz created successfully!", data: toQuizResponse(quiz, user) });
     } catch (error) {
       const message = (error as Error).message;
       const status = message === "Course not found!" ? 404 : message.startsWith("You can only") ? 403 : 500;
@@ -47,7 +35,7 @@ export class QuizController {
     const quizId = Number(req.params.id);
     try {
       const quiz = await quizService.getQuizById(quizId);
-      res.status(200).json({ data: quizForUser(quiz, (req as AuthRequest).user) });
+      res.status(200).json({ data: toQuizResponse(quiz, (req as AuthRequest).user) });
     } catch (error) {
       res.status(404).json({ message: (error as Error).message });
     }
@@ -64,7 +52,7 @@ export class QuizController {
       const updatedQuiz = await quizService.updateQuizById(quizId, { title: title.trim() });
       res
         .status(200)
-        .json({ message: "Quiz updated successfully", data: updatedQuiz });
+        .json({ message: "Quiz updated successfully", data: toQuizResponse(updatedQuiz, (req as AuthRequest).user) });
     } catch (error) {
       res.status(404).json({ message: (error as Error).message });
     }
@@ -83,7 +71,7 @@ export class QuizController {
   async getAllQuizzes(req: Request, res: Response) {
     try {
       const quizzes = await quizService.getAllQuizzes();
-      res.status(200).json(quizzes.map((quiz) => quizForUser(quiz, (req as AuthRequest).user)));
+      res.status(200).json(quizzes.map((quiz) => toQuizResponse(quiz, (req as AuthRequest).user)));
     } catch (error) {
       console.error("Error fetching quizzes:", error);
       res.status(500).json({ error: "Error fetching quizzes" });
@@ -94,7 +82,7 @@ export class QuizController {
     try {
       const courseId = Number(req.params.id);
       const quizzes = await quizService.getQuizzesByCourse(courseId);
-      res.status(200).json(quizzes.map((quiz) => quizForUser(quiz, (req as AuthRequest).user)));
+      res.status(200).json(quizzes.map((quiz) => toQuizResponse(quiz, (req as AuthRequest).user)));
     } catch (error) {
       console.error("Error fetching quizzes for course:", error);
       res.status(500).json({ error: "Error fetching quizzes" });
@@ -129,7 +117,12 @@ export class QuizController {
         return;
       }
       const result = await quizService.submitQuiz(quizId, user.id, answers);
-      res.status(200).json(result);
+      res.status(200).json({
+        score: result.score,
+        total: result.total,
+        attempt: result.attempt,
+        completion: result.completion,
+      });
     } catch (error) {
       const message = (error as Error).message;
       res.status(message === "Quiz not found!" ? 404 : 400).json({ message });

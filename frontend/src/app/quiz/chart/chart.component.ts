@@ -1,67 +1,45 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { HomeService } from '../../services/home.service';
-import { Progress } from '../../models/model';
-import { map, Subscription } from 'rxjs';
+import { QuizProgressResponse } from '../../models/model';
 
 @Component({
   selector: 'app-chart',
   standalone: false,
   templateUrl: './chart.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './chart.component.css'
 })
-
-export class ChartComponent implements AfterViewInit, OnDestroy {
-
-  userId= Number(localStorage.getItem("userId"))
-  constructor(private homeService: HomeService) {}
-
-  Highcharts: typeof Highcharts = Highcharts;
-
-  private subscriptions: Subscription[] = [];
+export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
+  @Input() progress: QuizProgressResponse[] = [];
+  private chart?: Highcharts.Chart;
+  private viewReady = false;
 
   ngAfterViewInit(): void {
-    this.loadProgressByUser();
+    this.viewReady = true;
+    this.renderChart();
+  }
+
+  ngOnChanges(_changes: SimpleChanges): void {
+    if (this.viewReady) this.renderChart();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.chart?.destroy();
   }
 
-  loadProgressByUser() {
-    const subscription = this.homeService.getProgressByUser(this.userId)
-      .pipe(map((res:any) => res.data))
-      .subscribe({
-        next: (data) => {
-          const chartData = data.map((item: any) => ({
-            name: item.quiz.title, 
-            y: item.score
-          }));
+  private renderChart(): void {
+    this.chart?.destroy();
+    this.chart = undefined;
 
-          this.buildChart(chartData);
-        },
-        error: (err) => {
-          console.error('Error fetching progress data', err);
-        }
-      });
+    const chartData = this.progress
+      .filter(item => !item.deleted && item.quiz !== null)
+      .map(item => ({ name: item.quiz.title, y: item.score }));
+    if (!chartData.length) return;
 
-    this.subscriptions.push(subscription);
-  }
-
-  buildChart(chartData: any[]) {
-    Highcharts.chart('container', {
-      chart: {
-        type: 'pie'
-      },
-      title: {
-        text: 'Quiz Scores'
-      },
-      tooltip: {
-        valueSuffix: '%'
-      },
-      subtitle: {
-        text: ''
-      },
+    this.chart = Highcharts.chart('container', {
+      chart: { type: 'pie' },
+      title: { text: 'Quiz scores' },
+      tooltip: { valueSuffix: '%' },
       plotOptions: {
         pie: {
           allowPointSelect: true,
@@ -73,26 +51,16 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
             enabled: true,
             distance: -40,
             format: '{point.percentage:.1f}%',
-            style: {
-              fontSize: '1.2em',
-              textOutline: 'none',
-              opacity: 0.7
-            },
-            filter: {
-              operator: '>',
-              property: 'percentage',
-              value: 10
-            }
+            style: { fontSize: '1.2em', textOutline: 'none', opacity: 0.7 },
+            filter: { operator: '>', property: 'percentage', value: 10 }
           }]
         }
       },
       series: [{
-        type: 'pie', 
+        type: 'pie',
         name: 'Score',
-        colorByPoint: true,
         data: chartData
-      } as Highcharts.SeriesPieOptions] 
+      }]
     });
   }
-  
-}  
+}

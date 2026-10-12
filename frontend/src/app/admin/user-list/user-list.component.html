@@ -2,19 +2,24 @@
   <h2>Teacher access requests</h2>
   <div class="surface-card p-3 mb-2 border-round" *ngFor="let request of teacherRequests">
     <span>{{ request.name }} ({{ request.email }})</span>
-    <button pButton type="button" label="Approve" class="ml-3"
-      (click)="reviewTeacherRequest(request.id, 'approved')"></button>
-    <button pButton type="button" label="Reject" class="p-button-secondary ml-2"
-      (click)="reviewTeacherRequest(request.id, 'rejected')"></button>
+    <button pButton type="button" class="ml-3"
+      (click)="reviewTeacherRequest(request.id, 'approved')">Approve</button>
+    <button pButton type="button" class="p-button-secondary ml-2"
+      (click)="reviewTeacherRequest(request.id, 'rejected')">Reject</button>
   </div>
 </section>
 
 <app-generic-list 
   [items]="users"
+  [heading]="'Manage users'"
+  [description]="'View and update registered accounts.'"
+  [emptyMessage]="'No user accounts are available.'"
   [itemFields]="['id', 'name', 'email', 'role']"
   [itemLabels]="['Id', 'Name', 'Email', 'Role']"
   [isLoading]="isLoading"
+  [loadError]="loadError"
   [isUser]="true"
+  (retryLoad)="loadUsers()"
   (updateItem)="onOpenUpdate($event)"
   (deleteItem)="deleteUser($event)">
 </app-generic-list>
@@ -44,8 +49,8 @@
         <td>{{ user.email }}</td>
         <td>{{ user.role }}</td>
         <td>
-          <button pButton type="button" label="Update" (click)="openUpdateDialog(user.id)"></button>
-          <button pButton type="button" label="Delete" (click)="deleteUser(user.id)"></button>
+          <button pButton type="button" (click)="openUpdateDialog(user.id)">Update</button>
+          <button pButton type="button" (click)="deleteUser(user.id)">Delete</button>
         </td>
       </tr>
   </ng-template>

@@ -1,113 +1,55 @@
+:host { display: block; position: relative; z-index: 20; }
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #007BFF; /* Changed to blue */
-  padding: 10px;
-  color: white;
+  display: flex; min-height: 4.5rem; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .65rem clamp(1rem, 4vw, 3.5rem); border-bottom: 1px solid #eaedf4;
+  background: #fff; box-shadow: 0 4px 20px rgb(31 42 68 / 4%);
 }
-
-.left-section, .right-section {
-  display: flex;
-  align-items: center;
+.brand { display: inline-flex; flex: none; align-items: center; gap: .55rem; color: #1b2540; font-size: 1.1rem; font-weight: 780; letter-spacing: -.035em; text-decoration: none; }
+.brand-mark,
+.profile-avatar { display: grid; place-items: center; border-radius: .75rem; background: #efedff; color: #5148c8; }
+.brand-mark { width: 2.35rem; height: 2.35rem; font-size: .72rem; font-weight: 800; letter-spacing: -.04em; }
+.brand-accent { color: #5b52c6; }
+.nav-content,
+.nav-actions { display: flex; align-items: center; gap: .5rem; }
+.nav-content { flex: 1; justify-content: flex-end; }
+.search-wrap { display: flex; width: clamp(10rem, 20vw, 16rem); height: 2.55rem; align-items: center; gap: .55rem; margin-right: .5rem; padding: 0 .75rem; border: 1px solid #e2e7f0; border-radius: .7rem; background: #f8f9fc; color: #8290a5; }
+.search-wrap:focus-within { border-color: #aaa5ee; background: #fff; box-shadow: 0 0 0 3px rgb(99 91 219 / 12%); }
+.search-wrap input { width: 100%; min-width: 0; padding: 0; border: 0; outline: 0; background: transparent; color: #273248; font: inherit; font-size: .86rem; }
+.search-wrap input::placeholder { color: #929db0; }
+.nav-link,
+.nav-button,
+.profile-button,
+.login-link,
+.register-link { display: inline-flex; min-height: 2.5rem; align-items: center; justify-content: center; gap: .4rem; padding: .5rem .7rem; border: 0; border-radius: .65rem; background: transparent; color: #3d4960; cursor: pointer; font: inherit; font-size: .86rem; font-weight: 600; text-decoration: none; }
+.nav-link:hover,
+.nav-button:hover,
+.profile-button:hover { background: #f2f3fa; color: #5148c8; }
+.nav-button .pi,
+.profile-button .pi-chevron-down { font-size: .68rem; }
+.nav-dropdown { position: relative; }
+.dropdown-content { position: absolute; top: calc(100% + .45rem); left: 0; z-index: 30; display: grid; min-width: 12rem; gap: .2rem; padding: .45rem; border: 1px solid #e7eaf2; border-radius: .8rem; background: #fff; box-shadow: 0 18px 40px rgb(31 42 68 / 14%); }
+.dropdown-right { right: 0; left: auto; }
+.dropdown-link { display: block; width: 100%; box-sizing: border-box; padding: .7rem .8rem; border: 0; border-radius: .5rem; background: none; color: #3d4960; cursor: pointer; font: inherit; font-size: .86rem; text-align: left; text-decoration: none; }
+.dropdown-link:hover { background: #f4f3ff; color: #5148c8; }
+.dropdown-logout { color: #b33b35; }
+.profile-button { border: 1px solid #e3e7ef; background: #fff; }
+.profile-avatar { width: 1.65rem; height: 1.65rem; border-radius: 50%; font-size: .75rem; }
+.login-link { color: #5148c8; }
+.register-link { padding-inline: 1rem; background: #5148c8; color: #fff; }
+.register-link:hover { background: #4038b2; color: #fff; }
+@media (max-width: 900px) {
+  .navbar { flex-wrap: wrap; gap: .45rem 1rem; }
+  .nav-content { order: 3; width: 100%; flex: auto; justify-content: flex-start; overflow-x: auto; }
+  .search-wrap { width: min(16rem, 40vw); flex: none; }
 }
-
-.nav-link {
-  color: white;
-  text-decoration: none;
-  margin: 0 10px;
-}
-
-.nav-link:hover {
-  text-decoration: underline;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropbtn {
-  background-color: #007BFF; /* Changed to blue */
-  color: white;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-content a:hover {
-  background-color: #f1f1f1;
-}
-
-.search-bar {
-  padding: 5px;
-  margin: 0 10px;
-}
-
-.course-dropdown, .profile-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.course-dropdown .dropdown-content, .profile-dropdown .dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.course-dropdown .dropdown-content a .profile-dropdown .dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.course-dropdown .dropdown-content a:hover, .profile-dropdown .dropdown-content a:hover {
-  background-color: #f1f1f1;
-}
-
-.course-dropdown:hover .dropdown-content, .profile-dropdown:hover .dropdown-content {
-  display: block;
-}
-
-button {
-  background-color: #007BFF; /* Changed to blue */
-  color: white;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-  margin: 0 5px;
-}
-
-button:hover {
-  background-color: #0056b3; /* Darker blue for hover effect */
-}
-
-/* Ensure the "Your Progress" link stays aligned */
-.left-section > div {
-  display: flex;
-  align-items: center;
-}
-
-.left-section > div > .nav-link {
-  margin: 0 10px;
+@media (max-width: 560px) {
+  .navbar { padding-inline: .8rem; }
+  .brand { font-size: 1rem; }
+  .nav-actions { gap: .2rem; }
+  .login-link,
+  .register-link { padding: .45rem .6rem; font-size: .8rem; }
+  .nav-content { gap: .25rem; }
+  .nav-link,
+  .nav-button { padding-inline: .55rem; font-size: .8rem; }
+  .search-wrap { width: 9.5rem; }
 }

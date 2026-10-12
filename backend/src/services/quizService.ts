@@ -30,7 +30,7 @@ export class QuizService {
 
   async getQuizById(id: number) {
     const quiz = await quizRepository.findOne({
-      where: { id: id },
+      where: { id, deleted: false },
       relations: ["course", "course.creator", "questions"],
     });
 
@@ -46,9 +46,8 @@ export class QuizService {
   }
 
   async deleteQuiz(id: number) {
-    const result = await quizRepository.delete(id);
+    const result = await quizRepository.update(id, { deleted: true });
     if (result.affected === 0) throw new Error("Quiz not found!");
-    // await quizRepository.update(id,{deleted:true})
   }
 
   async getAllQuizzes() {
@@ -57,6 +56,7 @@ export class QuizService {
       .leftJoinAndSelect("quiz.course", "course")
       .leftJoinAndSelect("course.creator", "creator")
       .leftJoinAndSelect("quiz.questions", "questions")
+      .where("quiz.deleted = false")
       .getMany();
   }
 
@@ -67,6 +67,7 @@ export class QuizService {
       .leftJoinAndSelect("course.creator", "creator")
       .leftJoinAndSelect("quiz.questions", "questions")
       .where("course.id = :courseId", { courseId })
+      .andWhere("quiz.deleted = false")
       .getMany();
   }
 
@@ -112,6 +113,7 @@ export class QuizService {
       relations: ["questions"],
     });
     if (!quiz) throw new Error("Quiz not found!");
+    if (quiz.deleted) throw new Error("Quiz not found!");
     if (quiz.questions.length === 0) throw new Error("This quiz has no questions");
     if (!answers || typeof answers !== "object" || Array.isArray(answers)) {
       throw new Error("Answers must be an object keyed by question ID");

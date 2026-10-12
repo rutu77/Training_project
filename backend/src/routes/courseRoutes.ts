@@ -14,6 +14,8 @@ const courseController= new CourseController()
 const router= Router()
 router.param("id", validateIdParam());
 
+router.get('/manage',authenticateUser,authorizeRole(["admin", "teacher"]),courseController.getManageCourses)
+router.get('/manage/:id',authenticateUser,authorizeRole(["admin", "teacher"]),courseController.getManageCourseById)
 router.post('/',authenticateUser,authorizeRole(["admin", "teacher"]),upload.single('thumbnail'),validateBody({
   title: { type: "string", required: true },
   description: { type: "string", required: true },

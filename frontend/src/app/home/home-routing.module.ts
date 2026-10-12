@@ -8,7 +8,6 @@ import { EnrollComponent } from './enroll/enroll.component';
 import { AuthGuard } from '../guard/auth.guard';
 import { MyLearningsComponent } from './my-learnings/my-learnings.component';
 import { AboutComponent } from './about/about.component';
-import { ContactComponent } from './contact/contact.component';
 import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
@@ -18,7 +17,6 @@ const routes: Routes = [
   {path: 'enrollment', component: EnrollComponent, canActivate:[AuthGuard] },
   {path:'mylearnings',component:MyLearningsComponent, canActivate:[AuthGuard]},
   {path:'about',component:AboutComponent},
-  {path:'contact',component:ContactComponent},
   {path:'profile',component:ProfileComponent, canActivate:[AuthGuard]}
 ];
 

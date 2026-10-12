@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { request } from 'express';
-import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { ApiResponse, UpdateUserRole, User } from '../models/model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,37 +11,33 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
-  private readonly api= `http://localhost:3000`
-  getTeacherRequests(){
-    return this.http.get<any>(`${this.api}/admin/teacher-requests`)
+  private readonly api= environment.apiUrl
+  getTeacherRequests(): Observable<ApiResponse<User[]>> {
+    return this.http.get<ApiResponse<User[]>>(`${this.api}/admin/teacher-requests`)
   }
 
-  reviewTeacherRequest(id: number, decision: 'approved' | 'rejected'){
-    return this.http.patch(`${this.api}/admin/teacher-requests/${id}`, { decision })
+  reviewTeacherRequest(id: number, decision: 'approved' | 'rejected'): Observable<ApiResponse<User>> {
+    return this.http.patch<ApiResponse<User>>(`${this.api}/admin/teacher-requests/${id}`, { decision })
   }
 
-  updateRole(data:any){
-    return this.http.post(`${this.api}/admin/updateRole`,data)
+  updateRole(data: UpdateUserRole): Observable<ApiResponse<User>> {
+    return this.http.post<ApiResponse<User>>(`${this.api}/admin/updateRole`, data)
   }
 
-  registerAdmin(data:any){
-    return this.http.post(`${this.api}/admin/AdminRegister`,data)
+  deleteUser(id:number): Observable<{message: string}> {
+    return this.http.delete<{message: string}>(`${this.api}/user/${id}`)
   }
 
-  deleteUser(id:number){
-    return this.http.delete(`${this.api}/user/${id}`)
+  getUserById(id:number): Observable<ApiResponse<User>> {
+    return this.http.get<ApiResponse<User>>(`${this.api}/user/${id}`)
   }
 
-  getUserById(id:number){
-    return this.http.get(`${this.api}/user/${id}`)
+  updateUser(id:number, data:FormData): Observable<ApiResponse<User>> {
+    return this.http.put<ApiResponse<User>>(`${this.api}/user/${id}`, data)
   }
 
-  updateUser(id:number, data:any){
-    return this.http.put(`${this.api}/user/${id}`,data)
-  }
-
-  getUsers(){
-    return this.http.get(`${this.api}/user/`)
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.api}/user/`)
   }
 
 }

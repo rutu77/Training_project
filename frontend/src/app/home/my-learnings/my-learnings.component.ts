@@ -1,53 +1,52 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HomeService } from '../../services/home.service';
 import { Course, Enrollment } from '../../models/model';
-import { CourseService } from '../../services/course.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-learnings',
   standalone: false,
   templateUrl: './my-learnings.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './my-learnings.component.css',
 })
 export class MyLearningsComponent implements OnInit {
   courses: Course[] = [];
   enrollments: Enrollment[] = [];
-  userId = Number(localStorage.getItem('userId'));
+  isLoading = true;
+  loadError = '';
 
   constructor(
     private homeservice: HomeService,
-    private courseService: CourseService,
-    private router: Router
+    private router: Router,
+    private readonly changeDetector: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadCourses();
     this.loadEnrollments();
   }
 
-  loadCourses() {
-    this.courseService.getCourses().subscribe((data: any) => {
-      this.courses = data;
-      this.courses = this.courses.filter((course) => !course.deleted);
+  loadEnrollments(): void {
+    this.isLoading = true;
+    this.loadError = '';
+    this.homeservice.getEnrollments().subscribe({
+      next: (data: Enrollment[]) => {
+        this.enrollments = data.filter(
+          (enrollment) => !enrollment.deleted && !enrollment.course.deleted
+        );
+        this.courses = Array.from(
+          new Map(this.enrollments.map((enrollment) => [enrollment.course.id, enrollment.course])).values()
+        );
+        this.isLoading = false;
+        this.changeDetector.markForCheck();
+      },
+      error: (error: unknown) => {
+        console.error('Error loading enrolled courses:', error);
+        this.loadError = 'Your enrolled courses could not be loaded. Please try again.';
+        this.isLoading = false;
+        this.changeDetector.markForCheck();
+      }
     });
-  }
-
-  loadEnrollments() {
-    this.homeservice.getEnrollments().subscribe((data: any) => {
-      this.enrollments = data;
-      this.enrollments = this.enrollments.filter(
-        (enrollment) => !enrollment.deleted
-      );
-    });
-  }
-
-  isEnrolled(courseId: number): boolean {
-    const enroll = this.enrollments.some(
-      (enrollment) =>
-        enrollment.user.id === this.userId && enrollment.course.id === courseId
-    );
-    return enroll;
   }
 
   viewCourse(courseId: number): void {

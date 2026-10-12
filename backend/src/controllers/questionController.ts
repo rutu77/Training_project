@@ -26,7 +26,14 @@ export class QuestionController{
       };
       try {
         const Question = await questionService.createQuestion(QuestionData);
-        res.status(201).json({ message: "Question created successfully!", data: Question });
+        res.status(201).json({
+          id: Question.id,
+          question: Question.question,
+          options: Question.options,
+          correctAnswer: Question.correctAnswer,
+          explanation: Question.explanation,
+          deleted: Question.deleted,
+        });
       } catch (error) {
         // res.status(500).json({ error: "Error creating Question" });
         res.status(400).json({ message: (error as Error).message });
@@ -72,7 +79,14 @@ export class QuestionController{
         if (explanation !== undefined) data.explanation = explanation;
         try{
           const updatedQuestion=await questionService.updateQuestionById(QuestionId,data);
-          res.status(200).json({message:"Question updated successfully",data:updatedQuestion});
+          res.status(200).json({message:"Question updated successfully",data:{
+            id: updatedQuestion.id,
+            question: updatedQuestion.question,
+            options: updatedQuestion.options,
+            correctAnswer: updatedQuestion.correctAnswer,
+            explanation: updatedQuestion.explanation,
+            deleted: updatedQuestion.deleted,
+          }});
         } catch(error){
           res.status(404).json({message:(error as Error).message});
         }
@@ -102,9 +116,20 @@ export class QuestionController{
         const quizId= Number(req.params.id);
         const questions= await questionService.getQuestionsByQuiz(quizId);
         const user = (req as AuthRequest).user;
-        const visibleQuestions = questions.map(({ quiz, ...question }) => {
-          if (user?.role === "admin" || quiz.course.creator.id === user?.id) return question;
-          const { correctAnswer, explanation, ...safeQuestion } = question;
+        const visibleQuestions = questions.map((question) => {
+          const safeQuestion = {
+            id: question.id,
+            question: question.question,
+            options: question.options,
+            deleted: question.deleted,
+          };
+          if (user?.role === "admin" || question.quiz.course.creator.id === user?.id) {
+            return {
+              ...safeQuestion,
+              correctAnswer: question.correctAnswer,
+              explanation: question.explanation,
+            };
+          }
           return safeQuestion;
         });
         res.status(200).json(visibleQuestions);

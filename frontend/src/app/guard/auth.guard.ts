@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -10,34 +9,10 @@ import Swal from 'sweetalert2';
 export class AuthGuard implements CanActivate {
   constructor(private _auth: AuthService, private router: Router) {}
 
-  canActivate(): boolean {
-    const isLoggedIn = this._auth.isLoggedIn();
-
-    if (isLoggedIn) {
-      return true;
-    } else {
-      this.showGuard()
-      this.router.navigate(['/auth/login']);
-      return false;
-    }
+  canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
+    if (this._auth.isLoggedIn()) return true;
+    return this.router.createUrlTree(['/auth/login'], {
+      queryParams: { returnUrl: state.url }
+    });
   }
-
-  showGuard() {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'bottom',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer)
-        toast.addEventListener('mouseleave', Swal.resumeTimer)
-      }
-    })
-
-    Toast.fire({
-      icon: 'error',
-      title: 'Login First!'
-    })
-}
 }

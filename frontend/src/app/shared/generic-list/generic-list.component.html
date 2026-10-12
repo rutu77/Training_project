@@ -1,43 +1,55 @@
-
-<div>
-  <!-- <ng-content></ng-content> -->
-  <div *ngIf="!isUser">
-    <button pButton type="button" label="Add" (click)="openAddDialog()"></button>
+<section class="management-surface">
+  <div class="list-toolbar">
+    <div>
+      <h1>{{ heading }}</h1>
+      <p>{{ description }}</p>
+    </div>
+    <button *ngIf="!isUser" pButton type="button" class="list-add-button" (click)="openAddDialog()">
+      <span class="pi pi-plus" aria-hidden="true"></span> Add new
+    </button>
   </div>
 
-  <div class="search-bar">
-    <input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterItems()"/>
+  <label class="list-search">
+    <span class="pi pi-search" aria-hidden="true"></span>
+    <input type="search" pInputText placeholder="Search records…" [(ngModel)]="searchText" (input)="filterItems()">
+  </label>
+
+  <div *ngIf="!isLoading && loadError" class="list-empty" role="alert">
+    <span>{{ loadError }}</span>
+    <button pButton type="button" class="row-edit" (click)="retryLoad.emit()">Try again</button>
   </div>
 
-  <p-table [value]="filteredItems" [tableStyle]="{ 'min-width': '50rem' }" aria-label="Items Table">
-    <ng-template pTemplate="header">
-      <tr>
-        <th *ngFor="let label of itemLabels">{{ label }}</th>
-        <th>Actions</th>
-      </tr>
-    </ng-template>
+  <div class="table-scroll" *ngIf="!isLoading && !loadError">
+    <table aria-label="Managed records">
+      <thead>
+        <tr>
+          <th *ngFor="let label of itemLabels" scope="col">{{ label }}</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of filteredItems">
+          <td *ngFor="let field of itemFields">{{ getDisplayValue(item, field) }}</td>
+          <td class="row-actions">
+            <button pButton type="button" class="row-edit" (click)="openUpdateDialog(getFieldValue(item, 'id'))">
+              <span class="pi pi-pencil" aria-hidden="true"></span> Edit
+            </button>
+            <button pButton type="button" class="row-delete" (click)="confirmDelete(getFieldValue(item, 'id'))">
+              <span class="pi pi-trash" aria-hidden="true"></span> Delete
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredItems.length === 0">
+          <td class="list-empty-cell" [attr.colspan]="itemLabels.length + 1">
+            {{ items.length > 0 ? 'No records match your search.' : emptyMessage }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-    <ng-template pTemplate="body" let-item>
-      <tr>
-        <td *ngFor="let field of itemFields">{{ getFieldValue(item,field) }}</td>
-        <td>
-          <button pButton type="button" label="Update" (click)="openUpdateDialog(item.id)"></button>
-          <button pButton type="button" label="Delete" (click)="confirmDelete(item.id)"></button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-
-</div>
-
-<!-- <div *ngIf="!items.length" [ngStyle]="{'text-align':'center'}">
-  <p-progressSpinner></p-progressSpinner>
-</div> -->
-
-<div *ngIf="!items || items.length === 0" [ngStyle]="{'text-align':'center'}">
-  <p *ngIf="!isLoading">Items not created</p>
-  <p-progressSpinner *ngIf="isLoading" ></p-progressSpinner>
-</div>
-
-
-
+  <div *ngIf="isLoading" class="list-empty" role="status">
+    <p-progress-spinner></p-progress-spinner>
+    <span>Loading records…</span>
+  </div>
+</section>

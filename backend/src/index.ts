@@ -15,13 +15,18 @@ import { enrollRoutes } from "./routes/enrollmentRoutes";
 import { questionRoutes } from "./routes/questionRoutes";
 import { reviewRoutes } from "./routes/reviewRoutes";
 import { progressRoutes } from "./routes/progressRoutes";
+import { createReadinessHandler, healthRoutes } from "./routes/healthRoutes";
 import { errorMiddleware } from "./middleware/error-middleware";
+import { httpSecurityHeaders } from "./middleware/httpSecurity";
 
 const app = express();
+app.set("trust proxy", env.trustProxyHops);
+app.disable("x-powered-by");
 
+app.use(httpSecurityHeaders);
 app.use(
   cors({
-    origin: "*",
+    origin: env.corsOrigins,
     allowedHeaders: ["Content-type", "Authorization"],
   })
 );
@@ -29,6 +34,11 @@ app.use(
 app.use(express.json({ limit: "1mb" }));
 
 app.use("/uploads", express.static(path.resolve(process.cwd(), "uploads")));
+app.use("/health", healthRoutes);
+app.get(
+  "/health/ready",
+  createReadinessHandler(() => AppDataSource.query("SELECT 1"))
+);
 
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
@@ -42,7 +52,6 @@ app.use("/enrollment", enrollRoutes);
 app.use("/review", reviewRoutes);
 app.use("/question", questionRoutes);
 app.use("/progress", progressRoutes);
-
 app.use((req, res) => {
   res.status(404).json({ status: "error", message: "Route not found" });
 });

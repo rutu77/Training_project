@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
 import Swal from 'sweetalert2';
@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
   selector: 'app-update-user',
   standalone: false,
   templateUrl: './update-user.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './update-user.component.css'
 })
 export class UpdateUserComponent implements OnInit{
@@ -39,7 +40,7 @@ export class UpdateUserComponent implements OnInit{
 
   loadUserData() {
     if (this.userId) {
-      this.admin.getUserById(this.userId).subscribe((res: any) => {
+      this.admin.getUserById(this.userId).subscribe((res) => {
         this.userEmail = res.data.email;
         this.updateUserForm.patchValue({
           role: res.data.role,

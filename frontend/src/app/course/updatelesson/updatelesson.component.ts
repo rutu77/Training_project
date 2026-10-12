@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CourseService } from '../../services/course.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
   selector: 'app-updatelesson',
   standalone: false,
   templateUrl: './updatelesson.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './updatelesson.component.css'
 })
 
@@ -19,15 +20,17 @@ export class UpdatelessonComponent implements OnInit{
 
   
   updateLessonForm!: FormGroup;
+  isSaving = false;
+  isLoadingLesson = false;
 
   constructor(private _course:CourseService){}
 
   ngOnInit(): void {
 
     this.updateLessonForm= new FormGroup({
-      title: new FormControl(''),
+      title: new FormControl('', [Validators.required]),
       videoUrl: new FormControl(''),
-      duration: new FormControl(''),
+      duration: new FormControl(0, [Validators.required, Validators.min(0)]),
     })
 
   }
@@ -38,54 +41,66 @@ export class UpdatelessonComponent implements OnInit{
 
   loadlessonData(){
     if(this.lessonId){
-      this._course.getLessonById(this.lessonId).subscribe((res:any)=>{      
-        this.updateLessonForm.patchValue({
-          title: res.data.title,
-          videoUrl: res.data.videoUrl,
-          duration: res.data.duration,
+      this.isLoadingLesson = true;
+      this._course.getLessonById(this.lessonId).subscribe({
+        next: (response) => {
+          this.updateLessonForm.patchValue({
+            title: response.data.title,
+            videoUrl: response.data.videoUrl,
+            duration: response.data.duration ?? 0,
+          });
+          this.isLoadingLesson = false;
+        },
+        error: (error: any) => {
+          console.error('Error loading lesson:', error);
+          this.isLoadingLesson = false;
+          Swal.fire({
+            icon: 'error',
+            title: 'Unable to load lesson',
+            text: error.error?.message || 'Please try again.',
+          });
+        }
         });
-      })
     }
   }
 
-
   onSubmit(){
-    if (this.updateLessonForm.invalid) return;
-  
-    // const updatedLesson= this.getUpdatedValues(this.updateLessonForm.value);
+    if (this.updateLessonForm.invalid || this.isSaving || this.isLoadingLesson) {
+      this.updateLessonForm.markAllAsTouched();
+      return;
+    }
+    const values = this.updateLessonForm.getRawValue();
+    const title = String(values.title ?? '').trim();
+    if (!title) {
+      this.updateLessonForm.controls['title'].setErrors({ required: true });
+      return;
+    }
 
-    
-    this._course.updateLesson(this.lessonId, this.updateLessonForm.value).subscribe(
-      () => {
+    this.isSaving = true;
+    this._course.updateLesson(this.lessonId, {
+      title,
+      videoUrl: String(values.videoUrl ?? '').trim(),
+      duration: Number(values.duration),
+    }).subscribe({
+      next: () => {
         Swal.fire({
           title: 'Lesson Updated',
           text: 'The lesson has been updated successfully!',
           icon: 'success',
         });
         this.lessonUpdated.emit();
+        this.isSaving = false;
       },
-      (error: any) => {
+      error: (error: any) => {
         console.error('Error updating lesson:', error);
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Failed to update the lesson.'
+          text: error.error?.message || 'Failed to update the lesson.'
         });
-        this.lessonUpdated.emit();
+        this.isSaving = false;
       }
-    );
+    });
   }
 
-    // private getUpdatedValues(formValues:any):any{
-    //   const updatedValues:any={};
-    //   for(const key in formValues){
-    //     if(formValues[key]!==''){
-    //       updatedValues[key]= formValues[key]
-    //     }
-    //   }
-    //   return updatedValues;
-    // }
-
 }
-
-

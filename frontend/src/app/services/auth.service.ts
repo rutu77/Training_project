@@ -1,95 +1,57 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../models/model';
-import { BehaviorSubject } from 'rxjs';
-import Swal from 'sweetalert2';
-import jwt_decode from 'jwt-decode';
+import { Observable } from 'rxjs';
+import { AuthSessionService } from './auth-session.service';
+import { environment } from '../../environments/environment';
+
+interface LoginResponse {
+  data: {
+    token: string;
+    user: {
+      id: number;
+      role: 'user' | 'teacher' | 'admin';
+    };
+  };
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  constructor(private http: HttpClient) { }
-
-  private authState = new BehaviorSubject<boolean>(this.isLoggedIn());
-  $authState = this.authState.asObservable();
-
-  private roleSubject = new BehaviorSubject<string | null>(this.getRole());
-  $role = this.roleSubject.asObservable();
-
-
-  private readonly api= `http://localhost:3000`
-
-  // Login(data:any){
-  //   return this.http.post(`${this.api}/auth/login`,data)
-  // }
-
-  Login(data: any) {
-    if (this.isLoggedIn()){
-      Swal.fire({
-        title: 'Alert!',
-        text: 'You are already logged in!',
-        icon: 'info'
-      });
-      return;
-    }
-  
-    return this.http.post(`${this.api}/auth/login`, data).subscribe(
-      (res: any) => {
-        if (res.data.token) {
-          localStorage.setItem('token', res.data.token);
-          localStorage.setItem('user_role', res.data.user.role);
-          localStorage.setItem('loggedIn', 'true');
-          this.authState.next(true);
-          this.roleSubject.next(res.data.user.role);
-          const decodedToken = jwt_decode(res.data.token) as { id: string, email: string, iat: number, exp: number };
-          const userId = decodedToken.id;
-          localStorage.setItem('userId',userId)
-          Swal.fire({
-            title: "Good job!",
-            text: "Login Successful!",
-            icon: "success"
-          });
-
-        } 
-        else{
-          console.error("Token not found");
-        }
-      },
-      (error: any) => {
-        console.error("Error during login:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: error.error.message || "Login Failed!",
-      }
-    );
-  })
-  }
-  
-  Register(data:any){
-    return this.http.post(`${this.api}/auth/register`,data)
+  constructor(
+    private readonly http: HttpClient,
+    private readonly session: AuthSessionService
+  ) {
+    this.$authState = this.session.authState$;
+    this.$role = this.session.role$;
   }
 
-  isLoggedIn(){
-    return localStorage.getItem('loggedIn') === 'true';
+  readonly $authState: Observable<boolean>;
+  readonly $role: Observable<string | null>;
+
+  private readonly api = environment.apiUrl;
+
+  Login(data: { email: string; password: string }): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.api}/auth/login`, data);
+  }
+
+  Register(data: unknown) {
+    return this.http.post(`${this.api}/auth/register`, data);
+  }
+
+  setSession(token: string, role: 'user' | 'teacher' | 'admin', userId: number): void {
+    this.session.setSession(token, role, userId);
+  }
+
+  isLoggedIn(): boolean {
+    return this.session.isLoggedIn();
   }
 
   getRole(): 'user' | 'admin' | 'teacher' | null {
-    return localStorage.getItem('user_role') as 'user' | 'admin' | 'teacher' | null;
+    return this.session.getRole();
   }
 
-  // isAdmin() {
-  //   return localStorage.getItem('admin') === 'true';
-  // }
-
-  logout() {
-    localStorage.removeItem('loggedIn');
-    localStorage.removeItem('user_role');
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    this.authState.next(false);
-    this.roleSubject.next(null);
+  logout(): void {
+    this.session.clearSession();
   }
 }

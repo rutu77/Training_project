@@ -17,7 +17,7 @@ const routes: Routes = [
   {path:'addLesson', component:AddlessonsComponent, canActivate:[teacherGuard]},
   {path:'updateLesson/:id',component:UpdatelessonComponent, canActivate:[teacherGuard]},
   {path:'lesson/:id',component:LessondetailsComponent},
-  {path:'lessonlist',component:LessonlistComponent},
+  {path:'lessonlist',component:LessonlistComponent, canActivate:[teacherGuard]},
   {path:'courselist',component:ManageCourseListComponent, canActivate:[teacherGuard]}
 ];
 

@@ -1,44 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import Swal from 'sweetalert2'
-import { AdminService } from '../../services/admin.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: false,
   templateUrl: './register.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './register.component.css'
 })
 
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
   passMismatch: boolean = false;
-  isAdmin: boolean = false;
 
-  constructor(private _admin: AdminService, private _auth: AuthService, private route: ActivatedRoute,private router:Router) {}
+  constructor(private _auth: AuthService, private router: Router) {}
 
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3), this.nameValidator()]),
     email: new FormControl('', [Validators.email, Validators.required]),
     password: new FormControl('', [Validators.minLength(8), Validators.required]),
     confirmPassword: new FormControl('', [Validators.required]),
-    secretKey: new FormControl(''),
     requestedRole: new FormControl('user')
   });
-
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      const expectedSecretKey = 'iamadmin';
-      if (params['key']===expectedSecretKey){
-        localStorage.setItem('user_role','admin')
-        this.isAdmin=this._auth.getRole()==="admin"
-        
-        this.registerForm.get('secretKey')?.setValidators([Validators.required]);
-        this.registerForm.get('requestedRole')?.setValue('user');
-      }
-    });
-  }
 
   nameValidator() {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -66,49 +51,25 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.valid) {
       const formValue = { ...this.registerForm.value };
       delete formValue.confirmPassword;
-
-      if (this.isAdmin) {
-        this._admin.registerAdmin(formValue).subscribe(
-          () => {
-            console.log("Registration form submitted");
-            Swal.fire({
-              title: "Good job!",
-              text: "Registration Successful!",
-              icon: "success"
-            });
-            this.router.navigate(['/auth/login'])
-          },
-          (error: any) => {
-            console.error("Error during registration", error);
-            localStorage.setItem('admin','false')
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: error.error.message || "Registration Failed!",
-            });
-          }
-        );
-      } else {
-        this._auth.Register(formValue).subscribe(
-          (res: any) => {
-            console.log("Registration form submitted");
-            Swal.fire({
-              title: "Good job!",
-              text: res.message || "Registration Successful!",
-              icon: "success"
-            });
-            this.router.navigate(['/auth/login'])
-          },
-          (error: any) => {
-            console.error("Error during registration", error);
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: error.error.message || "Registration Failed!",
-            });
-          }
-        );
-      }
+      this._auth.Register(formValue).subscribe(
+        (res: any) => {
+          console.log("Registration form submitted");
+          Swal.fire({
+            title: "Good job!",
+            text: res.message || "Registration Successful!",
+            icon: "success"
+          });
+          this.router.navigate(['/auth/login'])
+        },
+        (error: any) => {
+          console.error("Error during registration", error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: error.error.message || "Registration Failed!",
+          });
+        }
+      );
     }
   }
 }

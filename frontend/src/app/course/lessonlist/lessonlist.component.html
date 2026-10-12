@@ -1,8 +1,13 @@
 <app-generic-list
   [items]="lessons"
+  [heading]="'Manage lessons'"
+  [description]="'Lessons from your courses.'"
+  [emptyMessage]="'No lessons have been added to your courses yet.'"
   [itemFields]="['id','title','videoUrl','duration','course.title','course.id']"
   [itemLabels]="['Id','Title','Video URL','Duration','Course Title','Course Id']"
   [isLoading]="isLoading"
+  [loadError]="loadError"
+  (retryLoad)="loadLessons()"
   (addItem)="onOpenAdd()"
   (updateItem)="onOpenUpdate($event)"
   (deleteItem)="deleteLesson($event)"

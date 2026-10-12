@@ -1,81 +1,69 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
 import { HomeService } from '../../services/home.service';
-import Swal from 'sweetalert2';
 import { Course, Enrollment } from '../../models/model';
 import { saveAs } from 'file-saver';
+import { NotificationService } from '../../services/notification.service';
+import { AuthSessionService } from '../../services/auth-session.service';
 
 @Component({
   selector: 'app-enroll',
   standalone: false,
   templateUrl: './enroll.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './enroll.component.css'
 })
 export class EnrollComponent{
 
   @Input() course!: Course ;
-  userId= Number(localStorage.getItem('userId'));
+  userId: number | null;
   enrollments:Enrollment[]=[]
+  isEnrolling = false;
 
   @Output() enrollSuccess= new EventEmitter<void>();
   @Output() cancel= new EventEmitter<void>();
 
-  constructor(private router: Router,private homeService: HomeService){}
+  constructor(
+    private router: Router,
+    private homeService: HomeService,
+    private notifications: NotificationService,
+    private session: AuthSessionService
+  ){
+    this.userId = this.session.getUserId();
+  }
 
 
   enroll(){
-    this.homeService.enrollCourse(this.course.id).subscribe(
-      () => {
-        Swal.fire({
-          title: 'Enrollment Successful',
-          text: 'You have been successfully enrolled in the course!',
-          icon: 'success',
-        });
+    if (this.isEnrolling) return;
+    this.isEnrolling = true;
+    this.homeService.enrollCourse(this.course.id).subscribe({
+      next: () => {
+        this.isEnrolling = false;
+        this.notifications.success('You have been successfully enrolled in the course!');
         this.downloadEnrollReceipt();
         this.enrollSuccess.emit();
       },
-      (error) => {
+      error: (error: any) => {
+        this.isEnrolling = false;
         console.error('Error during enrollment', error);
-        Swal.fire({
-          title: 'Error',
-          text: 'An error occurred while enrolling in the course.',
-          icon: 'error',
-        });
-        this.enrollSuccess.emit();
+        this.notifications.error(error.error?.message || 'An error occurred while enrolling in the course.');
       }
-    )
+    })
   }
 
   downloadEnrollReceipt(){
     this.homeService.downloadEnrollmentReciept(this.course.id).subscribe(
       (response:Blob)=>{
-        const fileName= `Enrollment_Receipt_${this.userId}.pdf`;
+        const fileName = this.userId === null
+          ? 'Enrollment_Receipt.pdf'
+          : `Enrollment_Receipt_${this.userId}.pdf`;
         saveAs(response, fileName);
       },
       (error)=>{
         console.error("Error downloading receipt", error)
+        this.notifications.error('Enrollment succeeded, but the receipt could not be downloaded.');
       }
     )
-  }
-
-  showEnrollSuccess() {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "bottom",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-
-    Toast.fire({
-      icon: "success",
-      title: "Thanks!!",
-      text: "You are successfully enrolled in the course"
-    });
   }
 
   onCancel(){

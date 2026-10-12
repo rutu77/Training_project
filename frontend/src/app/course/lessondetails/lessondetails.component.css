@@ -1,51 +1,10 @@
-.lesson-detail {
-  border: 1px solid #ccc;
-  padding: 20px;
-  margin: 20px auto;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-.lesson-detail h1 {
-  font-size: 24px;
-  color: #333;
-  text-align: center;
-}
-
-.lesson-videourl {
-  display: block;
-  width: 70%;
-  height: 70vh; 
-  margin: 20px auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  max-width: 100%;
-}
-
-.lesson-meta {
-  font-size: 14px;
-  color: #666;
-  text-align: center;
-}
-
-.update-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  display: block;
-  margin: 20px auto;
-}
-
-.update-button:hover {
-  background-color: #0056b3;
-}
-
-
-
-
-
+.lesson-detail,
+.lesson-state { width: min(100% - 2rem, 58rem); margin: 2rem auto; border: 1px solid #e7eaf2; border-radius: 1rem; background: #fff; box-shadow: 0 10px 30px rgb(31 42 68 / 5%); }
+.lesson-detail { padding: clamp(1.2rem, 4vw, 2rem); }
+.lesson-eyebrow { margin: 0 0 .4rem; color: #6057c8; font-size: .72rem; font-weight: 750; letter-spacing: .13em; }
+.lesson-detail h1 { margin: 0; color: #172033; font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing: -.04em; }
+.lesson-meta { display: flex; flex-wrap: wrap; gap: .75rem; margin: .8rem 0 1.2rem; color: #68758b; font-size: .88rem; }
+.lesson-video { display: block; width: 100%; max-height: 70vh; margin: 0 auto; border-radius: .8rem; background: #111827; }
+.lesson-state { display: flex; min-height: 10rem; align-items: center; justify-content: center; gap: .75rem; padding: 1.5rem; color: #68758b; text-align: center; }
+.lesson-error { flex-direction: column; }
+.lesson-error p { margin: 0; }

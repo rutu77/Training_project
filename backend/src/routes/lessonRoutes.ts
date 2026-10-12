@@ -4,6 +4,7 @@ import {
   authenticateUser,
   authorizeCourseOwnerOrAdminFromBody,
   authorizeLessonOwnerOrAdmin,
+  authorizeRole,
 } from "../middleware/middleware"
 import { validateBody, validateIdParam } from "../middleware/requestValidation"
 
@@ -20,7 +21,7 @@ router.post('/',authenticateUser,validateBody({
   duration: { type: "number", required: true, min: 0 },
 }),authorizeCourseOwnerOrAdminFromBody,lessonController.createLesson)
 router.get('/:id',authenticateUser,lessonController.getLessonById)
-router.get('/',authenticateUser,lessonController.getAllLesson)
+router.get('/',authenticateUser,authorizeRole(["admin", "teacher"]),lessonController.getAllLesson)
 router.put('/:id',authenticateUser,authorizeLessonOwnerOrAdmin,validateBody({
   title: { type: "string" },
   videoUrl: { type: "string" },

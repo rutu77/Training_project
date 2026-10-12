@@ -5,6 +5,21 @@ import { AuthRequest } from "../types/authRequest";
 
 const reviewService = new ReviewService();
 
+function reviewResponse(review: Review) {
+  return {
+    id: review.id,
+    rating: review.rating,
+    comment: review.comment,
+    deleted: review.deleted,
+    user: review.user
+      ? { id: review.user.id, name: review.user.name }
+      : null,
+    course: review.course
+      ? { id: review.course.id, title: review.course.title }
+      : null,
+  };
+}
+
 export class ReviewController {
   async createReview(req: Request, res: Response) {
     const user = (req as AuthRequest).user;
@@ -25,7 +40,7 @@ export class ReviewController {
       }, user.id)) as Review;
       res
         .status(201)
-        .json({ message: "review created successfully!", data: review });
+        .json({ message: "review created successfully!", data: reviewResponse(review) });
     } catch (error) {
       res.status(400).json({ message: (error as Error).message });
     }
@@ -35,7 +50,7 @@ export class ReviewController {
     const reviewId = Number(req.params.id);
     try {
       const review = await reviewService.getReviewById(reviewId);
-      res.status(200).json({ data: review });
+      res.status(200).json({ data: reviewResponse(review) });
     } catch (error) {
       res.status(404).json({ message: (error as Error).message });
     }
@@ -45,7 +60,7 @@ export class ReviewController {
     const courseId = Number(req.params.id);
     try {
       const review = await reviewService.getReviewByCourseId(courseId);
-      res.status(200).json({ data: review });
+      res.status(200).json({ data: review.map(reviewResponse) });
     } catch (error) {
       res.status(404).json({ message: (error as Error).message });
     }
@@ -76,7 +91,7 @@ export class ReviewController {
       );
       res
         .status(200)
-        .json({ message: "Review updated successfully", data: updatedReview });
+        .json({ message: "Review updated successfully", data: reviewResponse(updatedReview) });
     } catch (error) {
       res.status((error as Error).message.includes("cannot") ? 403 : 404).json({ message: (error as Error).message });
     }
@@ -100,7 +115,7 @@ export class ReviewController {
   async getAllReviews(req: Request, res: Response): Promise<void> {
     try {
       const reviews = await reviewService.getAllReviews();
-      res.status(200).json(reviews);
+      res.status(200).json(reviews.map(reviewResponse));
     } catch (error) {
       res.status(500).json({ error: "Error fetching reviews" });
     }

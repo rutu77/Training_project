@@ -1,14 +1,23 @@
-<div *ngIf="lesson" class="lesson-detail">
-    <h1>{{ lesson.title }}</h1>
-    <video width="320" height="240"  class="lesson-videourl" autoplay muted>
-      <source src="lesson.videoUrl" type="video/mp4">
-    </video>
-    <!-- <video [src]="lesson.videoUrl" type="video/mp4" class="lesson-videourl"></video> -->
-    <div class="lesson-meta">
-      <span>Duration: {{ lesson.duration }} minutes</span>
-    </div>
-
+<div *ngIf="isLoading" class="lesson-state" role="status">
+  <p-progress-spinner></p-progress-spinner>
+  <span>Loading lesson…</span>
 </div>
 
+<div *ngIf="!isLoading && loadError" class="lesson-state lesson-error" role="alert">
+  <p>{{ loadError }}</p>
+</div>
 
+<article *ngIf="!isLoading && lesson" class="lesson-detail">
+  <p class="lesson-eyebrow">COURSE LESSON</p>
+  <h1>{{ lesson.title }}</h1>
+  <div class="lesson-meta">
+    <span>{{ lesson.duration || 0 }} minutes</span>
+    <span *ngIf="lesson.course">{{ lesson.course.title }}</span>
+  </div>
+  <video *ngIf="lesson.videoUrl" class="lesson-video" controls preload="metadata">
+    <source [src]="lesson.videoUrl">
+    Your browser does not support embedded video.
+  </video>
+  <p *ngIf="!lesson.videoUrl" class="lesson-state">No video has been added to this lesson yet.</p>
+</article>
   

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -8,6 +8,7 @@ import { HomeService } from '../../services/home.service';
   selector: 'app-add-review',
   standalone: false,
   templateUrl: './add-review.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './add-review.component.css'
 })
 export class AddReviewComponent implements OnInit{

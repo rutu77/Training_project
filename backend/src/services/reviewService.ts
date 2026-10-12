@@ -21,22 +21,24 @@ export class ReviewService{
     }
        
     async getReviewById(id: number){
-        const review = await reviewRepository.findOne({ where: {id } });
+        const review = await reviewRepository.findOne({
+            where: {id, deleted:false},
+            relations:["user", "course"],
+        });
         if (!review) throw new Error("Review not found!");
         return review;
     }
 
     async getReviewByCourseId(courseId: number) {
         const reviews= await reviewRepository.find({
-            where: { course: { id: courseId } },
+            where: { course: { id: courseId }, deleted:false },
             relations: ['course','user'],
         })
-        if (reviews.length === 0) throw new Error("No reviews found for this course!");
         return reviews;
     }
 
     async updateReviewById(id: number, data: { rating?: number; comment?: string }, userId: number, isAdmin: boolean){
-        const review = await reviewRepository.findOne({ where: { id }, relations: ["user"] });
+        const review = await reviewRepository.findOne({ where: { id }, relations: ["user", "course"] });
         if (!review) throw new Error("Review not found!");
         if (!isAdmin && review.user.id !== userId) throw new Error("You cannot update this review");
         if (data.rating !== undefined) review.rating = data.rating;
@@ -53,7 +55,10 @@ export class ReviewService{
     }
 
     async getAllReviews(){
-        return await reviewRepository.find({ relations:['course','user']});
+        return await reviewRepository.find({
+            where:{deleted:false},
+            relations:['course','user'],
+        });
     }
 
 }

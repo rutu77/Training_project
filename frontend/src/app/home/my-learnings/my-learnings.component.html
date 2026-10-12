@@ -1,17 +1,18 @@
 <div class="course-list" id="courseList">
-  <ng-container *ngFor="let course of courses" >
-      <ng-container *ngIf="isEnrolled(course.id)">
-          <div class="course-card" (click)="viewCourse(course.id)">
-              <img src="{{ course.thumbnail }}" alt="{{ course.title }}" class="course-thumbnail">
-              <div class="course-details">
-                  <h2 class="course-title">{{ course.title }}</h2>
-                  <p class="course-description">{{ course.description }}</p>
-              </div>
-          </div>
-      </ng-container>
-  </ng-container>
-</div>
-
-<div *ngIf="courses.length === 0" [ngStyle]="{'text-align':'center'}">
-    <p-progressSpinner></p-progressSpinner>
+  <div *ngIf="isLoading" role="status">
+    <p-progress-spinner></p-progress-spinner>
+    <span>Loading your courses...</span>
+  </div>
+  <div *ngIf="!isLoading && loadError" role="alert">
+    <p>{{ loadError }}</p>
+    <button type="button" (click)="loadEnrollments()">Try again</button>
+  </div>
+  <p *ngIf="!isLoading && !loadError && courses.length === 0">You are not enrolled in any courses yet.</p>
+  <div *ngFor="let course of courses" class="course-card" (click)="viewCourse(course.id)">
+    <img [src]="course.thumbnail" [alt]="course.title" class="course-thumbnail">
+    <div class="course-details">
+      <h2 class="course-title">{{ course.title }}</h2>
+      <p class="course-description">{{ course.description }}</p>
+    </div>
+  </div>
 </div>

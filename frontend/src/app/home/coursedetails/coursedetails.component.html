@@ -1,104 +1,108 @@
-<div *ngIf="!course" [ngStyle]="{'text-align':'center'}">
-  <p-progressSpinner></p-progressSpinner>
-</div>
+<main class="course-detail">
+  <div *ngIf="isLoadingCourse" class="course-state" role="status">
+    <p-progress-spinner></p-progress-spinner>
+    <span>Loading course…</span>
+  </div>
 
-<div *ngIf="course" class="course-detail">
-    <h1>{{ course.title }}</h1>
-    <img [src]="course.thumbnail" alt="{{ course.title }}" class="course-thumbnail">
-    <p>{{ course.description }}</p>
-    <div class="course-meta">
-      <span>Price: {{ course.price  | currency:'INR' }}</span>
-    </div>
+  <section *ngIf="!isLoadingCourse && courseError" class="course-state error-state" role="alert">
+    <p>{{ courseError }}</p>
+    <button type="button" class="secondary-action" (click)="loadCourseById(courseId)">Try again</button>
+  </section>
 
-    
-    <!-- enroll button-->
-    <div *ngIf="!isEnrolled(course.id) && isLoggedIn">
-      <button pButton (click)="openEnrollmentDialog(course)"  class="enroll-button">Enroll to this course</button>
-    </div>
-    
-    <p-dialog header="Enroll" [(visible)]="showEnrollDialog" [modal]="true">
-      <app-enroll [course]="selectedCourse" (enrollSuccess)="refreshEnrollments()" (cancel)="closeEnrollmentDialog()" (closeDialog)="closeEnrollmentDialog()"></app-enroll>
+  <ng-container *ngIf="!isLoadingCourse && course">
+    <header class="course-hero">
+      <img *ngIf="course.thumbnail" [src]="course.thumbnail" [alt]="course.title" class="course-thumbnail">
+      <div class="hero-copy">
+        <p class="eyebrow">COURSE DETAILS</p>
+        <h1>{{ course.title }}</h1>
+        <p class="course-description">{{ course.description }}</p>
+        <div class="course-meta">
+          <span class="course-price">{{ course.price | currency:'INR' }}</span>
+          <span *ngIf="course.creator">By {{ course.creator.name }}</span>
+        </div>
+
+        <button *ngIf="!isLoggedIn" type="button" class="primary-action" (click)="enroll()">Log in to enroll</button>
+        <button *ngIf="isLoggedIn && !isLoadingEnrollments && !isEnrolled(course.id)"
+          pButton type="button" class="primary-action" (click)="openEnrollmentDialog(course)">Enroll in this course</button>
+      </div>
+    </header>
+
+    <p-dialog header="Enroll in course" [(visible)]="showEnrollDialog" [modal]="true">
+      <app-enroll [course]="selectedCourse" (enrollSuccess)="refreshEnrollments()"
+        (cancel)="closeEnrollmentDialog()" (closeDialog)="closeEnrollmentDialog()"></app-enroll>
     </p-dialog>
 
-
-    <div *ngIf="!isLoggedIn" >
-      <!-- Please login to enroll to this course -->
-      <button (click)="enroll()" pInputText>Enroll</button>
-    </div>
-
-
-    
-    <!-- lesson and quizzes -->
-    <div *ngIf="isEnrolled(course.id)">
-          <h2>Lessons</h2>
-          <div *ngIf="lessons.length === 0" class="no-lessons">No lessons found!</div>
-          <div *ngFor="let lesson of lessons" class="lesson-card" (click)="viewLesson(lesson.id)">
-            <div class="lesson-details">
-              <h2 class="lesson-title">{{ lesson.title }}</h2>
-              <span class="lesson-duration">{{ lesson.duration }} min</span>
-            </div>
-    
-              <!-- <p-checkbox (click)="parentClick(lesson); $event.stopPropagation()" [(ngModel)]="lesson.completed" [binary]="true"></p-checkbox> -->
-         
+    <section *ngIf="isLoggedIn && isEnrolled(course.id)" class="course-content">
+      <div class="content-section">
+        <div class="section-heading">
+          <div><p class="eyebrow">COURSE CONTENT</p><h2>Lessons</h2></div>
+        </div>
+        <div *ngIf="isLoadingLessons" class="section-state" role="status">
+          <p-progress-spinner></p-progress-spinner><span>Loading lessons…</span>
+        </div>
+        <div *ngIf="!isLoadingLessons && lessonsError" class="section-state error-state" role="alert">
+          <span>{{ lessonsError }}</span><button type="button" class="text-button" (click)="loadLessonsByCourseId(course.id)">Retry</button>
+        </div>
+        <div *ngIf="!isLoadingLessons && !lessonsError && lessons.length === 0" class="section-state empty-state" role="status">
+          No lessons have been added to this course yet.
+        </div>
+        <button *ngFor="let lesson of lessons" type="button" class="lesson-card" (click)="viewLesson(lesson.id)">
+          <span class="content-icon pi pi-play-circle" aria-hidden="true"></span>
+          <span class="lesson-details"><strong>{{ lesson.title }}</strong><small>{{ lesson.duration || 0 }} min</small></span>
+          <span class="pi pi-chevron-right" aria-hidden="true"></span>
+        </button>
       </div>
-  
-        <!-- <div *ngIf="allLessonsCompleted"> -->
-          <h2>Quizzes</h2>
-          <div *ngIf="quizzes.length===0" class="no-quizzes">No Quiz Found</div>
-    
-          <div *ngFor="let quiz of quizzes" class="quiz-card" (click)="TakeQuiz(quiz.id)">
-            <div class="quiz-details">
-              <h2 class="quiz-title">{{ quiz.title }}</h2>
-            </div>
-          </div>  
+
+      <div class="content-section">
+        <div class="section-heading">
+          <div><p class="eyebrow">CHECK YOUR KNOWLEDGE</p><h2>Quizzes</h2></div>
         </div>
-
-    <!-- </div> -->
-
-  
-
-    <!-- reviews -->
-    <div>
-      <h2>Course Reviews</h2>
-      <div *ngIf="reviews.length === 0" class="no-reviews">No reviews found!</div>
-      <div *ngFor="let review of reviews" class="review-card">
-        <p>{{ review.comment }}</p>
-        <span class="review-author">By: {{ review.user.name }}</span>
-      
-        <div class="card flex justify-center">
-          <p-rating [(ngModel)]="review.rating" [readonly]="true" />
+        <div *ngIf="isLoadingQuizzes" class="section-state" role="status">
+          <p-progress-spinner></p-progress-spinner><span>Loading quizzes…</span>
         </div>
-
-        <div *ngIf="isReviewUserSame(review.user.id)">
-          <button (click)="deleteReview(review.id)" pInputText class="delete-review-button">Delete</button>
-          <button (click)="updateReviewDialog(review)" pInputText class="edit-review-button">Edit</button>
-
-          <p-dialog header="Update Review" [(visible)]="displayUpdateReviewDialog" [modal]="true">
-            <app-update-review [review]="selectedReview" (reviewUpdated)="refreshReviews()"></app-update-review>
-          </p-dialog>
-
+        <div *ngIf="!isLoadingQuizzes && quizzesError" class="section-state error-state" role="alert">
+          <span>{{ quizzesError }}</span><button type="button" class="text-button" (click)="loadQuizzes(course.id)">Retry</button>
         </div>
+        <div *ngIf="!isLoadingQuizzes && !quizzesError && quizzes.length === 0" class="section-state empty-state" role="status">
+          No quizzes have been added to this course yet.
+        </div>
+        <button *ngFor="let quiz of quizzes" type="button" class="quiz-card" (click)="takeQuiz(quiz.id)">
+          <span class="content-icon pi pi-file-edit" aria-hidden="true"></span>
+          <span class="lesson-details"><strong>{{ quiz.title }}</strong><small>{{ quiz.questions.length }} questions</small></span>
+          <span class="pi pi-chevron-right" aria-hidden="true"></span>
+        </button>
+      </div>
+    </section>
 
-    </div>
+    <section class="reviews-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">LEARNER FEEDBACK</p><h2>Course reviews</h2></div>
+        <button *ngIf="isEnrolled(course.id)" type="button" class="secondary-action" (click)="addReviewDialog()">Add a review</button>
+      </div>
+      <div *ngIf="isLoadingReviews" class="section-state" role="status">
+        <p-progress-spinner></p-progress-spinner><span>Loading reviews…</span>
+      </div>
+      <div *ngIf="!isLoadingReviews && reviewsError" class="section-state error-state" role="alert">
+        <span>{{ reviewsError }}</span><button type="button" class="text-button" (click)="loadReviewsByCourseId(course.id)">Retry</button>
+      </div>
+      <div *ngIf="!isLoadingReviews && !reviewsError && reviews.length === 0" class="section-state empty-state" role="status">
+        No reviews yet. Be the first to share your experience.
+      </div>
+      <article *ngFor="let review of reviews" class="review-card">
+        <div class="review-heading"><strong>{{ review.user.name }}</strong><p-rating [ngModel]="review.rating" [readonly]="true"></p-rating></div>
+        <p>{{ review.comment || 'No written comment.' }}</p>
+        <div *ngIf="isReviewUserSame(review.user.id)" class="review-actions">
+          <button type="button" class="text-button" (click)="updateReviewDialog(review)">Edit</button>
+          <button type="button" class="danger-text" (click)="deleteReview(review.id)">Delete</button>
+        </div>
+      </article>
+    </section>
 
-
-    <!-- add a review -->
-    <div *ngIf="isEnrolled(course.id)">
-      <!-- <ng-container add-form>
-        <app-add-review [courseId]="selectedCourseId" (reviewAdded)="refreshReviews()"></app-add-review>
-      </ng-container>   -->
-      <button (click)="addReviewDialog()" pButton>Add a review</button>
-      <p-dialog header="Add Review" [(visible)]="displayAddReviewDialog" [modal]="true">
-        <app-add-review [courseId]="selectedCourseId" (reviewAdded)="refreshReviews()"></app-add-review>
-      </p-dialog>
-      
-    </div>
-
-
-</div>
-
-
-
-
-    
-  
+    <p-dialog header="Update review" [(visible)]="displayUpdateReviewDialog" [modal]="true">
+      <app-update-review [review]="selectedReview" (reviewUpdated)="refreshReviews()"></app-update-review>
+    </p-dialog>
+    <p-dialog header="Add a review" [(visible)]="displayAddReviewDialog" [modal]="true">
+      <app-add-review [courseId]="selectedCourseId" (reviewAdded)="refreshReviews()"></app-add-review>
+    </p-dialog>
+  </ng-container>
+</main>

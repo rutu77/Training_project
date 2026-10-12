@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Course } from '../models/model';
 import { HomeService } from '../services/home.service';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
@@ -9,6 +9,7 @@ import { CourseListComponent } from './courselist/courselist.component';
   selector: 'app-home',
   standalone: false,
   templateUrl: './home.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home.component.css'
 })
 export class HomeComponent{

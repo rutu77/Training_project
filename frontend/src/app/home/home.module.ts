@@ -13,7 +13,6 @@ import { EnrollComponent } from './enroll/enroll.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MyLearningsComponent } from './my-learnings/my-learnings.component';
 import { AboutComponent } from './about/about.component';
-import { ContactComponent } from './contact/contact.component';
 import { CourseModule } from '../course/course.module';
 import { ProfileComponent } from './profile/profile.component';
 import { AddReviewComponent } from './add-review/add-review.component';
@@ -30,7 +29,6 @@ import { QuizModule } from '../quiz/quiz.module';
     EnrollComponent,
     MyLearningsComponent, 
     AboutComponent, 
-    ContactComponent, 
     ProfileComponent,
     AddReviewComponent,
     UpdateReviewComponent

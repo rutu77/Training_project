@@ -1,9 +1,14 @@
  
 <app-generic-list 
 [items]="courses"
-[itemFields]="['id','title','description','price','level','duration']"
-[itemLabels]="['Id','Title','Description','Price','Level','Duration']"
+[heading]="'Manage courses'"
+[description]="'Published courses and unpublished drafts you own.'"
+[emptyMessage]="'No courses have been created for this account yet.'"
+[itemFields]="['id','title','isPublished','description','price','level','duration']"
+[itemLabels]="['Id','Title','Publication status','Description','Price','Level','Duration']"
 [isLoading]="isLoading"
+[loadError]="loadError"
+(retryLoad)="loadCourses()"
 (addItem)="onOpenAdd()"
 (updateItem)="onOpenUpdate($event)"
 (deleteItem)="deleteCourse($event)"
@@ -24,6 +29,3 @@
 <p-dialog header="Update Course" [(visible)]="displayUpdateDialog" [modal]="true">
   <app-update-course [courseId]="selectCourseId" (courseUpdated)="refresh()"></app-update-course>
 </p-dialog>
-
-
-

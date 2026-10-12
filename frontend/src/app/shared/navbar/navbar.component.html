@@ -1,54 +1,49 @@
-<nav class="navbar">
-    <div class="left-section">
-        <a routerLink="/home" class="nav-link">Home</a>
+<nav class="navbar" aria-label="Main navigation">
+  <a routerLink="/home" class="brand">
+    <span class="brand-mark">EC</span>
+    <span>Edu<span class="brand-accent">Connect</span></span>
+  </a>
 
-        <div *ngIf="isLoggedIn">
-            <input type="text" pInputText placeholder="Search courses..." class="search-bar" [(ngModel)]="searchValue"  (ngModelChange)="searchCourses($event)" />
-       
-
-        <div *ngIf="isTeacher || isAdmin" class="course-dropdown">
-            <button pButton type="button" label="Course Settings" class="dropbtn" (click)="toggleCourseDropdown()"></button>
-            <div class="dropdown-content" *ngIf="courseDropdownOpen">
-                <a routerLink="/course/courselist" class="nav-link">Manage Course</a>
-                <a routerLink="/course/lessonlist" class="nav-link">Manage Lessons</a>
-                <a routerLink="/quiz/managequiz" class="nav-link">Manage Quizzes</a>
-            </div>
-        </div>
-
-
-     
-            <div *ngIf="!isTeacher && !isAdmin">
-                <a routerLink="/quiz/progress" class="nav-link">Your Progress</a>
-            </div>
-            
-            <div *ngIf="isAdmin || isTeacher" class="course-dropdown">
-                <button pButton type="button" label="User Settings" class="dropbtn" (click)="toggleUserDropdown()"></button>
-                <div class="dropdown-content" *ngIf="userDropdownOpen">
-                    <a routerLink="/quiz/user-progress" class="nav-link">See User Progress</a>
-                    <a routerLink="/admin/user-enrollments" class="nav-link">See User Enrollments</a>
-                    <div *ngIf="isAdmin">
-                        <a routerLink="/admin/userList" class="nav-link">Manage Users</a>
-                    </div> 
-                </div>
-            </div>
-
-         </div>
+  <div *ngIf="isLoggedIn" class="nav-content">
+    <label class="search-wrap">
+      <input type="search" pInputText aria-label="Search courses" placeholder="Search courses…"
+        [(ngModel)]="searchValue" (ngModelChange)="searchCourses($event)">
+    </label>
+    <a *ngIf="!isTeacher && !isAdmin" routerLink="/quiz/progress" class="nav-link">Your progress</a>
+    <div *ngIf="isTeacher || isAdmin" class="nav-dropdown">
+      <button pButton type="button" class="nav-button" (click)="toggleCourseDropdown()">Teaching</button>
+      <div class="dropdown-content" *ngIf="courseDropdownOpen">
+        <a routerLink="/course/courselist" class="dropdown-link">Manage courses</a>
+        <a routerLink="/course/lessonlist" class="dropdown-link">Manage lessons</a>
+        <a routerLink="/quiz/managequiz" class="dropdown-link">Manage quizzes</a>
+      </div>
     </div>
-
-    <div class="right-section">
-        <div *ngIf="isLoggedIn" class="profile-dropdown">
-            <button pButton type="button" label="Profile" icon="pi pi-user" class="dropbtn" (click)="toggleProfileDropdown()"></button>
-            <div class="dropdown-content" *ngIf="profileDropdownOpen">
-                <a routerLink="/home/profile">My Profile</a>
-                <a routerLink="/home/mylearnings">My Learnings</a>
-                <button (click)="logout()">Logout</button>
-            </div>
-        </div>  
-
-      
-        <div *ngIf="!isLoggedIn">
-            <button pButton type="button" label="Login" routerLink="/auth/login"></button>
-            <button pButton type="button" label="Register" routerLink="/auth/register"></button>
-        </div>
+    <div *ngIf="isAdmin || isTeacher" class="nav-dropdown">
+      <button pButton type="button" class="nav-button" (click)="toggleUserDropdown()">Administration</button>
+      <div class="dropdown-content" *ngIf="userDropdownOpen">
+        <a routerLink="/quiz/user-progress" class="dropdown-link">Learner progress</a>
+        <a routerLink="/admin/user-enrollments" class="dropdown-link">Enrollments</a>
+        <ng-container *ngIf="isAdmin">
+          <a routerLink="/admin/userList" class="dropdown-link">Manage users</a>
+        </ng-container>
+      </div>
     </div>
+  </div>
+
+  <div class="nav-actions">
+    <div *ngIf="isLoggedIn; else guestActions" class="nav-dropdown">
+      <button pButton type="button" class="profile-button" (click)="toggleProfileDropdown()">
+        <span class="profile-avatar pi pi-user" aria-hidden="true"></span> Account
+      </button>
+      <div class="dropdown-content dropdown-right" *ngIf="profileDropdownOpen">
+        <a routerLink="/home/profile" class="dropdown-link">My profile</a>
+        <a routerLink="/home/mylearnings" class="dropdown-link">My learning</a>
+        <button type="button" class="dropdown-link dropdown-logout" (click)="logout()">Sign out</button>
+      </div>
+    </div>
+    <ng-template #guestActions>
+      <a pButton routerLink="/auth/login" class="login-link">Log in</a>
+      <a pButton routerLink="/auth/register" class="register-link">Get started</a>
+    </ng-template>
+  </div>
 </nav>

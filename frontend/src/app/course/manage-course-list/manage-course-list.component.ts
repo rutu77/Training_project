@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Course } from '../../models/model';
 import { CourseService } from '../../services/course.service';
 import Swal from 'sweetalert2';
-import { error } from 'console';
 
 @Component({
   selector: 'app-manage-course-list',
   standalone: false,
   templateUrl: './manage-course-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './manage-course-list.component.css',
 })
 
@@ -16,27 +16,34 @@ export class ManageCourseListComponent implements OnInit {
   displayUpdateDialog = false;
   displayAddDialog=false;
   isLoading:boolean=true
+  loadError = '';
   selectCourseId!: number;
-  userId = Number(localStorage.getItem('userId'));
-  isAdmin = localStorage.getItem('user_role') === 'admin';
 
-  constructor(private course: CourseService) {}
+  constructor(
+    private course: CourseService,
+    private readonly changeDetector: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadCourses();
   }
 
-  loadCourses() {
-    this.course.getCourses().subscribe((data: any) => {
-      this.courses = data;
-
-      this.courses = this.courses
-        .filter((course) => !course.deleted);
-      if (!this.isAdmin) {
-        this.courses = this.courses.filter((course) => course.creator.id === this.userId);
+  loadCourses(): void {
+    this.isLoading = true;
+    this.loadError = '';
+    this.course.getManageCourses().subscribe({
+      next: (data) => {
+        this.courses = data.filter((course) => !course.deleted);
+        this.isLoading = false;
+        this.changeDetector.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error loading courses:', error);
+        this.courses = [];
+        this.loadError = 'Courses could not be loaded. Please try again.';
+        this.isLoading = false;
+        this.changeDetector.detectChanges();
       }
-      this.isLoading=false
-      // console.log([this.courses].flat());
     });
   }
 
@@ -62,6 +69,7 @@ export class ManageCourseListComponent implements OnInit {
       },
       (error: any) => {
         console.error('Error deleting Course:', error);
+        this.changeDetector.markForCheck();
         Swal.fire({
           title: 'Error',
           text: 'An error occurred while deleting the Course.',

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/userService";
+import { env } from "../config/env";
 const userService = new UserService();
 
 export class UserController {
@@ -24,7 +25,7 @@ export class UserController {
     };
     try {
       if (req.file) {
-        data.profilePicture = `http://localhost:3000/uploads/${req.file.filename}`;
+        data.profilePicture = `${env.publicApiUrl}/uploads/${req.file.filename}`;
       }
 
       const updatedUser = await userService.updateUserById(userId, data);

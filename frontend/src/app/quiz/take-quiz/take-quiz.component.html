@@ -1,14 +1,35 @@
-<div *ngIf="quiz" class="quiz-container">
-  <h2>{{ quiz.title }}</h2>
-  <form [formGroup]="quizForm" (ngSubmit)="submitQuiz()">
-    <div *ngFor="let question of quiz.questions">
-      <p>{{ question.question }}</p>
-      <div *ngFor="let option of question.options">
-        <input type="radio" [formControlName]="question.id" [value]="option" />
-        {{ option }}
-      </div>
-    </div>
-    <button type="submit" [disabled]="quizForm.invalid">Submit Quiz</button>
-    
-  </form>
-</div>
+<main class="quiz-take-page">
+  <div *ngIf="isLoading" class="quiz-state" role="status">
+    <p-progress-spinner></p-progress-spinner>
+    <span>Loading quiz…</span>
+  </div>
+  <section *ngIf="!isLoading && loadError" class="quiz-state" role="alert">
+    <p>{{ loadError }}</p>
+  </section>
+
+  <section *ngIf="!isLoading && quiz && quiz.questions.length === 0" class="quiz-state empty-state" role="status">
+    <span class="pi pi-list" aria-hidden="true"></span>
+    <h1>{{ quiz.title }}</h1>
+    <h2>This quiz is not ready yet</h2>
+    <p>The instructor has not added any questions. Please check back later.</p>
+  </section>
+
+  <section *ngIf="!isLoading && quiz && quiz.questions.length > 0" class="quiz-container">
+    <p class="eyebrow">KNOWLEDGE CHECK</p>
+    <h1>{{ quiz.title }}</h1>
+    <p class="quiz-intro">Choose an answer for each question, then submit your quiz.</p>
+    <form [formGroup]="quizForm" (ngSubmit)="submitQuiz()">
+      <fieldset *ngFor="let question of quiz.questions; let index = index" class="question-block">
+        <legend><span class="question-number">{{ index + 1 }}</span>{{ question.question }}</legend>
+        <label *ngFor="let option of question.options" class="answer-option">
+          <input type="radio" [formControlName]="question.id.toString()" [value]="option">
+          <span>{{ option }}</span>
+        </label>
+      </fieldset>
+      <p *ngIf="submitError" class="submit-error" role="alert">{{ submitError }}</p>
+      <button class="submit-button" type="submit" [disabled]="quizForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'Submitting…' : 'Submit quiz' }}
+      </button>
+    </form>
+  </section>
+</main>

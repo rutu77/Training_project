@@ -35,7 +35,6 @@ export class LessonService{
 
     async getLessonsByCourseId(courseId: number) {
         const lessons = await lessonRepository.find({ where: { course: { id: courseId } },relations: ['course'],});
-        if (lessons.length === 0) throw new Error("No lessons found for this course!");
         return lessons;
       }
       
@@ -55,8 +54,16 @@ export class LessonService{
     }
 
 
-    async getAllLessons(){
-        return await lessonRepository.find()
+    async getAllLessons(user: User) {
+        const query = lessonRepository
+            .createQueryBuilder("lesson")
+            .leftJoinAndSelect("lesson.course", "course")
+            .leftJoinAndSelect("course.creator", "creator")
+            .where("lesson.deleted = false");
+        if (user.role !== "admin") {
+            query.andWhere("creator.id = :userId", { userId: user.id });
+        }
+        return query.orderBy("lesson.id", "DESC").getMany();
     }
 
 }

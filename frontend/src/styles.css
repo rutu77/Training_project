@@ -1,11 +1,88 @@
 /* You can add global styles to this file, and also import other style files */
-@import "primeng/resources/themes/lara-light-blue/theme.css";
-@import "primeng/resources/primeng.css";
 @import "primeflex/primeflex.css";
 @import "primeicons/primeicons.css";
 
-html , body{
+* {
+  box-sizing: border-box;
+}
 
-    margin: 10 !important;
-    padding: 10 !important;
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #f7f8fc;
+  color: #1d2739;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgb(99 91 219 / 35%);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: #dedbff;
+  color: #28235c;
+}
+
+.p-datatable .p-datatable-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #e9edf4;
+  background: #f8f9fc;
+  color: #657188;
+  font-size: 0.76rem;
+  font-weight: 750;
+  letter-spacing: 0.045em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #eef1f5;
+  color: #3d4960;
+  font-size: 0.88rem;
+  vertical-align: middle;
+}
+
+.progress-state {
+  display: flex;
+  min-height: 10rem;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid #e7eaf2;
+  border-radius: 1rem;
+  background: #fff;
+  color: #68758b;
+  text-align: center;
+}
+
+.progress-state p {
+  margin: 0;
 }

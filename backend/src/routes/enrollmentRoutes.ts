@@ -13,6 +13,7 @@ const router = Router();
 router.param("id", validateIdParam());
 router.param("courseId", validateIdParam("courseId"));
 
+router.get("/manage", authenticateUser, authorizeRole(["admin", "teacher"]), enrollController.getManageEnrollments);
 router.post("/", authenticateUser, validateBody({
   courseId: { type: "integer", required: true, min: 1 },
 }), enrollController.createEnrollment);

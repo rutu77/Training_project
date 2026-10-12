@@ -1,22 +1,61 @@
-<h3>Your Quiz Progress</h3>
-<table>
-  <tr>
-    <th>Quiz Title</th>
-    <th>Score</th>
-    <th>Total</th>
-    <th>Completion</th>
-    <th>Attempt</th>
-  </tr>
-  <tr *ngFor="let progress of progressList">
-    <td>{{ progress.quiz.title }}</td>
-    <td>{{ progress.score }} %</td>
-    <td>{{ progress.total }}</td>
-    <td>{{ progress.completion | date : "short" }}</td>
-    <td>{{progress.attempt}}</td>
-  </tr>
-</table>
+<main class="progress-page">
+  <header class="progress-heading">
+    <p class="eyebrow">LEARNING DASHBOARD</p>
+    <h1>Your quiz progress</h1>
+    <p>Review your recent results and download a report of your completed quizzes.</p>
+  </header>
 
-<button (click)="downloadReport()" pInputText>Downlaod Report</button>
+  <div *ngIf="isLoading" class="progress-state" role="status">
+    <p-progress-spinner></p-progress-spinner>
+    <span>Loading your progress…</span>
+  </div>
+  <div *ngIf="!isLoading && loadError" class="progress-state error-state" role="alert">
+    <p>{{ loadError }}</p>
+    <button type="button" class="secondary-action" (click)="loadProgress()">Try again</button>
+  </div>
+  <section *ngIf="!isLoading && !loadError && progressList.length === 0" class="progress-state empty-state" role="status">
+    <span class="empty-icon pi pi-chart-line" aria-hidden="true"></span>
+    <h2>No quiz attempts yet</h2>
+    <p>When you complete a quiz, your score and attempt history will appear here.</p>
+    <button type="button" class="primary-action" disabled>
+      <span class="pi pi-download" aria-hidden="true"></span>
+      Download quiz report
+    </button>
+  </section>
 
-
-<app-chart></app-chart>
+  <ng-container *ngIf="!isLoading && !loadError && progressList.length > 0">
+    <section class="results-panel" aria-label="Quiz results">
+      <div class="results-toolbar">
+        <h2>Completed quizzes</h2>
+        <button type="button" class="primary-action" (click)="downloadReport()" [disabled]="isDownloading || progressList.length === 0">
+          <span class="pi pi-download" aria-hidden="true"></span>
+          {{ isDownloading ? 'Preparing report…' : 'Download quiz report' }}
+        </button>
+      </div>
+      <p *ngIf="reportError" class="report-error" role="alert">{{ reportError }}</p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Quiz</th>
+              <th>Score</th>
+              <th>Questions</th>
+              <th>Completed</th>
+              <th>Attempts</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let progress of progressList">
+              <td>{{ progress.quiz.title }}</td>
+              <td><span class="score">{{ progress.score }}%</span></td>
+              <td>{{ progress.total }}</td>
+              <td>{{ progress.completion | date:'medium' }}</td>
+              <td>{{ progress.attempt }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <app-chart [progress]="progressList"></app-chart>
+  </ng-container>
+</main>

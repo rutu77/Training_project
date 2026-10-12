@@ -1,7 +1,25 @@
 .register-container {
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    height: 100vh; 
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1.5rem;
+  background: #f7f8fc;
+}
+
+.register-container .surface-card {
+  max-width: 42rem;
+  background: #fff;
+  color: #1d2739;
+}
+
+.register-container input.p-inputtext {
+  border: 1px solid #d8deea;
+  background: #fff;
+  color: #1d2739;
+}
+
+.register-container input.p-inputtext::placeholder {
+  color: #77839a;
+}
   

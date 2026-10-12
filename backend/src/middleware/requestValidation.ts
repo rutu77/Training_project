@@ -54,7 +54,11 @@ export function validateBody(
           continue;
         }
       } else if (rule.type === "email") {
-        if (typeof value !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        if (
+          typeof value !== "string" ||
+          value.length > (rule.maxLength ?? 254) ||
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+        ) {
           errors.push(`${field} must be a valid email address`);
           continue;
         }

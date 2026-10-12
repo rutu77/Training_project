@@ -95,8 +95,13 @@ export class LessonController {
   }
 
   async getAllLesson(req: Request, res: Response) {
+    const user = (req as AuthRequest).user;
+    if (!user) {
+      res.status(401).json({ message: "Authentication is required" });
+      return;
+    }
     try {
-      const lessons = await lessonService.getAllLessons();
+      const lessons = await lessonService.getAllLessons(user);
       res.status(200).json(lessons);
     } catch (error) {
       res.status(500).json({ error: "Error fetching lessons" });

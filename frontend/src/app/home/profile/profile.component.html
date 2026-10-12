@@ -1,5 +1,15 @@
 
-<div *ngIf="user" class="profile-container">
+<div *ngIf="isLoading" class="profile-state" role="status">
+    <p-progress-spinner></p-progress-spinner>
+    <span>Loading profile…</span>
+</div>
+
+<div *ngIf="!isLoading && loadError" class="profile-state" role="alert">
+    <p>{{ loadError }}</p>
+    <button type="button" (click)="loadProfile()">Try again</button>
+</div>
+
+<div *ngIf="!isLoading && user" class="profile-container">
     <h1>{{ user.name }}</h1>
     <img [src]="user.profilePicture" alt="{{ user.name }}" class="profile-picture">
     <p>Bio: {{ user.bio }}</p>
@@ -34,8 +44,3 @@
         </form>
     </div> 
 </div>
-
-<div *ngIf="!user" [ngStyle]="{'text-align':'center'}">
-    <p-progressSpinner></p-progressSpinner>
-</div>
-

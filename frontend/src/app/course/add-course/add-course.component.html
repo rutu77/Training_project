@@ -29,8 +29,16 @@
     <label for="duration">Duration:</label>
     <input type="text" pInputText id="duration" placeholder="Enter Course Duration..." formControlName="duration">
 
+    <label for="isPublished" class="mt-3">
+        <input type="checkbox" id="isPublished" formControlName="isPublished">
+        Publish course immediately
+    </label>
+
     <div class="p-dialog-footer">
-        <button pButton type="submit" label="Add"></button>
+        <button pButton type="submit" [disabled]="isSubmitting || courseForm.invalid">
+            <i *ngIf="isSubmitting" class="pi pi-spin pi-spinner mr-2" aria-hidden="true"></i>
+            {{ isSubmitting ? 'Adding...' : 'Add' }}
+        </button>
     </div>
 
 </form>

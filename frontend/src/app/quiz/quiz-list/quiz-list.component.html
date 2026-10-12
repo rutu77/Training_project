@@ -1,39 +1,110 @@
-<div class="quiz-container">
-  <h3>Create New Quiz</h3>
-  <form [formGroup]="quizForm" (ngSubmit)="createQuiz()">
-    <input
-      type="text"
-      formControlName="title"
-      placeholder="Quiz Title"
-      required
-    />
-    <input
-      type="number"
-      formControlName="courseId"
-      placeholder="Course ID"
-      required
-    />
-    <button type="submit" [disabled]="quizForm.invalid">Create Quiz</button>
-  </form>
+<main class="quiz-manager">
+  <header class="manager-heading">
+    <div>
+      <p class="eyebrow">TEACHING TOOLS</p>
+      <h1>Quiz library</h1>
+      <p class="manager-description">Create quizzes for your courses and keep their questions up to date.</p>
+    </div>
+    <span class="quiz-count">{{ quizzes.length }} {{ quizzes.length === 1 ? 'quiz' : 'quizzes' }}</span>
+  </header>
 
-  <div *ngFor="let quiz of quizzes">
-    <h2>{{ quiz.title }}</h2>
-    <p *ngIf="quiz.course">Course: {{ quiz.course.title }}</p>
-    <p *ngIf="!quiz.course">Course: Not assigned</p>
-    <p>Questions:</p>
-    <ul>
-      <li *ngFor="let question of quiz.questions">
-        {{ question.question }}
-      </li>
-    </ul>
-    <button (click)="deleteQuiz(quiz.id)">Delete Quiz</button>
-    <a [routerLink]="['/quiz/addQuestion', quiz.id]">Add Question</a>
-  </div>
-</div>
+  <section class="create-panel" aria-labelledby="create-quiz-title">
+    <div class="panel-heading">
+      <span class="panel-icon pi pi-sparkles" aria-hidden="true"></span>
+      <div>
+        <h2 id="create-quiz-title">Create a quiz</h2>
+        <p>Choose a course first so learners can find the quiz in the right place.</p>
+      </div>
+    </div>
 
-<div
-  *ngIf="!quizzes || quizzes.length === 0"
-  [ngStyle]="{ 'text-align': 'center' }">
-  <p *ngIf="!isLoading">Quiz not created</p>
-  <p-progressSpinner *ngIf="isLoading"></p-progressSpinner>
-</div>
+    <div *ngIf="courseLoadError" class="inline-alert" role="alert">
+      <span>{{ courseLoadError }}</span>
+      <button type="button" class="link-button" (click)="loadCourses()">Try again</button>
+    </div>
+
+    <form class="quiz-create-form" [formGroup]="quizForm" (ngSubmit)="createQuiz()">
+      <div class="form-field">
+        <label for="quiz-title">Quiz title</label>
+        <input id="quiz-title" type="text" formControlName="title" placeholder="e.g. Module 1 review" required>
+        <small *ngIf="quizForm.controls.title.touched && quizForm.controls.title.invalid" class="field-error">
+          Enter a quiz title.
+        </small>
+      </div>
+      <div class="form-field">
+        <label for="quiz-course">Course</label>
+        <select id="quiz-course" formControlName="courseId" [disabled]="isLoadingCourses || courses.length === 0">
+          <option [ngValue]="null" disabled>Select a course</option>
+          <option *ngFor="let course of courses" [ngValue]="course.id">{{ course.title }}</option>
+        </select>
+        <small *ngIf="isLoadingCourses" class="field-hint">Loading your courses…</small>
+        <small *ngIf="!isLoadingCourses && !courseLoadError && courses.length === 0" class="field-hint">
+          No courses are available. Create a course first.
+        </small>
+      </div>
+      <button class="primary-action" type="submit"
+        [disabled]="quizForm.invalid || isCreatingQuiz || isLoadingCourses || courses.length === 0">
+        {{ isCreatingQuiz ? 'Creating…' : 'Create quiz' }}
+      </button>
+    </form>
+  </section>
+
+  <section class="quiz-library" aria-labelledby="quiz-library-title">
+    <div class="library-heading">
+      <div>
+        <p class="eyebrow">YOUR CONTENT</p>
+        <h2 id="quiz-library-title">Manage quizzes</h2>
+      </div>
+      <button type="button" class="secondary-action" (click)="loadQuizzes()" [disabled]="isLoading">Refresh</button>
+    </div>
+
+    <div *ngIf="isLoading" class="library-message" role="status">
+      <p-progress-spinner></p-progress-spinner>
+      <span>Loading quizzes…</span>
+    </div>
+    <div *ngIf="!isLoading && loadError" class="library-message" role="alert">
+      <span>{{ loadError }}</span>
+      <button type="button" class="secondary-action" (click)="loadQuizzes()">Try again</button>
+    </div>
+    <div *ngIf="!isLoading && !loadError && quizzes.length === 0" class="library-message empty-state" role="status">
+      <span class="empty-icon pi pi-book" aria-hidden="true"></span>
+      <h3>No quizzes yet</h3>
+      <p>Create a quiz above and it will appear here.</p>
+    </div>
+
+    <article *ngFor="let quiz of quizzes" class="quiz-card">
+      <div class="quiz-card-main">
+        <ng-container *ngIf="editingQuizId !== quiz.id; else editQuizTitle">
+          <h3>{{ quiz.title }}</h3>
+          <span class="course-tag">
+            <span class="pi pi-folder" aria-hidden="true"></span>
+            {{ quiz.course?.title || 'Course not assigned' }}
+          </span>
+        </ng-container>
+        <ng-template #editQuizTitle>
+          <form class="edit-quiz-form" [formGroup]="editQuizForm" (ngSubmit)="saveQuizTitle(quiz.id)">
+            <label [for]="'edit-quiz-' + quiz.id">Quiz title</label>
+            <div class="edit-quiz-controls">
+              <input [id]="'edit-quiz-' + quiz.id" type="text" formControlName="title" required>
+              <button class="primary-action small-action" type="submit" [disabled]="editQuizForm.invalid || isSavingQuiz">
+                {{ isSavingQuiz ? 'Saving…' : 'Save' }}
+              </button>
+              <button class="secondary-action small-action" type="button" (click)="cancelEditing()">Cancel</button>
+            </div>
+          </form>
+        </ng-template>
+        <p class="question-count">{{ quiz.questions.length }} {{ quiz.questions.length === 1 ? 'question' : 'questions' }}</p>
+      </div>
+      <div class="quiz-actions">
+        <a class="secondary-action" [routerLink]="['/quiz/addQuestion', quiz.id]">
+          <span class="pi pi-list" aria-hidden="true"></span> Questions
+        </a>
+        <button *ngIf="editingQuizId !== quiz.id" type="button" class="secondary-action" (click)="startEditing(quiz)">
+          <span class="pi pi-pencil" aria-hidden="true"></span> Edit
+        </button>
+        <button type="button" class="danger-action" (click)="deleteQuiz(quiz.id)">
+          <span class="pi pi-trash" aria-hidden="true"></span> Delete
+        </button>
+      </div>
+    </article>
+  </section>
+</main>

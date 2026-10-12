@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
   selector: 'app-update-course',
   standalone: false,
   templateUrl: './update-course.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './update-course.component.css'
 })
 
@@ -27,6 +28,7 @@ export class UpdateCourseComponent implements OnInit{
       price: new FormControl(''),
       level: new FormControl(''),
       duration: new FormControl(''),
+      isPublished: new FormControl(false),
     })
 
   }
@@ -37,13 +39,14 @@ export class UpdateCourseComponent implements OnInit{
 
   loadCourseData(){
     if(this.courseId){
-      this._course.getCourseById(this.courseId).subscribe((res:any)=>{
+      this._course.getManageCourseById(this.courseId).subscribe((res:any)=>{
         this.updateCourseForm.patchValue({
           title: res.data.title,
           description: res.data.description,
           price: res.data.price, 
           level: res.data.level,
           duration: res.data.duration,
+          isPublished: res.data.isPublished,
         });
       })
     }
@@ -74,5 +77,3 @@ export class UpdateCourseComponent implements OnInit{
     );
   }
 }
-
-

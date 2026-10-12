@@ -1,24 +1,73 @@
-<div *ngIf="quiz" class="quiz-container">
-    <h2>{{ quiz.title }}</h2>
-    <p *ngIf="quiz.course">Course: {{ quiz.course.title }}</p>
-    <p *ngIf="!quiz.course">Course: Not assigned</p>
-
-    <p>Questions:</p>
-    <ul>
-      <li *ngFor="let question of quiz.questions">
-        {{ question.question }}
-        <button (click)="deleteQuestion(question.id)">Delete</button>
-      </li>
-    </ul>
-
-    <h3>Add New Question</h3>
-    <form [formGroup]="questionForm" (ngSubmit)="addQuestion()">
-      <input type="text" formControlName="question" placeholder="Question" required>
-      <input type="text" formControlName="options" placeholder="Options (comma separated)" required>
-      <input type="text" formControlName="correctAnswer" placeholder="Correct Answer" required>
-      <input type="text" formControlName="explanation" placeholder="Explanation">
-      <button type="submit" [disabled]="questionForm.invalid">Add Question</button>
-    </form>
-    
+<main class="question-manager">
+  <div *ngIf="isLoading" class="page-state" role="status">
+    <p-progress-spinner></p-progress-spinner>
+    <span>Loading quiz questions…</span>
   </div>
-  
+
+  <section *ngIf="!isLoading && loadError" class="page-state error-state" role="alert">
+    <p>{{ loadError }}</p>
+    <button type="button" class="secondary-action" (click)="loadQuiz()">Try again</button>
+  </section>
+
+  <ng-container *ngIf="!isLoading && quiz">
+    <header class="question-heading">
+      <a routerLink="/quiz/managequiz" class="back-link">← Quiz library</a>
+      <p class="eyebrow">QUIZ BUILDER</p>
+      <h1>{{ quiz.title }}</h1>
+      <p class="course-name">{{ quiz.course?.title || 'Course not assigned' }}</p>
+    </header>
+
+    <section class="questions-panel" aria-labelledby="questions-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="questions-title">Questions</h2>
+          <p>Build a clear quiz with a question, answer choices, and the correct answer.</p>
+        </div>
+        <span class="question-count">{{ quiz.questions.length }}</span>
+      </div>
+
+      <div *ngIf="quiz.questions.length === 0" class="empty-questions" role="status">
+        <span class="pi pi-list" aria-hidden="true"></span>
+        <h3>No questions yet</h3>
+        <p>Add the first question below. It will be ready for learners once saved.</p>
+      </div>
+      <article *ngFor="let question of quiz.questions; let index = index" class="question-item">
+        <span class="question-number">{{ index + 1 }}</span>
+        <p>{{ question.question }}</p>
+        <button type="button" class="delete-button" (click)="deleteQuestion(question.id)" [attr.aria-label]="'Delete question ' + (index + 1)">
+          <span class="pi pi-trash" aria-hidden="true"></span>
+        </button>
+      </article>
+    </section>
+
+    <section class="add-question-panel" aria-labelledby="add-question-title">
+      <h2 id="add-question-title">Add a question</h2>
+      <form [formGroup]="questionForm" (ngSubmit)="addQuestion()">
+        <label for="question-text">Question</label>
+        <textarea id="question-text" formControlName="question" rows="3" placeholder="Write your question…" required></textarea>
+        <small *ngIf="questionForm.controls.question.touched && questionForm.controls.question.invalid" class="field-error">
+          Enter a question.
+        </small>
+
+        <label for="question-options">Answer options <span>Separate options with commas</span></label>
+        <input id="question-options" type="text" formControlName="options" placeholder="Option A, Option B, Option C" required>
+        <small *ngIf="questionForm.controls.options.touched && questionForm.controls.options.invalid" class="field-error">
+          Enter at least two options, separated by commas.
+        </small>
+
+        <label for="correct-answer">Correct answer</label>
+        <input id="correct-answer" type="text" formControlName="correctAnswer" placeholder="Must match one option" required>
+        <small *ngIf="questionForm.controls.correctAnswer.touched && questionForm.controls.correctAnswer.invalid" class="field-error">
+          The correct answer must match one of the options.
+        </small>
+
+        <label for="question-explanation">Explanation <span>Optional</span></label>
+        <textarea id="question-explanation" formControlName="explanation" rows="2" placeholder="Explain why this is correct…"></textarea>
+
+        <button class="primary-action" type="submit" [disabled]="questionForm.invalid || isSaving">
+          {{ isSaving ? 'Saving question…' : 'Add question' }}
+        </button>
+      </form>
+    </section>
+  </ng-container>
+</main>

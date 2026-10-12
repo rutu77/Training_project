@@ -1,8 +1,29 @@
 import { Request, Response } from "express";
 import { CourseService } from "../services/courseService";
 import { AuthRequest } from "../types/authRequest";
+import { env } from "../config/env";
+import { parseCourseCatalogQuery } from "../utils/courseCatalogQuery";
+import { Course } from "../models/Course";
 
 const courseService = new CourseService();
+
+function courseResponse(course: Course) {
+  return {
+    id: course.id,
+    title: course.title,
+    description: course.description,
+    thumbnail: course.thumbnail,
+    level: course.level,
+    duration: course.duration,
+    price: course.price,
+    isPublished: course.isPublished,
+    createdAt: course.createdAt,
+    deleted: course.deleted,
+    creator: course.creator
+      ? { id: course.creator.id, name: course.creator.name }
+      : null,
+  };
+}
 
 export class CourseController {
   async createCourse(req: Request, res: Response) {
@@ -77,7 +98,9 @@ export class CourseController {
         title: title.trim(),
         description: description.trim(),
         isPublished,
-        thumbnail: `http://localhost:3000/uploads/${req.file?.filename ?? "thumbnail-1744171929158-151282897.jpg"}`,
+        thumbnail: req.file
+          ? `${env.publicApiUrl}/uploads/${req.file.filename}`
+          : "",
         price: parsedPrice,
         level,
         duration: parsedDuration,
@@ -91,7 +114,7 @@ export class CourseController {
       const course = await courseService.createCourse(courseData, creator);
       res
         .status(201)
-        .json({ message: "Course created successfully!", data: course });
+        .json({ message: "Course created successfully!", data: courseResponse(course) });
     } catch (error) {
       console.error("Error creating course:", error);
       res.status(500).json({ message: "Failed to create course" });
@@ -101,10 +124,25 @@ export class CourseController {
   async getCourseById(req: Request, res: Response) {
     const courseId = Number(req.params.id);
     try {
-      const course = await courseService.getCourseById(courseId);
-      res.status(200).json({ data: course });
+      const course = await courseService.getPublicCourseById(courseId);
+      res.status(200).json({ data: courseResponse(course) });
     } catch (error) {
       res.status(404).json({ message: (error as Error).message });
+    }
+  }
+
+  async getManageCourseById(req: Request, res: Response) {
+    const user = (req as AuthRequest).user;
+    if (!user) {
+      res.status(401).json({ message: "Authentication is required" });
+      return;
+    }
+    try {
+      const course = await courseService.getManageCourseById(Number(req.params.id), user);
+      res.status(200).json({ data: courseResponse(course) });
+    } catch (error) {
+      const message = (error as Error).message;
+      res.status(message === "Course not found!" ? 404 : 500).json({ message });
     }
   }
 
@@ -116,7 +154,7 @@ export class CourseController {
       const updatedCourse = await courseService.updateCourse(courseId, data);
       res
         .status(200)
-        .json({ message: "Course updated successfully", data: updatedCourse });
+        .json({ message: "Course updated successfully", data: courseResponse(updatedCourse) });
     } catch (error) {
       res.status(404).json({ message: (error as Error).message });
     }
@@ -143,14 +181,39 @@ export class CourseController {
   }
 
   async getAllCourses(req: Request, res: Response) {
+    let query: ReturnType<typeof parseCourseCatalogQuery>;
     try {
-      const courses = await courseService.getAllCourses();
-      res.status(200).json(courses);
+      query = parseCourseCatalogQuery(req.query);
     } catch (error) {
+      res.status(400).json({ status: "error", message: (error as Error).message });
+      return;
+    }
+    try {
+      const result = await courseService.getPublicCourses(query);
+      res.status(200).json({
+        data: result.data.map(courseResponse),
+        pagination: result.pagination,
+      });
+    } catch (error) {
+      console.error("Error fetching public courses:", error);
       res.status(500).json({ error: "Error fetching courses" });
     }
   }
 
+  async getManageCourses(req: Request, res: Response) {
+    const user = (req as AuthRequest).user;
+    if (!user) {
+      res.status(401).json({ message: "Authentication is required" });
+      return;
+    }
+    try {
+      const courses = await courseService.getManageCourses(user);
+      res.status(200).json(courses.map(courseResponse));
+    } catch (error) {
+      console.error("Error fetching courses for management:", error);
+      res.status(500).json({ error: "Error fetching courses" });
+    }
+  }
   // async getSearchCourses(req:Request,res:Response){
   //   try{
   //     const search= req.query.search as string ;

@@ -1,54 +1,66 @@
-.update-lesson-container {
-    border: 1px solid #ccc;
-    padding: 20px;
-    margin: 20px auto;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    max-width: 600px;
-    box-sizing: border-box;
+.update-lesson-form {
+  display: grid;
+  min-width: min(27rem, 78vw);
+  gap: 0.7rem;
 }
 
-.update-lesson-container h2 {
-    font-size: 24px;
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
+.update-lesson-form label {
+  margin-top: 0.25rem;
+  color: #1e293b;
+  font-size: 0.9rem;
+  font-weight: 650;
 }
 
-.update-lesson-container form {
-    display: flex;
-    flex-direction: column;
+.update-lesson-form input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 2.8rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #dbe3ef;
+  border-radius: 0.65rem;
+  background: #fff;
+  color: #172033;
+  font: inherit;
 }
 
-.update-lesson-container label {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 5px;
+.update-lesson-form input:focus {
+  border-color: #635bdb;
+  outline: 3px solid rgb(99 91 219 / 14%);
 }
 
-.update-lesson-container input {
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
+.field-hint,
+.field-error {
+  color: #64748b;
+  font-size: 0.82rem;
 }
 
-.update-lesson-container button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    align-self: center;
+.field-error {
+  color: #b42318;
 }
 
-.update-lesson-container button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+.optional-label {
+  color: #8290a5;
+  font-size: 0.78rem;
+  font-weight: 450;
 }
 
-.update-lesson-container button:hover:not(:disabled) {
-    background-color: #0056b3;
+.primary-action {
+  min-height: 2.8rem;
+  margin-top: 0.5rem;
+  border: 0;
+  border-radius: 0.65rem;
+  background: #5148c8;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 650;
+}
+
+.primary-action:hover:not(:disabled) {
+  background: #4038b2;
+}
+
+.primary-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }

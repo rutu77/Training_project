@@ -1,5 +1,6 @@
 import { Progress } from "../models/Progress";
 import { progressRepository } from "../repositories/progressRepository";
+import { User } from "../models/User";
 const PDFDocument = require('pdfkit')
 import fs from 'fs';
 import path from 'path';
@@ -22,13 +23,34 @@ export class ProgressService{
     return await progressRepository.find({relations:['user','quiz']})
   }
 
+  async getManageProgress(user: User) {
+    const query = progressRepository
+      .createQueryBuilder("progress")
+      .leftJoinAndSelect("progress.user", "student")
+      .leftJoinAndSelect("progress.quiz", "quiz")
+      .leftJoin("quiz.course", "course")
+      .leftJoin("course.creator", "creator")
+      .where("progress.deleted = false")
+      .orderBy("progress.completion", "DESC");
+
+    if (user.role !== "admin") {
+      query.andWhere("creator.id = :teacherId", { teacherId: user.id });
+    }
+
+    return query.getMany();
+  }
+
   async deleteProgress(id: number) {
     const result = await progressRepository.delete(id);
     if (result.affected === 0) throw new Error("Progress not found!");
   }
 
   async generateProgressReport(userId:number){
-    const progressList: Progress[] = await this.getProgressByUser(userId);
+    const progressList: Progress[] = (await this.getProgressByUser(userId))
+      .filter((progress) => !progress.deleted);
+    if (progressList.length === 0) {
+      throw new Error("No quiz progress is available to include in the report");
+    }
     // console.log('generate',progressList);
     
   

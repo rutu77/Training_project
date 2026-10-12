@@ -14,6 +14,7 @@ const progressController= new ProgressController()
 const router= Router()
 router.param("id", validateIdParam());
 
+router.get('/manage',authenticateUser,authorizeRole(["admin", "teacher"]),progressController.getManageProgress)
 router.get('/:id',authenticateUser,authorizeProgressOwnerOrAdmin,progressController.getprogressById)
 router.get('/user/:id',authenticateUser,authorizeUserSelfOrAdminForParam,progressController.getProgressByUser)
 router.get('/report/:id',authenticateUser,authorizeUserSelfOrAdminForParam,progressController.downloadProgressReport)

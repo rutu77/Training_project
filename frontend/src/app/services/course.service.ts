@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AddCourse, AddReview, Course, Lesson, Review, UpdateCourse } from '../models/model';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
+import { ApiResponse, Course, CourseCatalogResponse, CreateLesson, Lesson, Review } from '../models/model';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +13,11 @@ export class CourseService {
 
   constructor(private http:HttpClient) { }
 
-  private readonly api= `http://localhost:3000`
+  private readonly api= environment.apiUrl
 
   //Courses
-  getCourseById(id: number){
-    return this.http.get(`${this.api}/course/${id}`);
+  getCourseById(id: number): Observable<ApiResponse<Course>>{
+    return this.http.get<ApiResponse<Course>>(`${this.api}/course/${id}`);
   }
   
   // getCourses(query:string=''){
@@ -23,56 +25,71 @@ export class CourseService {
   //   return this.http.get(url);
   // }
 
-  getCourses(){
-    return this.http.get(`${this.api}/course/`)
+  getCourses(search = '', page = 1, limit = 20): Observable<CourseCatalogResponse>{
+    const params = new HttpParams()
+      .set('search', search)
+      .set('page', page)
+      .set('limit', limit);
+    return this.http.get<CourseCatalogResponse>(`${this.api}/course/`, { params })
+  }
+
+  getManageCourses(): Observable<Course[]>{
+    return this.http.get<Course[]>(`${this.api}/course/manage`)
+  }
+
+  getManageCourseById(id: number): Observable<ApiResponse<Course>>{
+    return this.http.get<ApiResponse<Course>>(`${this.api}/course/manage/${id}`)
   }
 
 
   //Course managment by teacher/admin
-  addCourse(course:FormData){
-    return this.http.post(`${this.api}/course/`, course)
+  addCourse(course:FormData): Observable<ApiResponse<Course>>{
+    return this.http.post<ApiResponse<Course>>(`${this.api}/course/`, course)
   }
 
-  updateCourse(id:number,course:FormData){
-    return this.http.put(`${this.api}/course/${id}`, course)
+  updateCourse(id:number,course:FormData): Observable<ApiResponse<Course>>{
+    return this.http.put<ApiResponse<Course>>(`${this.api}/course/${id}`, course)
   }
 
 
-  deleteCourse(id:number){
-    return this.http.delete(`${this.api}/course/delete/${id}`)
+  deleteCourse(id:number): Observable<void>{
+    return this.http.delete<void>(`${this.api}/course/delete/${id}`)
   }
 
 
 
   //Lessons
-  getLessonById(id: number) {
-    return this.http.get(`${this.api}/lesson/${id}`);
+  getLessonById(id: number): Observable<ApiResponse<Lesson>> {
+    return this.http.get<ApiResponse<Lesson>>(`${this.api}/lesson/${id}`);
   }
 
-  getLessons(){
-    return this.http.get(`${this.api}/lesson/`)
+  getLessons(): Observable<Lesson[]> {
+    return this.http.get<Lesson[]>(`${this.api}/lesson/`)
   }
 
-  addLesson(lesson:Lesson){
-    return this.http.post(`${this.api}/lesson/`,lesson)
+  addLesson(lesson: CreateLesson): Observable<ApiResponse<Lesson>> {
+    return this.http.post<ApiResponse<Lesson>>(`${this.api}/lesson/`, lesson)
   }
 
-  updateLesson(id:number,lesson:any){
-    return this.http.put(`${this.api}/lesson/${id}`, lesson)
+  updateLesson(
+    id: number,
+    lesson: Partial<Pick<Lesson, 'title' | 'videoUrl' | 'duration'>>
+  ): Observable<ApiResponse<Lesson>> {
+    return this.http.put<ApiResponse<Lesson>>(`${this.api}/lesson/${id}`, lesson)
   }
 
-  deleteLesson(id:number){
-    return this.http.delete(`${this.api}/lesson/${id}`)
+  deleteLesson(id:number): Observable<{message: string}> {
+    return this.http.delete<{message: string}>(`${this.api}/lesson/${id}`)
   }
 
-  getLessonByCourseId(courseId:number){
-    return this.http.get(`${this.api}/lesson/course/${courseId}`)
+  getLessonByCourseId(courseId:number): Observable<ApiResponse<Lesson[]>> {
+    return this.http.get<ApiResponse<Lesson[]>>(`${this.api}/lesson/course/${courseId}`)
   }
 
 
 
-  getReviewsByCourseId(courseId:number){
-    return this.http.get(`${this.api}/review/course/${courseId}`)
+  getReviewsByCourseId(courseId:number): Observable<ApiResponse<Review[]>>{
+    return this.http.get<ApiResponse<Review[]>>(`${this.api}/review/course/${courseId}`)
   }
 
   

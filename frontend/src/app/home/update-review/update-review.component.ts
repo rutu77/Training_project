@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { Review } from '../../models/model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HomeService } from '../../services/home.service';
@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
   selector: 'app-update-review',
   standalone: false,
   templateUrl: './update-review.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './update-review.component.css'
 })
 export class UpdateReviewComponent{
@@ -15,7 +16,6 @@ export class UpdateReviewComponent{
   @Input() review!: Review;
   @Output() reviewUpdated = new EventEmitter<void>();
 
-  userId= Number(localStorage.getItem("userId"));
 
   reviewEditForm = new FormGroup({
     rating: new FormControl(),

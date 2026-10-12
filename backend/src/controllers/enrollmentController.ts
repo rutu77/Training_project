@@ -62,6 +62,32 @@ export class EnrollmentController {
       }
     }
 
+    async getManageEnrollments(req: Request, res: Response): Promise<void> {
+      const user = (req as AuthRequest).user;
+      if (!user) {
+        res.status(401).json({ message: "Authentication is required" });
+        return;
+      }
+      try {
+        const enrollments = await enrollmentService.getManageEnrollments(user);
+        res.status(200).json(enrollments.map((enrollment) => ({
+          id: enrollment.id,
+          enrollment_date: enrollment.enrollment_date,
+          status: enrollment.status,
+          deleted: enrollment.deleted,
+          user: enrollment.user
+            ? { id: enrollment.user.id, name: enrollment.user.name }
+            : null,
+          course: enrollment.course
+            ? { id: enrollment.course.id, title: enrollment.course.title }
+            : null,
+        })));
+      } catch (error) {
+        console.error("Error fetching managed enrollments:", error);
+        res.status(500).json({ error: "Error fetching enrollments" });
+      }
+    }
+
     async getMyEnrollments(req: Request, res: Response): Promise<void> {
       const user = (req as AuthRequest).user;
       if (!user) {

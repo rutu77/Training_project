@@ -1,27 +1,36 @@
 <div class="course-list" id="courseList">
-  <div *ngIf="filteredCourses.length === 0; else coursesList" [ngStyle]="{'text-align':'center'}">
-    <p-progressSpinner></p-progressSpinner>
+  <div *ngIf="isLoading" class="catalog-message" role="status">
+    <p-progress-spinner></p-progress-spinner>
+    <span>Loading courses...</span>
   </div>
-  
-  <ng-template #coursesList>
+  <div *ngIf="!isLoading && loadError" class="catalog-message" role="alert">
+    <p>{{ loadError }}</p>
+    <button type="button" (click)="retryLoad()">Retry</button>
+  </div>
+  <div *ngIf="!isLoading && !loadError && filteredCourses.length === 0" class="catalog-message" role="status">
+    <p>No courses found.</p>
+  </div>
+  <ng-container *ngIf="!isLoading && !loadError && filteredCourses.length > 0">
     <div *ngFor="let course of filteredCourses" class="course-card" (click)="viewCourse(course.id)">
-      <img [src]="course.thumbnail" alt="{{ course.title }}" class="course-thumbnail"/>
-      
+      <img [src]="course.thumbnail" [alt]="course.title" class="course-thumbnail"/>
       <div class="course-details">
-        <div class="course-title">
-          <h2 class="course-title">{{ course.title }}</h2>
-        </div>
-
-        <div class="course-description">
-          <p class="course-description">{{ course.description }}</p>
-        </div>
-
+        <div class="course-title"><h2 class="course-title">{{ course.title }}</h2></div>
+        <div class="course-description"><p class="course-description">{{ course.description }}</p></div>
         <div class="course-footer">
           <span class="course-price">{{ course.price | currency:'INR'}}</span>
-
-          <span class="course-rating">Ratings: {{ ratings[course.id] | number : "1.1-1" }}</span>
+          <span class="course-rating" *ngIf="ratings[course.id] > 0">
+            <span class="pi pi-star-fill" aria-hidden="true"></span>
+            {{ ratings[course.id] | number : "1.1-1" }}
+          </span>
+          <span class="course-rating" *ngIf="!ratings[course.id]">No ratings yet</span>
         </div>
       </div>
     </div>
-  </ng-template>
+  </ng-container>
 </div>
+
+<nav *ngIf="!isLoading && !loadError && totalCourses > 0" class="catalog-pagination" aria-label="Course pages">
+  <button type="button" (click)="loadPage(currentPage - 1)" [disabled]="currentPage <= 1">Previous</button>
+  <span>Page {{ currentPage }} of {{ totalPages }} ({{ totalCourses }} courses)</span>
+  <button type="button" (click)="loadPage(currentPage + 1)" [disabled]="currentPage >= totalPages">Next</button>
+</nav>

@@ -1,33 +1,49 @@
 
-<div [ngStyle]="{'display': 'flex', 'justify-content': 'flex-end', 'margin-bottom': '1rem','margin':'1rem'}">
-  <input type="text" pInputText placeholder="Search..." [(ngModel)]="searchText" (input)="filterEnrollments()"/>
-</div>
+<section class="management-page" aria-labelledby="enrollments-heading">
+  <header class="management-header">
+    <div>
+      <h1 id="enrollments-heading">Enrollments</h1>
+      <p>Review enrolled learners and the courses they are taking.</p>
+    </div>
+    <label *ngIf="!isLoading && !loadError" class="search-wrap">
+      <span class="visually-hidden">Search enrollments</span>
+      <input type="search" pInputText placeholder="Search enrollments" [(ngModel)]="searchText"
+        (input)="filterEnrollments()"/>
+    </label>
+  </header>
 
-<p-table [value]="filterEnrolls" [tableStyle]="{ 'min-width': '50rem' }">
-    <ng-template pTemplate="header">
+  <div *ngIf="isLoading" class="progress-state" role="status">
+    <p-progress-spinner></p-progress-spinner>
+    <span>Loading enrollments…</span>
+  </div>
+  <div *ngIf="!isLoading && loadError" class="progress-state error-state" role="alert">
+    <p>{{ loadError }}</p>
+    <button pButton type="button" (click)="loadEnrollments()">Try again</button>
+  </div>
+
+  <div *ngIf="!isLoading && !loadError" class="table-scroll">
+    <table class="management-table">
+      <thead>
         <tr>
-          <th>User ID</th>
-          <th>User Name</th>
-          <th>Enrollment Date</th>
-          <th>Course</th>
+          <th scope="col">User ID</th>
+          <th scope="col">User name</th>
+          <th scope="col">Enrollment date</th>
+          <th scope="col">Course</th>
         </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-enrollment>
-        <tr>
-          <td>{{ enrollment.user.id }}</td>
-          <td>{{ enrollment.user.name }}</td>
-          <td>{{ enrollment.enrollment_date }}</td>
-          <td>{{ enrollment.course.title }}</td>
+      </thead>
+      <tbody>
+        <tr *ngFor="let enrollment of filterEnrolls">
+          <td>{{ enrollment.user?.id ?? '—' }}</td>
+          <td>{{ enrollment.user?.name || 'Unknown learner' }}</td>
+          <td>{{ enrollment.enrollment_date | date:'mediumDate' }}</td>
+          <td>{{ enrollment.course?.title || 'Course unavailable' }}</td>
         </tr>
-    </ng-template>
-  </p-table>
-
-<!-- <div *ngIf="filterEnrolls.length === 0" [ngStyle]="{'text-align':'center'}">
-  <p-progressSpinner></p-progressSpinner>
-</div> -->
-
-
-<div *ngIf="!filterEnrolls || filterEnrolls.length === 0" [ngStyle]="{'text-align':'center'}">
-  <p *ngIf="!isLoading">Enrollments not found</p>
-  <p-progressSpinner *ngIf="isLoading" ></p-progressSpinner>
-</div>
+        <tr *ngIf="filterEnrolls.length === 0">
+          <td colspan="4" class="empty-cell">
+            {{ enrollments.length ? 'No enrollments match your search.' : 'No enrollments are available yet.' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

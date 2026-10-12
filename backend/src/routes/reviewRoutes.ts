@@ -16,9 +16,9 @@ router.post("/", authenticateUser, validateBody({
   rating: { type: "integer", required: true, min: 1, max: 5 },
   comment: { type: "string" },
 }), reviewController.createReview);
-router.get("/:id", reviewController.getReviewById);
-router.get("/", reviewController.getAllReviews);
 router.get("/course/:id", reviewController.getReviewByCourseId);
+router.get("/", reviewController.getAllReviews);
+router.get("/:id", reviewController.getReviewById);
 router.put("/:id", authenticateUser, authorizeReviewOwnerOrAdmin, validateBody({
   rating: { type: "integer", min: 1, max: 5 },
   comment: { type: "string" },

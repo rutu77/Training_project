@@ -2,6 +2,7 @@ import { Enrollment } from "../models/Enrollment";
 import { enrollRepository } from "../repositories/enrollmentRepository";
 import { userRepository } from "../repositories/userRepository";
 import { courseRepository } from "../repositories/courseRepository";
+import { User } from "../models/User";
 const PDFDocument = require("pdfkit");
 import fs from "fs";
 import path from "path";
@@ -49,6 +50,22 @@ export class EnrollmentService {
 
   async getAllEnrollments() {
     return await enrollRepository.find({ relations: ["course", "user"] });
+  }
+
+  async getManageEnrollments(user: User) {
+    const query = enrollRepository
+      .createQueryBuilder("enrollment")
+      .leftJoinAndSelect("enrollment.user", "student")
+      .leftJoinAndSelect("enrollment.course", "course")
+      .leftJoin("course.creator", "creator")
+      .where("enrollment.deleted = false")
+      .orderBy("enrollment.enrollment_date", "DESC");
+
+    if (user.role !== "admin") {
+      query.andWhere("creator.id = :teacherId", { teacherId: user.id });
+    }
+
+    return query.getMany();
   }
 
   async getEnrollmentsByUser(userId: number) {

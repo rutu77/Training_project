@@ -16,7 +16,7 @@
         <label for="password" class="block text-900 font-medium mb-2">Password</label>
         <input id="password" type="password" placeholder="Enter password" formControlName="password" pInputText class="w-full mb-3" required>
 
-        <button pButton pRipple label="Login" icon="pi pi-user" class="w-full" type="submit" [disabled]="loginForm.invalid"></button>
+        <button pButton pRipple icon="pi pi-user" class="w-full" type="submit" [disabled]="loginForm.invalid || isSubmitting">{{ isSubmitting ? 'Signing in...' : 'Login' }}</button>
       </form>
   </div> 
 </div>

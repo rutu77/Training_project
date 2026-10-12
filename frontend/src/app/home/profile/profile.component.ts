@@ -1,38 +1,74 @@
-import { Component, OnInit } from '@angular/core';
-import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2'
 import { HomeService } from '../../services/home.service';
+import { AuthSessionService } from '../../services/auth-session.service';
 import { User } from '../../models/model';
 
 @Component({
   selector: 'app-profile',
   standalone: false,
   templateUrl: './profile.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './profile.component.css'
 })
 
 export class ProfileComponent implements OnInit{
 
-  userId = Number(localStorage.getItem("userId"));
+  private readonly userId: number | null;
   user: User | undefined;
   showUpdateForm = false;
   updateUserForm!: FormGroup;
   selectedFile: File | null = null;
+  isLoading = true;
+  loadError = '';
 
-  constructor(private home: HomeService, private fb: FormBuilder) {}
+  constructor(
+    private home: HomeService,
+    private fb: FormBuilder,
+    private session: AuthSessionService,
+    private readonly changeDetector: ChangeDetectorRef
+  ) {
+    this.userId = this.session.getUserId();
+  }
 
   ngOnInit() {
     this.initializeForm();
+    if (this.userId === null) {
+      this.loadError = 'Sign in to view your profile.';
+      this.isLoading = false;
+      return;
+    }
 
-    this.home.getUserById(this.userId).subscribe((data: any) => {
-      this.user = data.data;
-      this.updateUserForm.patchValue({
-        name: this.user?.name,
-        profilePicture: this.user?.profilePicture,
-        bio: this.user?.bio,
-        email: this.user?.email,
-      });
+    this.loadProfile();
+  }
+
+  loadProfile(): void {
+    if (this.userId === null) {
+      this.loadError = 'Sign in to view your profile.';
+      this.isLoading = false;
+      return;
+    }
+    this.isLoading = true;
+    this.loadError = '';
+    this.home.getUserById(this.userId).subscribe({
+      next: (data) => {
+        this.user = data.data;
+        this.updateUserForm.patchValue({
+          name: this.user.name,
+          profilePicture: this.user.profilePicture,
+          bio: this.user.bio,
+          email: this.user.email,
+        });
+        this.isLoading = false;
+        this.changeDetector.markForCheck();
+      },
+      error: (error: any) => {
+        console.error('Error loading profile:', error);
+        this.loadError = error.error?.message || 'Your profile could not be loaded. Please try again.';
+        this.isLoading = false;
+        this.changeDetector.markForCheck();
+      }
     });
   }
 
@@ -47,11 +83,13 @@ export class ProfileComponent implements OnInit{
     });
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.selectedFile = input.files?.[0] ?? null;
   }
 
   onSubmit() {
+    if (this.userId === null) return;
     if (this.updateUserForm.invalid) return;
 
     if (this.updateUserForm.value.password !== this.updateUserForm.value.cpassword) {
@@ -81,7 +119,7 @@ export class ProfileComponent implements OnInit{
     }
 
     this.home.updateUser(this.userId, formData).subscribe(
-      (data: any) => {
+      (data) => {
         Swal.fire({
           title: 'Profile Updated',
           text: 'Your profile has been updated successfully!',
@@ -89,9 +127,20 @@ export class ProfileComponent implements OnInit{
         });
         this.showUpdateForm = false;
         this.user = data.data;
+        this.updateUserForm.patchValue({
+          name: this.user.name,
+          profilePicture: this.user.profilePicture,
+          bio: this.user.bio,
+          email: this.user.email,
+          password: '',
+          cpassword: '',
+        });
+        this.selectedFile = null;
+        this.changeDetector.markForCheck();
       },
       (error: any) => {
         console.error('Error updating profile:', error);
+        this.changeDetector.markForCheck();
         Swal.fire({
           title: 'Error',
           text: 'An error occurred while updating your profile.',

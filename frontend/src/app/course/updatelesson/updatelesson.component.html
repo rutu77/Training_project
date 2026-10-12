@@ -1,22 +1,23 @@
-<div class="update-lesson-container" class="p-fluid">
-  <h2>Update Lesson</h2>
-  
-    <form [formGroup]="updateLessonForm" (ngSubmit)="onSubmit()">
-      <label for="title">Title:</label>
-      <input id="title" pInputText formControlName="title" type="text">
-  
-      <label for="videourl">Video URL:</label>
-      <input id="videourl" pInputText formControlName="videoUrl" type="text">
+<form class="update-lesson-form" [formGroup]="updateLessonForm" (ngSubmit)="onSubmit()">
+  <p *ngIf="isLoadingLesson" class="field-hint" role="status">Loading lesson details…</p>
 
-      <label for="duration">Duration:</label>
-      <input id="duration" pInputText formControlName="duration" type="text">
+  <label for="update-lesson-title">Lesson title</label>
+  <input id="update-lesson-title" formControlName="title" type="text" required>
+  <small *ngIf="updateLessonForm.controls['title'].touched && updateLessonForm.controls['title'].invalid" class="field-error">
+    Enter a lesson title.
+  </small>
 
-      <!-- <label for="courseId">Course Id:</label>
-      <input id="courseId" pInputText formControlName="courseId" type="text">
-   -->
-      <div class="p-dialog-footer">
-        <button pButton type="submit" label="Update"></button>
-      </div>
-      <!-- <button type="submit" [disabled]="updateLessonForm.invalid">Update lesson</button> -->
-    </form>
-  </div>
+  <label for="update-lesson-video">Video URL <span class="optional-label">Optional</span></label>
+  <input id="update-lesson-video" formControlName="videoUrl" type="url">
+
+  <label for="update-lesson-duration">Duration <span class="optional-label">Minutes</span></label>
+  <input id="update-lesson-duration" formControlName="duration" type="number" min="0" step="1" required>
+  <small *ngIf="updateLessonForm.controls['duration'].touched && updateLessonForm.controls['duration'].invalid" class="field-error">
+    Duration must be zero or more.
+  </small>
+
+  <button class="primary-action" type="submit"
+    [disabled]="updateLessonForm.invalid || isSaving || isLoadingLesson">
+    {{ isSaving ? 'Saving…' : 'Save changes' }}
+  </button>
+</form>

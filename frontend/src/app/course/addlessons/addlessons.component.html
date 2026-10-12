@@ -1,25 +1,37 @@
-<div class="p-fluid">
-<form class="addLesson" [formGroup]="lessonForm" (ngSubmit)="onSubmit()">
+<form class="lesson-form" [formGroup]="lessonForm" (ngSubmit)="onSubmit()">
+  <p class="form-intro">Add a lesson to one of your available courses.</p>
 
-    <h2>Add Lesson</h2>
-    
-    <label for="title">Title:</label>
-    <input type="text" pInputText id="title" placeholder="Enter Lesson Title..." formControlName="title">
+  <div *ngIf="courseLoadError" class="form-alert" role="alert">
+    <span>{{ courseLoadError }}</span>
+    <button type="button" class="text-button" (click)="loadCourses()">Try again</button>
+  </div>
 
-    <label for="videoUrl">Video URL:</label>
-    <input type="text" pInputText id="videoUrl" placeholder="Enter Video URL..." formControlName="videoUrl">
+  <label for="lesson-course">Course</label>
+  <select id="lesson-course" formControlName="courseId" [disabled]="isLoadingCourses || courses.length === 0">
+    <option [ngValue]="null" disabled>Select a course</option>
+    <option *ngFor="let course of courses" [ngValue]="course.id">{{ course.title }}</option>
+  </select>
+  <small *ngIf="isLoadingCourses" class="field-hint">Loading your courses…</small>
+  <small *ngIf="!isLoadingCourses && !courseLoadError && courses.length === 0" class="field-hint">
+    No courses are available. Create a course first.
+  </small>
 
+  <label for="lesson-title">Lesson title</label>
+  <input id="lesson-title" type="text" formControlName="title" placeholder="e.g. Getting started" required>
+  <small *ngIf="lessonForm.controls['title'].touched && lessonForm.controls['title'].invalid" class="field-error">
+    Enter a lesson title.
+  </small>
 
-    <label for="duration">Duration:</label>
-    <input type="text" pInputText id="duration" placeholder="Enter Lesson Duration..." formControlName="duration">
+  <label for="lesson-video">Video URL <span class="optional-label">Optional</span></label>
+  <input id="lesson-video" type="url" formControlName="videoUrl" placeholder="https://…">
 
-    <label for="courseId">Course Id:</label>
-    <input type="number" pInputText id="courseId" placeholder="Enter Course Id..." formControlName="courseId">
+  <label for="lesson-duration">Duration <span class="optional-label">Minutes</span></label>
+  <input id="lesson-duration" type="number" min="0" step="1" formControlName="duration" required>
+  <small *ngIf="lessonForm.controls['duration'].touched && lessonForm.controls['duration'].invalid" class="field-error">
+    Duration must be zero or more.
+  </small>
 
-
-    <div class="p-dialog-footer">
-        <!-- <button pButton type="button" label="Cancel" (click)="onCancel()"></button> -->
-        <button pButton type="submit" label="Add"></button>
-    </div>
+  <button class="primary-action" type="submit" [disabled]="lessonForm.invalid || isSaving || isLoadingCourses || courses.length === 0">
+    {{ isSaving ? 'Adding lesson…' : 'Add lesson' }}
+  </button>
 </form>
-</div>

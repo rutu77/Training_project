@@ -1,12 +1,19 @@
+export type UserRole = 'user' | 'admin' | 'teacher';
+
 export interface User{
     id:number
     name:string
     email:string
-    password:string
-    role:'user'|'admin'|'teacher'
+    role:UserRole
     profilePicture?:string
     bio?:string
-    deleted:boolean
+    deleted?:boolean
+    teacherRequestStatus?:'none'|'pending'|'approved'|'rejected'
+}
+
+export interface UpdateUserRole {
+    email: string;
+    newRole: UserRole;
 }
 
 export interface Course{
@@ -17,10 +24,31 @@ export interface Course{
     thumbnail?:string
     price:number
     // tags?:string[],
-    creator:User,
-    level:string,
+    creator:CourseCreator | null,
+    level:'beginner'|'intermediate'|'advanced',
     duration:number
     deleted:boolean
+    createdAt?:string
+}
+
+export interface CourseCreator {
+    id:number;
+    name:string;
+}
+
+export interface ApiResponse<T> {
+    data:T;
+    message?:string;
+}
+
+export interface CourseCatalogResponse {
+    data: Course[];
+    pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+    };
 }
 
 export interface AddCourse{
@@ -44,15 +72,26 @@ export interface UpdateCourse {
     level?: string;
     duration?: number;
   }
+
+  export type CourseLevel = 'beginner' | 'intermediate' | 'advanced';
   
 
 export interface Enrollment{
-    enrollment_id:number,
-    enrollment_date:Date,
+    id:number,
+    enrollment_date:string,
     user:User,
     course:Course
     status: "in_progress"|"completed"; 
     deleted:boolean
+}
+
+export interface ManagedEnrollment {
+    id:number;
+    enrollment_date:string;
+    status:'in_progress'|'completed';
+    deleted:boolean;
+    user:{id:number; name:string} | null;
+    course:{id:number; title:string} | null;
 }
 
 export interface Lesson{
@@ -65,12 +104,69 @@ export interface Lesson{
     completed:boolean
 }
 
+export interface CreateLesson {
+    title: string;
+    videoUrl: string;
+    duration: number;
+    courseId: number;
+}
+
 export interface Quiz{
-    id?:number,
+    id:number,
     title:string,
-    courseId:number,
-    // questions:Question[]
-    deleted:boolean
+    course:QuizCourseSummary | null;
+    questions:QuizQuestion[];
+    deleted:boolean;
+}
+
+export interface QuizCourseSummary {
+    id:number;
+    title:string;
+    creator:{id:number; name:string} | null;
+}
+
+export interface QuizQuestion {
+    id:number;
+    question:string;
+    options:string[];
+    correctAnswer?:string;
+    explanation?:string | null;
+    deleted:boolean;
+}
+
+export interface CreateQuiz {
+    title:string;
+    courseId:number;
+}
+
+export interface CreateQuizQuestion {
+    question:string;
+    options:string[];
+    correctAnswer:string;
+    explanation?:string;
+}
+
+export interface QuizSubmission {
+    score:number;
+    total:number;
+    attempt:number;
+    completion:string;
+}
+
+export interface ProgressRecord {
+    id:number;
+    score:number;
+    total:number;
+    completion:string;
+    attempt:number;
+    deleted:boolean;
+    user:{id:number; name:string} | null;
+    quiz:{id:number; title:string} | null;
+}
+
+export interface QuizProgressResponse extends ProgressRecord {
+    user:{id:number; name:string};
+    quiz:{id:number; title:string};
 }
 
 export interface Question{
@@ -90,10 +186,10 @@ export interface Question{
 
 export interface Review{
     id:number,
-    user:User,
-    course:Course
+    user:{id:number; name:string},
+    course:{id:number; title:string},
     rating:number,
-    comment:string
+    comment:string | null
     deleted:boolean
 }
 

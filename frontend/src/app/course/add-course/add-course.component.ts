@@ -1,13 +1,13 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { title } from 'process';
+import { Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { CourseService } from '../../services/course.service';
-import Swal from 'sweetalert2';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-add-course',
   standalone: false,
   templateUrl: './add-course.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './add-course.component.css'
 })
 export class AddCourseComponent implements OnInit{
@@ -15,8 +15,12 @@ export class AddCourseComponent implements OnInit{
   @Output() courseAdded= new EventEmitter<void>()
   
   selectedFile:File|null=null;
+  isSubmitting = false;
   
-  constructor(private _course:CourseService){}
+  constructor(
+    private _course:CourseService,
+    private notifications: NotificationService
+  ){}
 
   courseForm!: FormGroup;
 
@@ -33,11 +37,13 @@ export class AddCourseComponent implements OnInit{
     })
   }
 
-  onFileSelected(event:any){
-    this.selectedFile= event.target.files[0]
+  onFileSelected(event: Event){
+    const input = event.target as HTMLInputElement;
+    this.selectedFile = input.files?.[0] ?? null;
   }
 
   onSubmit(){
+    if(this.courseForm.invalid || this.isSubmitting) return;
     if(this.courseForm.valid){
       const form= new FormData();
       form.append('title', this.courseForm.value.title);
@@ -51,13 +57,10 @@ export class AddCourseComponent implements OnInit{
         form.append('thumbnail', this.selectedFile);
       }
       
-      this._course.addCourse(form).subscribe(
-        ()=>{
-          Swal.fire({
-            title: 'Course Added',
-            text: 'The course has been added successfully!',
-            icon: 'success',
-          });
+      this.isSubmitting = true;
+      this._course.addCourse(form).subscribe({
+        next: ()=>{
+          this.notifications.success('The course has been added successfully.');
           this.courseForm.reset({
             title: '',
             description: '',
@@ -68,23 +71,15 @@ export class AddCourseComponent implements OnInit{
             duration: 0
           });
           this.selectedFile = null;
+          this.isSubmitting = false;
           this.courseAdded.emit()
         },
-        (error:any)=>{
+        error: (error:any)=>{
           console.error("Error adding course", error);
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: error.error.message || "Something went wrong!",
-          });
-          this.courseAdded.emit()
+          this.notifications.error(error.error?.message || "The course could not be added.");
+          this.isSubmitting = false;
         }
-      )
+      })
       }
     }
-
-    // onCancel(){
-    //   this.courseForm.reset();
-    // }
   }
-

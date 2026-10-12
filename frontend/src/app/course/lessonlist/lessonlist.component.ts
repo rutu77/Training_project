@@ -1,83 +1,67 @@
-import { Component, OnInit } from '@angular/core';
-import { Course, Enrollment, Lesson } from '../../models/model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HomeService } from '../../services/home.service';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Lesson } from '../../models/model';
 import { CourseService } from '../../services/course.service';
+import { AuthSessionService } from '../../services/auth-session.service';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-lessonlist',
   standalone: false,
   templateUrl: './lessonlist.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './lessonlist.component.css',
 })
 export class LessonlistComponent implements OnInit {
-  course: Course | undefined;
-  userId = Number(localStorage.getItem('userId'));
+  get userId(): number | null {
+    return this.session.getUserId();
+  }
   lessons: Lesson[] = [];
-  enrollments: Enrollment[] = [];
 
   displayUpdateDialog = false;
   displayAddDialog=false;
   selectedLessonId!: number;
-  isLoading:boolean=true
+  isLoading = true;
+  loadError = '';
+  isAdmin = false;
 
   constructor(
-    private route: ActivatedRoute,
     private courseService: CourseService,
-    private homeService: HomeService,
-    private router: Router
-  ) {}
+    private session: AuthSessionService,
+    private readonly changeDetector: ChangeDetectorRef
+  ) {
+    this.isAdmin = this.session.getRole() === 'admin';
+  }
 
   ngOnInit(): void {
-    this.loadCourse();
-    this.loadEnrollments();
     this.loadLessons();
   }
 
-  loadCourse() {
-    const courseId = this.route.snapshot.paramMap.get('id');
-
-    if (courseId) {
-      this.courseService.getCourseById(+courseId).subscribe((data: any) => {
-        this.course = data;
-      });
-    }
-  }
-
-  loadEnrollments() {
-    this.homeService.getEnrollments().subscribe((data: any) => {
-      this.enrollments = data;
-      this.enrollments = this.enrollments.filter(
-        (enrollment) => !enrollment.deleted
-      );
-    });
-  }
-
   loadLessons() {
-    this.courseService.getLessons().subscribe((data: any) => {
-      this.lessons = data;
-      this.lessons = this.lessons
-      .filter((lesson) => !lesson.deleted)
-      .filter((lesson)=>lesson.course.creator.id===this.userId);
-      this.isLoading=false
-
+    const userId = this.userId;
+    if (userId === null) {
+      this.lessons = [];
+      this.isLoading = false;
+      this.changeDetector.detectChanges();
+      return;
+    }
+    this.isLoading = true;
+    this.loadError = '';
+    this.courseService.getLessons().subscribe({
+      next: (data) => {
+        this.lessons = data
+          .filter((lesson) => !lesson.deleted)
+          .filter((lesson) => this.isAdmin || lesson.course.creator?.id === userId);
+        this.isLoading = false;
+        this.changeDetector.detectChanges();
+      },
+      error: (error: unknown) => {
+        console.error('Error loading lessons:', error);
+        this.lessons = [];
+        this.isLoading = false;
+        this.loadError = 'Lessons could not be loaded. Please try again.';
+        this.changeDetector.detectChanges();
+      },
     });
-  }
-
-  // getLessonByCourseId(courseId: number) {
-  //   const lessonData = this.lessons.filter(
-  //     (lesson) => lesson.course.id === courseId
-  //   );
-  //   return lessonData;
-  // }
-
-  isEnrolled(courseId: number): boolean {
-    const enroll = this.enrollments.some(
-      (enrollment) =>
-        enrollment.user.id === this.userId && enrollment.course.id === courseId
-    );
-    return enroll;
   }
 
   refresh() {
@@ -95,7 +79,7 @@ export class LessonlistComponent implements OnInit {
     this.displayAddDialog= true
   }
 
-  deleteLesson(lessonId: any) {
+  deleteLesson(lessonId: number) {
     this.courseService.deleteLesson(lessonId).subscribe(
       () => {
         this.loadLessons();
@@ -107,6 +91,7 @@ export class LessonlistComponent implements OnInit {
           text: 'An error occurred while deleting the lesson.',
           icon: 'error',
         });
+        this.changeDetector.markForCheck();
 
       }
     );

@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User } from '../../models/model';
 import { AdminService } from '../../services/admin.service';
 import Swal from 'sweetalert2';
-import { UpdateUserComponent } from '../update-user/update-user.component';
 
 @Component({
   selector: 'app-user-list',
   standalone: false,
   templateUrl: './user-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './user-list.component.css'
 })
 export class UserListComponent implements OnInit {
@@ -17,8 +17,12 @@ export class UserListComponent implements OnInit {
   displayUpdateDialog= false;
   selectedUserId!:number;
   isLoading:boolean=true
+  loadError = '';
 
-  constructor(private admin: AdminService) {}
+  constructor(
+    private admin: AdminService,
+    private readonly changeDetector: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadUsers();
@@ -27,7 +31,10 @@ export class UserListComponent implements OnInit {
 
   loadTeacherRequests() {
     this.admin.getTeacherRequests().subscribe({
-      next: (response) => this.teacherRequests = response.data,
+      next: (response) => {
+        this.teacherRequests = response.data;
+        this.changeDetector.detectChanges();
+      },
       error: (error) => {
         console.error('Error loading teacher requests:', error);
         Swal.fire({
@@ -35,15 +42,27 @@ export class UserListComponent implements OnInit {
           text: 'Unable to load teacher access requests.',
           icon: 'error',
         });
+        this.changeDetector.detectChanges();
       }
     });
   }
 
-  loadUsers() {
-    this.admin.getUsers().subscribe((data: any) => {
-      this.users = data;
-      this.users= this.users.filter(user=>!user.deleted).filter(user=>user.email!=="admin@gmail.com")
-      this.isLoading=false
+  loadUsers(): void {
+    this.isLoading = true;
+    this.loadError = '';
+    this.admin.getUsers().subscribe({
+      next: (data) => {
+        this.users = data.filter(user => !user.deleted && user.email !== 'admin@gmail.com');
+        this.isLoading = false;
+        this.changeDetector.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error loading users:', error);
+        this.users = [];
+        this.loadError = 'Users could not be loaded. Please try again.';
+        this.isLoading = false;
+        this.changeDetector.detectChanges();
+      }
     });
   }
 
@@ -101,4 +120,3 @@ export class UserListComponent implements OnInit {
     this.displayUpdateDialog= true
   }
 }
-
