@@ -1,7 +1,7 @@
 # EduConnect
 
 A modern course management platform built with Angular on the frontend and an Express + TypeORM + PostgreSQL backend. The project is designed for a learning platform with role-based access, course catalog workflows, quizzes, learner progress tracking, and admin operations in a clean, production-oriented structure.
-
+<img width="1320" height="608" alt="dashboard" src="https://github.com/user-attachments/assets/7c773c26-131f-4761-8b13-6cece8f47795" />
 
 ## Overview
 
