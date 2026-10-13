@@ -1,6 +1,7 @@
-# Training Project
+# EduConnect
 
 A modern course management platform built with Angular on the frontend and an Express + TypeORM + PostgreSQL backend. The project is designed for a learning platform with role-based access, course catalog workflows, quizzes, learner progress tracking, and admin operations in a clean, production-oriented structure.
+
 
 ## Overview
 
@@ -48,7 +49,7 @@ The solution is intended to be easy to run locally, simple to understand for con
 ## Project Structure
 
 ```text
-Training_project/
+Educonnect/
 ├── backend/
 │   ├── src/
 │   ├── test/
